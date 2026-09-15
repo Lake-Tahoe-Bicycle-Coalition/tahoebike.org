@@ -1,0 +1,121 @@
+// Prisma schema for tahoebike.org.
+// Only the content types listed in docs/MIGRATION_PLAN.md live here.
+// Schema changes require a migration: `pnpm db:migrate --name <change>`.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Program {
+  BIKE_KITCHEN
+  BIKE_VALET
+  OTHER
+}
+
+enum FormType {
+  CONTACT
+  VALET_REQUEST
+  RACK_APPLICATION
+}
+
+enum SubmissionStatus {
+  NEW
+  READ
+  ARCHIVED
+}
+
+/// A time-bound event. Hidden from the public site once `endsAt` has passed.
+model Event {
+  id              String   @id @default(cuid())
+  title           String
+  program         Program
+  startsAt        DateTime
+  endsAt          DateTime
+  locationName    String?
+  address         String?
+  /// Markdown
+  description     String   @default("")
+  registrationUrl String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([program, endsAt])
+}
+
+/// Board of directors and advisors shown on /about.
+model BoardMember {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  /// Markdown
+  bio       String   @default("")
+  photoUrl  String?
+  sortOrder Int      @default(0)
+  isAdvisor Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, isAdvisor, sortOrder])
+}
+
+/// The hero callout cards on the home page.
+model HomepageCard {
+  id        String   @id @default(cuid())
+  title     String
+  blurb     String
+  ctaLabel  String
+  ctaUrl    String
+  imageUrl  String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, sortOrder])
+}
+
+/// Optional site-wide banner. Shown only while now is between startsAt and endsAt.
+model Announcement {
+  id        String   @id @default(cuid())
+  message   String
+  linkUrl   String?
+  startsAt  DateTime
+  endsAt    DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([startsAt, endsAt])
+}
+
+/// Key/value settings: prices, addresses, external URLs, feature flags.
+/// Known keys are listed in lib/settings.ts.
+model SiteSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+/// Every public form submission, stored before the notification email is sent.
+model FormSubmission {
+  id          String           @id @default(cuid())
+  formType    FormType
+  payload     Json
+  submittedAt DateTime         @default(now())
+  status      SubmissionStatus @default(NEW)
+
+  @@index([formType, status, submittedAt])
+}
+
+/// Allowlist for /admin sign-in (Google accounts matched by email).
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+}
