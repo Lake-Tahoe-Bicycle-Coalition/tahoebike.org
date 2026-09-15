@@ -16,7 +16,17 @@ import { SmartLink } from "@/components/smart-link";
  * http(s) links open in a new tab.
  */
 
-const INLINE = /\*\*(.+?)\*\*|\*(.+?)\*|\[([^\]]+)\]\(([^)\s]+)\)/g;
+/**
+ * Inline syntax, one alternative per construct:
+ *   1. `**bold**`
+ *   2. `*italic*`: the text must not start or end with whitespace, so that arithmetic
+ *      such as `5 * 3 * 2` stays literal.
+ *   3. `[label](url)`: the URL may contain one level of balanced parentheses
+ *      (`https://en.wikipedia.org/wiki/Foo_(bar)`), and a URL such as
+ *      `javascript:alert(1)` is consumed whole, so an unsafe link degrades to just
+ *      its label rather than leaving a stray `)` behind.
+ */
+const INLINE = /\*\*(.+?)\*\*|\*(?!\s)(.+?)(?<!\s)\*|\[([^\]]+)\]\(((?:[^()\s]|\([^()\s]*\))+)\)/g;
 const SAFE_URL = /^(https?:|mailto:)/i;
 
 function renderInline(text: string): ReactNode[] {
