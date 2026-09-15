@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { NewsletterArchive } from "@/components/newsletter-archive";
 import { NewsletterSignupForm } from "@/components/newsletter-signup-form";
+import { SmartLink } from "@/components/smart-link";
 import { fetchNewsletterArchive } from "@/lib/constant-contact";
 import { getSettings } from "@/lib/settings";
 
@@ -58,10 +59,9 @@ export default async function JoinPage() {
                 {tier.name} – ${tier.price}
               </h3>
               <p className="mt-auto pt-5">
-                <a href={tier.url} className="btn btn-primary" target="_blank" rel="noopener">
+                <SmartLink href={tier.url} className="btn btn-primary">
                   Join for ${tier.price} / Year
-                  <span className="sr-only"> (opens in a new tab)</span>
-                </a>
+                </SmartLink>
               </p>
             </li>
           ))}
@@ -99,10 +99,9 @@ export default async function JoinPage() {
             </p>
             <p className="flex-1">
               You can also{" "}
-              <a href={settings.constant_contact_volunteer_url} target="_blank" rel="noopener">
+              <SmartLink href={settings.constant_contact_volunteer_url}>
                 join our volunteer email list
-                <span className="sr-only"> (opens in a new tab)</span>
-              </a>
+              </SmartLink>
               .
             </p>
             <p>
@@ -172,10 +171,9 @@ function DonationPanel({
     <section aria-labelledby={`${id}-heading`} className="rounded-lg bg-tahoe/10 p-6">
       <h3 id={`${id}-heading`}>{title}</h3>
       <p className="mt-4">
-        <a href={buttonUrl} className="btn btn-blue" target="_blank" rel="noopener">
+        <SmartLink href={buttonUrl} className="btn btn-blue">
           {title}
-          <span className="sr-only"> (opens in a new tab)</span>
-        </a>
+        </SmartLink>
       </p>
       <form action={checkoutUrl} method="get" className="mt-6">
         <input type="hidden" name="plan" value={plan} />

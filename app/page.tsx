@@ -3,6 +3,7 @@ import Image from "next/image";
 import { HeroCards } from "@/components/hero-cards";
 import { NewsletterSignupForm } from "@/components/newsletter-signup-form";
 import { PhotoGallery, type Photo } from "@/components/photo-gallery";
+import { SmartLink } from "@/components/smart-link";
 import { prisma } from "@/lib/db";
 import type { HomepageCard } from "@/lib/generated/prisma/client";
 import { getSettings } from "@/lib/settings";
@@ -81,10 +82,8 @@ export default async function HomePage() {
 
         <div className="grid gap-8 lg:grid-cols-2">
           <section aria-labelledby="bike-map-heading" className="flex flex-col gap-4">
-            <a
+            <SmartLink
               href={settings.map_url}
-              target="_blank"
-              rel="noopener"
               className="block overflow-hidden rounded-lg border border-asphalt/10"
             >
               <Image
@@ -95,17 +94,16 @@ export default async function HomePage() {
                 sizes="(min-width: 1024px) 560px, 100vw"
                 className="h-auto w-full"
               />
-            </a>
+            </SmartLink>
             <h2 id="bike-map-heading">Online Bike Map</h2>
             <p>
               Produced by the Lake Tahoe Bicycle Coalition, the Lake Tahoe Bikeways Map is Tahoe’s
               most comprehensive bike trail map. Check out our new, interactive bike map!
             </p>
             <p>
-              <a href={settings.map_url} className="btn btn-blue" target="_blank" rel="noopener">
+              <SmartLink href={settings.map_url} className="btn btn-blue">
                 Explore the map
-                <span className="sr-only"> (opens in a new tab)</span>
-              </a>
+              </SmartLink>
             </p>
           </section>
 
@@ -118,16 +116,14 @@ export default async function HomePage() {
           <h2 id="follow-heading">Follow us</h2>
           <ul className="mt-4 flex flex-wrap gap-4">
             <li>
-              <a href={settings.facebook_url} className="btn btn-secondary" target="_blank" rel="noopener">
+              <SmartLink href={settings.facebook_url} className="btn btn-secondary">
                 Facebook
-                <span className="sr-only"> (opens in a new tab)</span>
-              </a>
+              </SmartLink>
             </li>
             <li>
-              <a href={settings.instagram_url} className="btn btn-secondary" target="_blank" rel="noopener">
+              <SmartLink href={settings.instagram_url} className="btn btn-secondary">
                 Instagram
-                <span className="sr-only"> (opens in a new tab)</span>
-              </a>
+              </SmartLink>
             </li>
           </ul>
         </section>

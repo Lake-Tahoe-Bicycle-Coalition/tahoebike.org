@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/forms/contact-form";
+import { SmartLink } from "@/components/smart-link";
 import { getSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
@@ -8,15 +9,6 @@ export const metadata: Metadata = {
   description:
     "Send the Lake Tahoe Bicycle Coalition a message, or reach us by email, mail, Facebook, or Instagram.",
 };
-
-function ExternalLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <a href={href} target="_blank" rel="noopener">
-      {children}
-      <span className="sr-only"> (opens in a new tab)</span>
-    </a>
-  );
-}
 
 export default async function ContactPage() {
   const settings = await getSettings();
@@ -42,15 +34,15 @@ export default async function ContactPage() {
           </h2>
           <ul className="mt-4 space-y-3">
             <li>
-              <ExternalLink href={settings.facebook_url}>Facebook</ExternalLink>
+              <SmartLink href={settings.facebook_url}>Facebook</SmartLink>
             </li>
             <li>
-              <ExternalLink href={settings.instagram_url}>Instagram</ExternalLink>
+              <SmartLink href={settings.instagram_url}>Instagram</SmartLink>
             </li>
             <li>
-              <ExternalLink href={settings.constant_contact_volunteer_url}>
+              <SmartLink href={settings.constant_contact_volunteer_url}>
                 Sign up to hear about volunteer opportunities
-              </ExternalLink>
+              </SmartLink>
             </li>
             <li>
               <Link href="/join#newsletter">Sign up for our e-news</Link>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { EventList } from "@/components/event-list";
+import { SmartLink } from "@/components/smart-link";
 import { YouTubeEmbed } from "@/components/youtube-embed";
 import { getUpcomingEvents } from "@/lib/events";
 import { getSettings } from "@/lib/settings";
@@ -121,9 +122,7 @@ export default async function BikeKitchenPage() {
           <EventList events={events} />
         </div>
         <p className="mt-6">
-          <a href={settings.point_org_url} target="_blank" rel="noopener">
-            See all volunteer shifts on POINT
-          </a>
+          <SmartLink href={settings.point_org_url}>See all volunteer shifts on POINT</SmartLink>
         </p>
       </section>
 

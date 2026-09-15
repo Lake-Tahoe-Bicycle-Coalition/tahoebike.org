@@ -51,7 +51,6 @@ export default async function ProgramsPage() {
         "The Lake Tahoe Bikeways Map is Tahoe’s most comprehensive bike trail map. Find out where to ride and keep up to date on winter path conditions and construction.",
       href: settings.map_url,
       linkLabel: "Explore the map",
-      external: true,
     },
     {
       title: "Printable Bike Map",
@@ -66,7 +65,6 @@ export default async function ProgramsPage() {
         "Our annual celebration of biking in Tahoe: ride bikes, win prizes, and attend events all month long.",
       href: settings.bike_month_url,
       linkLabel: "Visit Tahoe Bike Month",
-      external: true,
     },
   ];
 

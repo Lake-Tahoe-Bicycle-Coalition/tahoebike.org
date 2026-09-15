@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { SmartLink } from "@/components/smart-link";
 import { prisma } from "@/lib/db";
 import type { Announcement } from "@/lib/generated/prisma/client";
 
@@ -29,15 +29,9 @@ export async function AnnouncementBanner() {
         {linkUrl ? (
           <>
             {" "}
-            {/^https?:/i.test(linkUrl) ? (
-              <a href={linkUrl} className={linkClass} target="_blank" rel="noopener">
-                Learn more
-              </a>
-            ) : (
-              <Link href={linkUrl} className={linkClass}>
-                Learn more
-              </Link>
-            )}
+            <SmartLink href={linkUrl} className={linkClass}>
+              Learn more
+            </SmartLink>
           </>
         ) : null}
       </p>

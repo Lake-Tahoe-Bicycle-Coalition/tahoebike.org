@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
+import { SmartLink } from "@/components/smart-link";
 import type { HomepageCard } from "@/lib/generated/prisma/client";
-import { isExternalUrl, isOptimizableImageUrl } from "@/lib/urls";
+import { isOptimizableImageUrl } from "@/lib/urls";
 
 type Card = Pick<HomepageCard, "id" | "title" | "blurb" | "ctaLabel" | "ctaUrl" | "imageUrl">;
 
@@ -36,46 +36,14 @@ export function HeroCards({ cards }: { cards: Card[] }) {
               <h2 className="text-xl sm:text-xl">{card.title}</h2>
               <p className="flex-1">{card.blurb}</p>
               <p>
-                <CtaLink href={card.ctaUrl} className="btn btn-primary">
+                <SmartLink href={card.ctaUrl} className="btn btn-primary">
                   {card.ctaLabel}
-                </CtaLink>
+                </SmartLink>
               </p>
             </div>
           </li>
         ))}
       </ul>
     </section>
-  );
-}
-
-function CtaLink({
-  href,
-  className,
-  children,
-}: {
-  href: string;
-  className: string;
-  children: React.ReactNode;
-}) {
-  if (href.startsWith("/")) {
-    return (
-      <Link href={href} className={className}>
-        {children}
-      </Link>
-    );
-  }
-  if (isExternalUrl(href)) {
-    return (
-      <a href={href} className={className} target="_blank" rel="noopener">
-        {children}
-        <span className="sr-only"> (opens in a new tab)</span>
-      </a>
-    );
-  }
-  // mailto:, tel:, #anchor and the like.
-  return (
-    <a href={href} className={className}>
-      {children}
-    </a>
   );
 }

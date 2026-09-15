@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { SmartLink } from "@/components/smart-link";
 import { getSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
@@ -24,9 +25,7 @@ export default async function VolunteerPage() {
         </p>
         <p>
           Want to stay in the loop? Join our{" "}
-          <a href={settings.constant_contact_volunteer_url} target="_blank" rel="noopener">
-            volunteer email list
-          </a>{" "}
+          <SmartLink href={settings.constant_contact_volunteer_url}>volunteer email list</SmartLink>{" "}
           to receive the latest updates and upcoming opportunities.
         </p>
       </div>
@@ -46,9 +45,7 @@ export default async function VolunteerPage() {
         {/* Optional helper from POINT: resizes #point_iframe to fit its content. The embed works without it. */}
         <Script src="https://pointapp.org/embed/assets/js/iframe-scripts.js" strategy="lazyOnload" data-frame-id="1149" />
         <p className="mt-4">
-          <a href={settings.point_org_url} target="_blank" rel="noopener">
-            Open the volunteer calendar on POINT
-          </a>
+          <SmartLink href={settings.point_org_url}>Open the volunteer calendar on POINT</SmartLink>
         </p>
       </section>
     </div>

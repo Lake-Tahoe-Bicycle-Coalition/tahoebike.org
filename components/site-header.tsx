@@ -1,18 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import { SmartLink } from "@/components/smart-link";
 import { primaryNav, type NavLink } from "@/lib/navigation";
 
 function NavAnchor({ link, className }: { link: NavLink; className?: string }) {
-  const external = link.external ?? /^https?:/.test(link.href);
-  return external ? (
-    <a href={link.href} className={className} target="_blank" rel="noopener">
+  return (
+    <SmartLink href={link.href} className={className}>
       {link.label}
-      <span className="sr-only"> (opens in a new tab)</span>
-    </a>
-  ) : (
-    <Link href={link.href} className={className}>
-      {link.label}
-    </Link>
+    </SmartLink>
   );
 }
 

@@ -1,5 +1,6 @@
 /** Primary navigation. Mirrors the WordPress "Primary" menu tree. */
-export type NavLink = { label: string; href: string; external?: boolean };
+/** `href` is a site path or an external URL; SmartLink opens external ones in a new tab. */
+export type NavLink = { label: string; href: string };
 export type NavItem = NavLink & {
   children?: NavLink[];
   /** Label for a link to the parent page inside its dropdown, when the parent is a real index page. */
@@ -14,8 +15,8 @@ export const primaryNav: NavItem[] = [
     href: "/programs",
     indexLabel: "All programs",
     children: [
-      { label: "Tahoe Bike Month", href: "https://www.tahoebikemonth.org/", external: true },
-      { label: "Interactive Bike Map", href: "https://map.tahoebike.org/", external: true },
+      { label: "Tahoe Bike Month", href: "https://www.tahoebikemonth.org/" },
+      { label: "Interactive Bike Map", href: "https://map.tahoebike.org/" },
       { label: "Printable Bike Map", href: "/print-bike-map" },
       { label: "Bike Kitchen", href: "/programs/bike-kitchen" },
       { label: "Bike Racks", href: "/bike-racks" },
@@ -47,8 +48,8 @@ export const footerColumns: { heading: string; links: NavLink[] }[] = [
   {
     heading: "Resources",
     links: [
-      { label: "Interactive Bike Map", href: "https://map.tahoebike.org/", external: true },
-      { label: "Bike Month", href: "https://www.tahoebikemonth.org/", external: true },
+      { label: "Interactive Bike Map", href: "https://map.tahoebike.org/" },
+      { label: "Bike Month", href: "https://www.tahoebikemonth.org/" },
       { label: "Bike Safety", href: "/bike-safety" },
       { label: "Bike Valet", href: "/programs/bike-valet" },
     ],

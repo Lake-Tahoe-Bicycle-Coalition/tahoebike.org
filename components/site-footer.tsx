@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { SmartLink } from "@/components/smart-link";
 import { footerColumns } from "@/lib/navigation";
 import type { Settings } from "@/lib/settings";
 
@@ -17,23 +17,17 @@ export function SiteFooter({ settings }: { settings: Settings }) {
             <ul className="space-y-2">
               {column.links.map((link) => (
                 <li key={link.label}>
-                  {link.external ? (
-                    <a href={link.href} className="text-white" target="_blank" rel="noopener">
-                      {link.label}
-                    </a>
-                  ) : (
-                    <Link href={link.href} className="text-white">
-                      {link.label}
-                    </Link>
-                  )}
+                  <SmartLink href={link.href} className="text-white">
+                    {link.label}
+                  </SmartLink>
                 </li>
               ))}
               {column.heading === "Get Involved"
                 ? social.map((link) => (
                     <li key={link.label}>
-                      <a href={link.href} className="text-white" target="_blank" rel="noopener">
+                      <SmartLink href={link.href} className="text-white">
                         {link.label}
-                      </a>
+                      </SmartLink>
                     </li>
                   ))
                 : null}

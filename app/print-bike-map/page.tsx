@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { SmartLink } from "@/components/smart-link";
 import { getSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
@@ -49,9 +50,7 @@ export default async function PrintBikeMapPage() {
         <p>
           Pick up a copy for free at all bike shops and visitor centers in Tahoe and Truckee, or
           save the paper and view the map online at{" "}
-          <a href={settings.map_url} target="_blank" rel="noopener">
-            map.tahoebike.org
-          </a>
+          <SmartLink href={settings.map_url}>map.tahoebike.org</SmartLink>
           .
         </p>
         <p>Click the images below to download a PDF.</p>
@@ -76,10 +75,10 @@ export default async function PrintBikeMapPage() {
             />
           </a>
           <p className="mt-4">
-            <a href={map.pdfUrl} className="btn btn-secondary" target="_blank" rel="noopener">
+            <SmartLink href={map.pdfUrl} className="btn btn-secondary">
               Download the PDF
-              <span className="sr-only">: {map.heading} (opens in a new tab)</span>
-            </a>
+              <span className="sr-only">: {map.heading}</span>
+            </SmartLink>
           </p>
         </section>
       ))}

@@ -1,4 +1,5 @@
 import { Fragment, type ReactNode } from "react";
+import { SmartLink } from "@/components/smart-link";
 
 /**
  * Tiny, safe Markdown-subset renderer. Output is React elements only; raw HTML in the
@@ -40,11 +41,10 @@ function renderInline(text: string): ReactNode[] {
 
 function renderLink(label: string, url: string, key: number): ReactNode {
   if (!SAFE_URL.test(url)) return label;
-  const external = /^https?:/i.test(url);
   return (
-    <a key={key} href={url} {...(external ? { target: "_blank", rel: "noopener" } : {})}>
+    <SmartLink key={key} href={url}>
       {label}
-    </a>
+    </SmartLink>
   );
 }
 

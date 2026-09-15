@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SmartLink } from "@/components/smart-link";
 import { formatEventDate, formatEventTimeRange, type Event } from "@/lib/events";
 import { Markdown } from "@/lib/markdown";
 
@@ -30,13 +31,11 @@ export function EventList({ events }: { events: Event[] }) {
               {event.locationName ? <span className="font-semibold">{event.locationName}</span> : null}
               {event.locationName && event.address ? <br /> : null}
               {event.address ? (
-                <a
+                <SmartLink
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.address)}`}
-                  target="_blank"
-                  rel="noopener"
                 >
                   {event.address}
-                </a>
+                </SmartLink>
               ) : null}
             </p>
           ) : null}
@@ -47,15 +46,9 @@ export function EventList({ events }: { events: Event[] }) {
           ) : null}
           {event.registrationUrl ? (
             <p className="mt-auto pt-2">
-              {/^https?:/i.test(event.registrationUrl) ? (
-                <a href={event.registrationUrl} className="btn btn-primary" target="_blank" rel="noopener">
-                  Sign up
-                </a>
-              ) : (
-                <Link href={event.registrationUrl} className="btn btn-primary">
-                  Sign up
-                </Link>
-              )}
+              <SmartLink href={event.registrationUrl} className="btn btn-primary">
+                Sign up
+              </SmartLink>
             </p>
           ) : null}
         </li>

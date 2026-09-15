@@ -1,3 +1,4 @@
+import { SmartLink } from "@/components/smart-link";
 import type { NewsletterItem } from "@/lib/constant-contact";
 
 type Props = {
@@ -44,9 +45,7 @@ export function NewsletterArchive({ items, signupUrl, heading = "Newsletters" }:
         </div>
       ) : (
         <p className="mt-4">
-          <a href={signupUrl} target="_blank" rel="noopener">
-            Subscribe to get our latest news by email.
-          </a>
+          <SmartLink href={signupUrl}>Subscribe to get our latest news by email.</SmartLink>
         </p>
       )}
     </section>
@@ -55,10 +54,9 @@ export function NewsletterArchive({ items, signupUrl, heading = "Newsletters" }:
 
 function ArchiveLink({ item }: { item: NewsletterItem }) {
   return (
-    <a href={item.campaignUrl} target="_blank" rel="noopener">
+    <SmartLink href={item.campaignUrl}>
       {item.subject}
       {item.sentDate ? <span className="ml-2 text-sm font-normal text-asphalt/70">{item.sentDate}</span> : null}
-      <span className="sr-only"> (opens in a new tab)</span>
-    </a>
+    </SmartLink>
   );
 }

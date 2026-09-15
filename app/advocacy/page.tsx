@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { SmartLink } from "@/components/smart-link";
 import { getSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
@@ -84,9 +85,9 @@ export default async function AdvocacyPage() {
           className="h-[600px] w-full border-0"
         />
         <p className="mt-4">
-          <a href={`https://drive.google.com/drive/folders/${COMMENT_LETTERS_FOLDER_ID}`} target="_blank" rel="noopener">
+          <SmartLink href={`https://drive.google.com/drive/folders/${COMMENT_LETTERS_FOLDER_ID}`}>
             Open the comment letters folder in Google Drive
-          </a>
+          </SmartLink>
         </p>
       </section>
     </div>
