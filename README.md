@@ -46,8 +46,18 @@ so only `DATABASE_URL` is required to run the public site.
 | `pnpm db:migrate --name <change>` | Create and apply a migration after editing the schema |
 | `pnpm db:deploy` | Apply pending migrations (production) |
 | `pnpm db:seed` | Run `prisma/seed.ts` (idempotent; upserts by stable keys) |
-| `pnpm content:parse` | Parse the WordPress export into `content/generated/*.json` |
-| `pnpm content:images` | Download referenced `wp-content/uploads` images into `public/images` |
+| `pnpm content:parse` | Parse the WordPress export into `content/generated/{pages,attachments,nav-menu-items,layouts}.json` (gitignored, for inspection) |
+| `pnpm content:images` | Download referenced `wp-content/uploads` images into `public/images` and rewrite `content/image-map.json` |
+
+The seed reads the WordPress export in `reference/` directly and needs the committed
+`content/image-map.json` for headshot and card image paths. Re-run `pnpm content:images`
+if the set of referenced images changes. Until the Phase 3 admin exists the seed is the
+source of truth for board members, homepage cards, and events: re-seeding restores the
+export values.
+
+When poking at the database with `psql`, note that Prisma stores `timestamp` columns as UTC
+while Postgres.app sessions default to local time; run `PGTZ=UTC psql ...` to avoid
+7-hour surprises when inserting announcements or events by hand.
 
 ## Database changes
 

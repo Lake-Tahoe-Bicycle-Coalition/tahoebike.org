@@ -126,7 +126,7 @@ The Divi contact form emails `info@tahoebike.org`; newsletter signups go to Cons
 
 ### Q27. Newsletter signup form target
 The Divi signup module posted to Constant Contact through the WordPress plugin (list id `1199281500`), so the export contains no plain form endpoint, only the hosted opt-in page URL (`visitor.r20.constantcontact.com/manage/optin?v=...`).
-**Assumed.** The new site renders a plain HTML form that submits GET to that hosted opt-in page with the `v` parameter and an `email` field. If Constant Contact ignores the `email` parameter, the visitor lands on the hosted page and re-enters their address, which still works. Better: generate an embeddable "Sign-up form" in the Constant Contact dashboard and paste its endpoint into the `constant_contact_signup_url` setting.
+**Assumed.** The new site renders a plain HTML form that submits GET to that hosted opt-in page with the `v` parameter and an `email` field. Tested Sept 15 2026: the hosted page loads but does **not** prefill the email, so visitors retype their address there (two steps instead of one). Fix options: generate an embeddable sign-up form in the Constant Contact dashboard and point the `constant_contact_signup_url` setting at its endpoint, or add a server action using the Constant Contact API. The newsletter archive endpoint (`campaignlp.constantcontact.com/v1/archive/<account>/activities`) works server-side and currently returns four campaigns with `subject` and `campaignUrl` only (no dates).
 
 ### Q28. "Support the Coalition" call-to-action layout
 The Divi library contains a saved "Support the Coalition" header (Donate / Learn More buttons over a photo) that was probably shown above the footer on some pages. The export does not record where it was placed.
@@ -135,3 +135,19 @@ The Divi library contains a saved "Support the Coalition" header (Donate / Learn
 ### Q29. Photo credits and alt text
 The export has no alt text for most images (only sponsor logos). Alt text on the new site was written by the migration agents from the image content and file names.
 **Open.** Have a board member review alt text and confirm no photo needs a credit.
+
+### Q30. Large hero image
+The "Tahoe Bike Map" homepage card uses `2023/05/LTBC_SouthLake-2023-Print.png` (5.0 MB, the full print map). next/image serves resized versions, so visitors never download the original, but the repo carries it.
+**Open.** Swap the card image for a photo or a smaller crop via the admin once Phase 3 lands.
+
+### Q31. Retired page links inside ported copy
+The programs index reuses the old `/projects/` "Communications" blurb, whose "Stay In Touch" link pointed at the retired `/stay-in-touch/` page. It now links to the newsletter signup on `/join#newsletter` (Q12 sends the retired path to `/contact`).
+**Assumed.** Fine either way; change the link if the contact page should be the newsletter home instead.
+
+### Q32. Markdown link policy for admin-entered content
+Board bios and event descriptions render through a small safe Markdown subset (paragraphs, bold, italic, links, bullet lists). Links are limited to http, https, and mailto, so a root-relative link such as `/join` renders as plain text.
+**Assumed.** Relax to allow root-relative paths if editors need internal links.
+
+### Q33. Print map image dimensions
+The brief guessed portrait maps; the 2026 print map images are 1908×1404 landscape. Pages use the measured dimensions.
+**Decided by measurement.** No action.
