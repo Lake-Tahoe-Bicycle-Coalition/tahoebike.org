@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isoDateInZone } from "@/lib/time";
 import { matchingFundsValues, organizationTypeValues, rackStyleValues } from "./fields";
 
 /**
@@ -10,6 +11,7 @@ import { matchingFundsValues, organizationTypeValues, rackStyleValues } from "./
  * (which is zod-free) so that zod stays out of the browser bundle.
  */
 
+/** Multi-line text (textarea). */
 function requiredText(label: string, max: number) {
   return z
     .string(`${label} is required.`)
@@ -18,8 +20,23 @@ function requiredText(label: string, max: number) {
     .max(max, `${label} must be ${max} characters or fewer.`);
 }
 
+/** Multi-line text (textarea), may be empty. */
 function optionalText(label: string, max: number) {
   return z.string().trim().max(max, `${label} must be ${max} characters or fewer.`);
+}
+
+/**
+ * Single-line values must not contain line breaks: several of them end up in email
+ * subjects, where an injected CR/LF could add headers.
+ */
+const NO_LINE_BREAKS = /^[^\r\n]*$/;
+
+function requiredLine(label: string, max: number) {
+  return requiredText(label, max).regex(NO_LINE_BREAKS, { error: `${label} must be a single line.` });
+}
+
+function optionalLine(label: string, max: number) {
+  return optionalText(label, max).regex(NO_LINE_BREAKS, { error: `${label} must be a single line.` });
 }
 
 const email = z
@@ -45,10 +62,10 @@ const honeypot = { website: z.string().max(0, "Invalid submission.") };
 // --- Contact (Q18) -----------------------------------------------------------
 
 export const contactSchema = z.object({
-  firstName: requiredText("First name", 100),
-  lastName: requiredText("Last name", 100),
+  firstName: requiredLine("First name", 100),
+  lastName: requiredLine("Last name", 100),
   email,
-  phone: optionalText("Phone number", 40),
+  phone: optionalLine("Phone number", 40),
   message: requiredText("Message", 5000),
   ...honeypot,
 });
@@ -62,22 +79,47 @@ const organizationType = z.enum(
   "Tell us whether you are a nonprofit or a Business Member.",
 );
 
-export const valetRequestSchema = z.object({
-  contactName: requiredText("Contact name", 100),
-  organization: requiredText("Organization", 200),
-  email,
-  phone: requiredText("Phone number", 40),
-  eventName: requiredText("Event name", 200),
-  eventDate: z.iso.date("Enter the event date."),
-  startTime: z.iso.time("Enter the start time."),
-  endTime: z.iso.time("Enter the end time."),
-  location: requiredText("Event location", 300),
-  expectedAttendance: wholeNumber("Expected attendance", 1_000_000),
-  expectedBikes: wholeNumber("Expected number of bikes", 100_000),
-  organizationType,
-  notes: optionalText("Notes", 3000),
-  ...honeypot,
-});
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const ISO_TIME = /^(\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?$/;
+
+/** Seconds since midnight for `HH:MM`, `HH:MM:SS`, or `HH:MM:SS.sss`; null if malformed. */
+function timeToSeconds(time: string): number | null {
+  const match = ISO_TIME.exec(time);
+  if (!match) return null;
+  return Number(match[1]) * 3600 + Number(match[2]) * 60 + Number(match[3] ?? 0);
+}
+
+export const valetRequestSchema = z
+  .object({
+    contactName: requiredLine("Contact name", 100),
+    organization: requiredLine("Organization", 200),
+    email,
+    phone: requiredLine("Phone number", 40),
+    eventName: requiredLine("Event name", 200),
+    eventDate: z.iso.date("Enter the event date."),
+    startTime: z.iso.time("Enter the start time."),
+    endTime: z.iso.time("Enter the end time."),
+    location: requiredLine("Event location", 300),
+    expectedAttendance: wholeNumber("Expected attendance", 1_000_000),
+    expectedBikes: wholeNumber("Expected number of bikes", 100_000),
+    organizationType,
+    notes: optionalText("Notes", 3000),
+    ...honeypot,
+  })
+  // Cross-field rules. Each attaches its issue to one field so the form shows it
+  // inline; each skips values that already failed their own checks above.
+  .refine((data) => !ISO_DATE.test(data.eventDate) || data.eventDate >= isoDateInZone(), {
+    error: "The event date must be today or later.",
+    path: ["eventDate"],
+  })
+  .refine(
+    (data) => {
+      const start = timeToSeconds(data.startTime);
+      const end = timeToSeconds(data.endTime);
+      return start === null || end === null || end > start;
+    },
+    { error: "The end time must be after the start time.", path: ["endTime"] },
+  );
 
 export type ValetRequestInput = z.infer<typeof valetRequestSchema>;
 
@@ -88,11 +130,11 @@ const rackStyle = z.enum(rackStyleValues, "Choose a rack style.");
 const matchingFunds = z.enum(matchingFundsValues, "Tell us whether you can provide matching funds.");
 
 export const rackApplicationSchema = z.object({
-  businessName: requiredText("Business name", 200),
-  contactName: requiredText("Contact name", 100),
+  businessName: requiredLine("Business name", 200),
+  contactName: requiredLine("Contact name", 100),
   email,
-  phone: requiredText("Phone number", 40),
-  businessAddress: requiredText("Business address", 300),
+  phone: requiredLine("Phone number", 40),
+  businessAddress: requiredLine("Business address", 300),
   racksRequested: wholeNumber("Number of racks requested", 100),
   rackStyle,
   matchingFunds,
