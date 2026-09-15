@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+/*
+  Brand tokens from reference/LTBC-brand-guide.pdf.
+  Typeface: Franklin Gothic ATF (commercial). Until licensed files are added,
+  Libre Franklin (Google Fonts, loaded in app/layout.tsx) stands in for it.
+*/
+@theme {
+  --color-asphalt: #201800;
+  --color-safety: #ffdf00;
+  --color-bluebird: #52b9e9;
+  --color-tahoe: #1598cb;
+
+  --font-sans:
+    "franklin-gothic-atf", "Franklin Gothic ATF", var(--font-libre-franklin), "Libre Franklin",
+    Arial, Helvetica, sans-serif;
+  --font-heading: var(--font-sans);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white font-sans text-asphalt antialiased;
+    letter-spacing: 0.025em; /* body tracking 25 */
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading font-extrabold uppercase leading-tight text-balance;
+    letter-spacing: 0.1em; /* header tracking 100 */
+  }
+
+  h1 {
+    @apply text-3xl sm:text-4xl;
+  }
+  h2 {
+    @apply text-2xl sm:text-3xl;
+  }
+  h3 {
+    @apply text-xl;
+  }
+  h4 {
+    @apply text-lg;
+  }
+
+  a {
+    @apply text-tahoe underline decoration-tahoe/40 underline-offset-2 hover:decoration-tahoe;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-tahoe;
+  }
+
+  code {
+    @apply rounded bg-neutral-100 px-1 py-0.5 text-sm;
+  }
+}
+
+@layer components {
+  /* Vertical rhythm for long-form page copy. */
+  .prose-ltbc > * + * {
+    @apply mt-4;
+  }
+  .prose-ltbc > h2 {
+    @apply mt-10;
+  }
+  .prose-ltbc > h3 {
+    @apply mt-8;
+  }
+  .prose-ltbc ul {
+    @apply list-disc space-y-1 pl-6;
+  }
+  .prose-ltbc ol {
+    @apply list-decimal space-y-2 pl-6;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md border-2 px-5 py-2.5 font-heading font-extrabold uppercase tracking-widest no-underline transition-colors;
+  }
+  .btn-primary {
+    @apply border-safety bg-safety text-asphalt hover:border-asphalt;
+  }
+  .btn-secondary {
+    @apply border-asphalt bg-white text-asphalt hover:bg-asphalt hover:text-white;
+  }
+  .btn-blue {
+    @apply border-tahoe bg-tahoe text-white hover:bg-asphalt hover:border-asphalt;
+  }
+
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-safety focus:px-4 focus:py-2 focus:text-asphalt;
+  }
+
+  .field-label {
+    @apply mb-1 block font-semibold;
+  }
+  .field-input {
+    @apply w-full rounded border border-asphalt/40 bg-white px-3 py-2 focus:border-tahoe;
+  }
+}
