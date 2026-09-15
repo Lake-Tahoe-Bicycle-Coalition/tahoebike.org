@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Volunteer",
   description:
     "Volunteers are at the heart of our mission to create a more bike-friendly and sustainable Tahoe. Sign up for a shift on POINT or join our volunteer email list.",
+  alternates: { canonical: "/volunteer" },
 };
 
 export default async function VolunteerPage() {

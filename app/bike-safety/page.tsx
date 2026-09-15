@@ -7,6 +7,19 @@ export const metadata: Metadata = {
   title: "Bike Safety",
   description:
     "If you're biking roadways or bike paths in Lake Tahoe, we just want you to be safe: watch the Bike Safe Lake Tahoe videos and read ten tips for biking in Tahoe.",
+  alternates: { canonical: "/bike-safety" },
+  openGraph: {
+    // Next replaces (never merges) the root layout's openGraph, so restate its shared fields.
+    type: "website",
+    siteName: "Lake Tahoe Bicycle Coalition",
+    locale: "en_US",
+    images: [
+      {
+        url: "/images/2022/05/BSmeets_141113_90004-4.jpg",
+        alt: "A road cyclist in a yellow jersey riding the highway above Emerald Bay",
+      },
+    ],
+  },
 };
 
 const tips: { tip: ReactNode; explanation?: string }[] = [

@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: { absolute: "Lake Tahoe Bicycle Coalition" },
   description:
     "Helping Tahoe become more bicycle friendly: the Lake Tahoe Bicycle Coalition produces Tahoe’s most comprehensive bike trail map and runs bike programs, events, and advocacy around the lake.",
+  alternates: { canonical: "/" },
 };
 
 /** The two Divi galleries on the WordPress home page, in their original order. */

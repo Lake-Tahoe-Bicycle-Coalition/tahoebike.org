@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Join the Coalition",
   description:
     "Join us and help us promote safe and enjoyable bicycle transportation and recreation in the Tahoe basin: become a member, donate, volunteer, or subscribe to our newsletter.",
+  alternates: { canonical: "/join" },
 };
 
 export default async function JoinPage() {

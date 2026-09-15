@@ -21,6 +21,8 @@ export const metadata: Metadata = {
     template: "%s | Lake Tahoe Bicycle Coalition",
   },
   description: "Helping Tahoe to become more bicycle friendly.",
+  openGraph: { type: "website", siteName: "Lake Tahoe Bicycle Coalition", locale: "en_US" },
+  twitter: { card: "summary_large_image" },
 };
 
 /** Re-render at most every 5 minutes so admin edits show up without a deploy. */
