@@ -81,16 +81,16 @@ A draft that prototypes a "Discover Our Newsletter Archive" page using the same 
 **Open.** Should the new site publish a privacy policy? The native forms collect names, emails, and phone numbers, so one is advisable.
 
 ### Q16. Bike Valet request form fields
-The current Google Form's questions are not in the export (only the embed URL is). The native form needs a field list.
-**Assumed** fields: contact name, organization, email, phone, event name, event date, start/end time, location, expected attendance, expected number of bikes, whether the organizer is a nonprofit or LTBC business member, notes. Compare with the Google Form before retiring it.
+The current Google Form's questions are not in the export (only the embed URL is).
+**Assumed, implemented.** Fields: contact name, organization, email, phone, event name, event date, start time, end time, location, expected attendance, expected number of bikes, organization type (nonprofit / Bike Coalition business member / both / neither), notes. Notifications go to `bike_valet_email`. Compare with the Google Form before retiring it and adjust `lib/forms/schemas.ts`.
 
 ### Q17. Bike Rack application form fields
 Same situation as Q16.
-**Assumed** fields: business name, contact name, email, phone, business address, number of racks requested, rack style (bolt-down or free-standing), ability to provide matching funds, expected use / community benefit, notes.
+**Assumed, implemented.** Fields: business name, contact name, email, phone, business address, number of racks requested (1–100), rack style (bolt-down / free-standing), matching funds (yes / partial / no), expected use and community benefit, notes. Shown only while `rack_program_open` is true; the server action also refuses submissions when the flag is off. Notifications go to `contact_email`.
 
 ### Q18. Contact form fields
 The Divi form has First Name, Last Name, Email, Phone (optional), Message.
-**Assumed.** Same fields in the native form.
+**Decided, implemented.** Same fields in the native form; notifications go to `contact_email` with reply-to set to the sender.
 
 ## Infrastructure and tooling
 
