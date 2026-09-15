@@ -49,4 +49,5 @@ export {
   stripVariantSuffixes,
   type UploadUrlParts,
 } from "./images";
-export { zoneOffsetMs, zonedTimeToUtc } from "./zoned-time";
+// Kept for compatibility; the implementation now lives in lib/time.ts.
+export { zoneOffsetMs, zonedTimeToUtc } from "../time";

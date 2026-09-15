@@ -1,10 +1,16 @@
 /**
- * Convert a wall-clock date/time in a named IANA time zone to a UTC `Date`,
- * using only `Intl.DateTimeFormat` (no dependencies).
+ * Time-zone helpers built on `Intl.DateTimeFormat` only (no dependencies), usable
+ * from app code, the seed script, and the WordPress export tooling alike.
  *
  * Example: `zonedTimeToUtc("2026-08-26", "14:00", "America/Los_Angeles")`
  * is 2026-08-26T21:00:00.000Z (PDT is UTC-7).
  */
+
+/**
+ * The zone every wall-clock time on the site is entered and displayed in (event times,
+ * form dates), whatever zone the server runs in.
+ */
+export const SITE_TIME_ZONE = "America/Los_Angeles";
 
 const formatterCache = new Map<string, Intl.DateTimeFormat>();
 
@@ -70,4 +76,17 @@ export function zonedTimeToUtc(date: string, time: string, timeZone: string): Da
   const secondOffset = zoneOffsetMs(new Date(utc), timeZone);
   if (secondOffset !== firstOffset) utc = wallClockAsUtc - secondOffset;
   return new Date(utc);
+}
+
+const isoDateFormatterCache = new Map<string, Intl.DateTimeFormat>();
+
+/** The calendar date (`YYYY-MM-DD`) of an instant in a zone; defaults to now in the site zone. */
+export function isoDateInZone(instant: Date = new Date(), timeZone: string = SITE_TIME_ZONE): string {
+  let formatter = isoDateFormatterCache.get(timeZone);
+  if (!formatter) {
+    // en-CA formats as YYYY-MM-DD.
+    formatter = new Intl.DateTimeFormat("en-CA", { timeZone, year: "numeric", month: "2-digit", day: "2-digit" });
+    isoDateFormatterCache.set(timeZone, formatter);
+  }
+  return formatter.format(instant);
 }

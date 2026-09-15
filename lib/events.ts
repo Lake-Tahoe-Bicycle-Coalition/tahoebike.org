@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import type { Event, Program } from "@/lib/generated/prisma/client";
+import { SITE_TIME_ZONE } from "@/lib/time";
 
 export type { Event };
 
@@ -17,7 +18,7 @@ export async function getUpcomingEvents(program?: Program): Promise<Event[]> {
 }
 
 /** Event times are entered and displayed in Pacific time, whatever the server's zone. */
-const TIME_ZONE = "America/Los_Angeles";
+const TIME_ZONE = SITE_TIME_ZONE;
 
 const longDate = new Intl.DateTimeFormat("en-US", {
   timeZone: TIME_ZONE,

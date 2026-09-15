@@ -16,6 +16,8 @@
 import { readFileSync } from "node:fs";
 import { prisma } from "../lib/db";
 import { SETTING_DEFAULTS } from "../lib/settings";
+// Bike Kitchen event times in the export are Pacific wall-clock times.
+import { SITE_TIME_ZONE, zonedTimeToUtc } from "../lib/time";
 import {
   WP_EXPORT_PATH,
   extractBikeKitchenEvents,
@@ -23,13 +25,10 @@ import {
   extractTeamMembers,
   parseWpExport,
   requirePage,
-  zonedTimeToUtc,
   type WpExport,
 } from "../lib/wp-export";
 
 const IMAGE_MAP_PATH = "content/image-map.json";
-/** Bike Kitchen event times in the export are Pacific wall-clock times. */
-const SITE_TIME_ZONE = "America/Los_Angeles";
 
 // TODO(allowlist): replace these placeholders with the real board member Google account
 // emails before the first production deploy. See docs/OPEN_QUESTIONS.md Q24.
