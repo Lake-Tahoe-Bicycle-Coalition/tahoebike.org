@@ -36,14 +36,14 @@ export function BoardRoster({ members }: { members: BoardMember[] }) {
             ) : (
               <div
                 aria-hidden="true"
-                className="flex h-full w-full items-center justify-center text-4xl font-extrabold text-tahoe"
+                className="flex h-full w-full items-center justify-center text-4xl font-extrabold text-tahoe-deep"
               >
                 {initials(member.name)}
               </div>
             )}
           </div>
           <h3>{member.name}</h3>
-          {member.role ? <p className="font-semibold text-tahoe">{member.role}</p> : null}
+          {member.role ? <p className="font-semibold text-tahoe-deep">{member.role}</p> : null}
           {member.bio.trim() ? (
             <div className="space-y-2">
               <Markdown source={member.bio} />

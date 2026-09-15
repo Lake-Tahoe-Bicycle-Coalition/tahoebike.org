@@ -100,7 +100,7 @@ export default async function AboutPage() {
               <li key={advisor.id}>
                 <h3>{advisor.name}</h3>
                 {advisor.role && advisor.role.toLowerCase() !== "advisor" ? (
-                  <p className="font-semibold text-tahoe">{advisor.role}</p>
+                  <p className="font-semibold text-tahoe-deep">{advisor.role}</p>
                 ) : null}
                 {advisor.bio.trim() ? (
                   <div className="mt-1 space-y-2">

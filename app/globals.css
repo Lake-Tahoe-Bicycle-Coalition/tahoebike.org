@@ -10,6 +10,13 @@
   --color-safety: #ffdf00;
   --color-bluebird: #52b9e9;
   --color-tahoe: #1598cb;
+  /*
+    Not a brand colour: Tahoe blue darkened until it passes WCAG AA text contrast
+    (5.30:1 on white and 4.76:1 on a bg-tahoe/10 panel; #1598cb is only 3.29:1 on white).
+    Use it for text (links, roles, button labels); keep --color-tahoe for backgrounds,
+    borders, decoration, and the focus ring, where 3:1 is enough.
+  */
+  --color-tahoe-deep: #0a739f;
 
   --font-sans:
     "franklin-gothic-atf", "Franklin Gothic ATF", var(--font-libre-franklin), "Libre Franklin",
@@ -49,7 +56,7 @@
   }
 
   a {
-    @apply text-tahoe underline decoration-tahoe/40 underline-offset-2 hover:decoration-tahoe;
+    @apply text-tahoe-deep underline decoration-tahoe-deep/40 underline-offset-2 hover:decoration-tahoe-deep;
   }
 
   :focus-visible {
@@ -89,7 +96,7 @@
     @apply border-asphalt bg-white text-asphalt hover:bg-asphalt hover:text-white;
   }
   .btn-blue {
-    @apply border-tahoe bg-tahoe text-white hover:bg-asphalt hover:border-asphalt;
+    @apply border-tahoe-deep bg-tahoe-deep text-white hover:bg-asphalt hover:border-asphalt;
   }
 
   .skip-link {
