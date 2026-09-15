@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Our Programs",
   description:
     "What we’re working on to help Tahoe to become more bicycle friendly: bike maps, the Bike Kitchen, Bike Valet, bike racks, bike safety, advocacy, and Tahoe Bike Month.",
+  alternates: { canonical: "/programs" },
 };
 
 export default async function ProgramsPage() {

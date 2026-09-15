@@ -6,6 +6,19 @@ export const metadata: Metadata = {
   title: "Advocacy",
   description:
     "The Lake Tahoe Bicycle Coalition advocates to jurisdictions around Lake Tahoe to help make sure that cyclists' perspectives are accounted for in public infrastructure planning.",
+  alternates: { canonical: "/advocacy" },
+  openGraph: {
+    // Next replaces (never merges) the root layout's openGraph, so restate its shared fields.
+    type: "website",
+    siteName: "Lake Tahoe Bicycle Coalition",
+    locale: "en_US",
+    images: [
+      {
+        url: "/images/2026/05/IMG_8347.jpeg",
+        alt: "A “Share the Road” sign beside a road-work sign at a signalized crosswalk on a Tahoe street",
+      },
+    ],
+  },
 };
 
 const COMMENT_LETTERS_FOLDER_ID = "1bmu9wsRb_B1E4iSSVS1JgPft7eRCUrx6";
