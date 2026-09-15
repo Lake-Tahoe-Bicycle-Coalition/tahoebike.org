@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/forms/contact-form";
 import { SmartLink } from "@/components/smart-link";
 import { getSettings } from "@/lib/settings";
+import { pageMetadata } from "@/lib/site-metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Contact",
   description:
     "Send the Lake Tahoe Bicycle Coalition a message, or reach us by email, mail, Facebook, or Instagram.",
-};
+  path: "/contact",
+});
 
 export default async function ContactPage() {
   const settings = await getSettings();

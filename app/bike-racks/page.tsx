@@ -1,13 +1,18 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { RackApplicationForm } from "@/components/forms/rack-application-form";
 import { getSettings, settingIsTrue } from "@/lib/settings";
+import { pageMetadata } from "@/lib/site-metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Bike Racks",
   description:
     "Since 2018 the Regional Bicycle Parking Program has placed 450 bike racks and eight fix-it stations on public lands and at businesses in the Tahoe Basin.",
-};
+  path: "/bike-racks",
+  image: {
+    url: "/images/2022/06/bike-rack.jpg",
+    alt: "A row of bicycles parked at an inverted-U bike rack",
+  },
+});
 
 const photos = [
   {

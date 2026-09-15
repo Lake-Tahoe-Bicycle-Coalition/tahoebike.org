@@ -1,26 +1,18 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { SmartLink } from "@/components/smart-link";
 import { getSettings } from "@/lib/settings";
+import { pageMetadata } from "@/lib/site-metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Printable Bike Map",
   description:
     "Pick up a free copy of the Lake Tahoe bike map at bike shops and visitor centers in Tahoe and Truckee, or download the Truckee / North Tahoe and South Tahoe maps as PDFs.",
-  alternates: { canonical: "/print-bike-map" },
-  openGraph: {
-    // Next replaces (never merges) the root layout's openGraph, so restate its shared fields.
-    type: "website",
-    siteName: "Lake Tahoe Bicycle Coalition",
-    locale: "en_US",
-    images: [
-      {
-        url: "/images/2026/06/LTBC_SouthLake-2026-print.jpg",
-        alt: "South Tahoe bike map, 2026 print edition",
-      },
-    ],
+  path: "/print-bike-map",
+  image: {
+    url: "/images/2026/06/LTBC_SouthLake-2026-print.jpg",
+    alt: "South Tahoe bike map, 2026 print edition",
   },
-};
+});
 
 /** The 2026 print maps. Image files are 1908x1404 (landscape); PDFs live on Google Drive. */
 const maps = [

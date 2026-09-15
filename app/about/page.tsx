@@ -1,28 +1,20 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { BoardRoster } from "@/components/board-roster";
 import { prisma } from "@/lib/db";
 import { Markdown } from "@/lib/markdown";
 import type { BoardMember } from "@/lib/generated/prisma/client";
+import { pageMetadata } from "@/lib/site-metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "About Us",
   description:
     "The Lake Tahoe Bicycle Coalition is an all-volunteer organization dedicated to promoting bicycling, bike events, and new bicycle infrastructure throughout the Tahoe region.",
-  alternates: { canonical: "/about" },
-  openGraph: {
-    // Next replaces (never merges) the root layout's openGraph, so restate its shared fields.
-    type: "website",
-    siteName: "Lake Tahoe Bicycle Coalition",
-    locale: "en_US",
-    images: [
-      {
-        url: "/images/2022/05/reichel-slider.jpeg",
-        alt: "A child pushes an adult riding a tiny kids' bike along the Lake Tahoe shore",
-      },
-    ],
+  path: "/about",
+  image: {
+    url: "/images/2022/05/reichel-slider.jpeg",
+    alt: "A child pushes an adult riding a tiny kids' bike along the Lake Tahoe shore",
   },
-};
+});
 
 async function getBoard(): Promise<{ board: BoardMember[]; advisors: BoardMember[] }> {
   try {

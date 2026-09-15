@@ -1,29 +1,21 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { EventList } from "@/components/event-list";
 import { SmartLink } from "@/components/smart-link";
 import { YouTubeEmbed } from "@/components/youtube-embed";
 import { getUpcomingEvents } from "@/lib/events";
 import { getSettings } from "@/lib/settings";
+import { pageMetadata } from "@/lib/site-metadata";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Bike Kitchen",
   description:
     "Recycle your old or unwanted bicycle: LTBC volunteers collect donated bikes, repair them, and give them to community members who need one.",
-  alternates: { canonical: "/programs/bike-kitchen" },
-  openGraph: {
-    // Next replaces (never merges) the root layout's openGraph, so restate its shared fields.
-    type: "website",
-    siteName: "Lake Tahoe Bicycle Coalition",
-    locale: "en_US",
-    images: [
-      {
-        url: "/images/2022/09/unnamed.jpg",
-        alt: "Volunteers repairing bikes on work stands at an outdoor Bike Kitchen fix-up event",
-      },
-    ],
+  path: "/programs/bike-kitchen",
+  image: {
+    url: "/images/2022/09/unnamed.jpg",
+    alt: "Volunteers repairing bikes on work stands at an outdoor Bike Kitchen fix-up event",
   },
-};
+});
 
 const gallery = [
   {

@@ -4,6 +4,7 @@ import { AnnouncementBanner } from "@/components/announcement-banner";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { getSettings } from "@/lib/settings";
+import { SITE_NAME, openGraphDefaults } from "@/lib/site-metadata";
 import "./globals.css";
 
 const libreFranklin = Libre_Franklin({
@@ -17,11 +18,11 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tahoebike.org";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Lake Tahoe Bicycle Coalition",
-    template: "%s | Lake Tahoe Bicycle Coalition",
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
   description: "Helping Tahoe to become more bicycle friendly.",
-  openGraph: { type: "website", siteName: "Lake Tahoe Bicycle Coalition", locale: "en_US" },
+  openGraph: openGraphDefaults,
   twitter: { card: "summary_large_image" },
 };
 
