@@ -1,0 +1,60 @@
+<div class="ltbc-news"
+     data-account="a07e270p4wa0"
+     data-count="5"
+     data-fallback="https://visitor.r20.constantcontact.com/manage/optin?v=00102zBK1ZSE4ZhF4LhxVBqPxWpLUk85oGP9B0AgiQrGDbn_fzGitCqoim-BXR7_weZtb-tfl4pxK1qPDJkPx3VfVa9ihdOubDPO3ts5_fkwCsSh_pA9kfzgqCn14fr6c9GKWpiZVZkUGb3Lv1jLpIVeG4cNU8K_rNQ2603LV821pwlYQ9H_1vB0_BxH3XSAWMgoXEItf7kGR4%3D">
+</div>
+
+<style>
+  .ltbc-news h3 { margin-bottom: .5em; }
+  .ltbc-news .ltbc-latest { font-size: 1.15em; margin-bottom: 1em; }
+  .ltbc-news .ltbc-latest a { font-weight: 700; }
+  .ltbc-news ul { list-style: none; padding: 0; margin: 0; }
+  .ltbc-news li { padding: .25em 0; border-top: 1px solid #e5e5e5; }
+</style>
+
+<script>
+(function () {
+  var box = document.querySelector(".ltbc-news");
+  if (!box) return;
+
+  var account  = box.dataset.account;
+  var count    = box.dataset.count || 5;
+  var fallback = box.dataset.fallback;
+  var url = "https://campaignlp.constantcontact.com/v1/archive/" +
+            encodeURIComponent(account) + "/activities?limit=" + count;
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return "&#" + c.charCodeAt(0) + ";";
+    });
+  }
+
+  function link(item) {
+    return '<a href="' + esc(item.campaignUrl) + '" target="_blank" rel="noopener">' +
+           esc(item.subject) + "</a>";
+  }
+
+  function showFallback() {
+    box.innerHTML = '<h3>Newsletter</h3><p><a href="' + esc(fallback) +
+      '" target="_blank" rel="noopener">Subscribe to get our latest news by email.</a></p>';
+  }
+
+  fetch(url)
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+    .then(function (items) {
+      items = (items || []).filter(function (i) { return i && i.subject && i.campaignUrl; });
+      if (!items.length) return showFallback();
+
+      var html = "<h3>Latest Newsletter</h3>" +
+                 '<p class="ltbc-latest">' + link(items[0]) + "</p>";
+
+      if (items.length > 1) {
+        html += "<h3>Past Issues</h3><ul>";
+        for (var i = 1; i < items.length; i++) html += "<li>" + link(items[i]) + "</li>";
+        html += "</ul>";
+      }
+      box.innerHTML = html;
+    })
+    .catch(showFallback);
+})();
+</script>
