@@ -1,6 +1,6 @@
 # tahoebike.org Migration Plan
 
-**Status:** Planning → Build
+**Status:** Phases 1, 2 and 4 built (Sept 15 2026); Phase 3 (admin) next
 **Last updated:** September 2026
 
 ## Background
@@ -118,19 +118,19 @@ Newsletter signup continues to post to Constant Contact.
 ## Phases
 
 ### Phase 1: Scaffold
-- Next.js + TypeScript + Tailwind + pnpm
-- Prisma schema for the models above; Prisma Postgres connected through Vercel
-- Admin auth with allowlist
-- Seed script that loads the board roster, Bike Kitchen events, homepage cards, and site settings from the WordPress XML export
-- CI: typecheck, lint, `prisma validate` on every PR
+- Next.js + TypeScript + Tailwind + pnpm (done)
+- Prisma schema for the models above (done); Prisma Postgres connected through Vercel (pending the Vercel project, Q23)
+- Admin auth with allowlist (done: Auth.js + Google, `AdminUser` allowlist, `/admin` shell only)
+- Seed script that loads the board roster, Bike Kitchen events, homepage cards, and site settings from the WordPress XML export (done)
+- CI: typecheck, lint, `prisma validate` on every PR (done)
 
 ### Phase 2: Content and structure
-- Port every page from the XML export, preserving paths
-- Fix known content bugs during the port (duplicated Bike Valet body; stale 2022 rack deadline; past events)
-- Wire events, board, hero cards, and announcements to the DB
-- Download all referenced images from `wp-content/uploads` into `/public/images` (static) or Vercel Blob (admin-managed)
-- Build the three native forms and email notifications
-- Minimal, clean, accessible styling only, using the brand guidelines' colors and fonts. No attempt to replicate the WordPress theme.
+- Port every page from the XML export, preserving paths (done)
+- Fix known content bugs during the port (duplicated Bike Valet body; stale 2022 rack deadline; past events) (done)
+- Wire events, board, hero cards, and announcements to the DB (done)
+- Download all referenced images from `wp-content/uploads` into `/public/images` (static) or Vercel Blob (admin-managed) (done: static images downloaded; Blob uploads arrive with Phase 3)
+- Build the three native forms and email notifications (done)
+- Minimal, clean, accessible styling only, using the brand guidelines' colors and fonts. No attempt to replicate the WordPress theme. (done)
 
 ### Phase 3: Admin
 - CRUD pages for each model
@@ -138,9 +138,9 @@ Newsletter signup continues to post to Constant Contact.
 - Image uploads
 
 ### Phase 4: Redirects and SEO
-- Keep existing paths. Add a `next.config` redirect map for anything that changes and for old WordPress URLs found in the export (attachment pages, `?p=` links, etc.)
-- Choose `tahoebike.org` (non-www, matching current canonical) as canonical; redirect `www`
-- Metadata, Open Graph, sitemap, robots
+- Keep existing paths. Add a `next.config` redirect map for anything that changes and for old WordPress URLs found in the export (attachment pages, `?p=` links, etc.) (done: 341 rules, see `docs/REDIRECTS.md`)
+- Choose `tahoebike.org` (non-www, matching current canonical) as canonical; redirect `www` (done)
+- Metadata, Open Graph, sitemap, robots (done; three pages still need `alternates.canonical`, Q34)
 
 ### Phase 5: Cutover
 - Board reviews the Vercel preview
@@ -158,6 +158,18 @@ Newsletter signup continues to post to Constant Contact.
 - Prisma schema changes require a migration (`prisma migrate dev`); never edit the database schema by hand.
 - Keep dependencies minimal. Prefer Next.js built-ins over libraries.
 - Read `BRAND_GUIDELINES` (see repo root) before any styling work.
+
+### Where things are
+
+| What | Where |
+|---|---|
+| Page copy | `app/**/page.tsx` |
+| Shared components | `components/` |
+| Site setting keys and defaults | `lib/settings.ts` |
+| Redirect map | `lib/redirects.ts` (+ `lib/redirects.generated.ts`), documented in `docs/REDIRECTS.md` |
+| Decisions and open questions log | `docs/OPEN_QUESTIONS.md` |
+| WordPress export parsing and content scripts | `lib/wp-export/` and `scripts/` |
+| Database seed | `prisma/seed.ts` |
 
 ## Open items
 
