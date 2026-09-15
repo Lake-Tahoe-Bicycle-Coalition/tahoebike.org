@@ -1,0 +1,117 @@
+/**
+ * The redirect map for next.config.ts: every WordPress-era URL that must keep
+ * working on the new site (Phase 4 of docs/MIGRATION_PLAN.md, Q12 in
+ * docs/OPEN_QUESTIONS.md).
+ *
+ * Generated entries (attachment pages, `?p=` / `?page_id=` / `?attachment_id=`
+ * ids, old `wp-content/uploads` URLs) live in lib/redirects.generated.ts and
+ * are rebuilt with `pnpm content:redirects`. Everything else is hand-written
+ * here. Order matters: Next applies the first matching rule.
+ *
+ * Trailing slashes: Next's default (`trailingSlash: false`) already answers
+ * `/about/` with a 308 to `/about` before these rules run, so no source here
+ * carries a trailing slash and nothing re-implements that normalization.
+ *
+ * Query strings: Next appends the request's query string to every redirect
+ * destination (see `prepareDestination` in next/dist/shared/lib/router/utils),
+ * so `/?page_id=9` lands on `/about?page_id=9`. That is harmless (pages ignore
+ * unknown params and every page declares a canonical URL) and cannot be
+ * avoided with next.config redirects. It also means a `/?s=term` → `/` search
+ * redirect would redirect to itself forever, so there is none: `/?s=term`
+ * simply renders the home page.
+ */
+import type { NextConfig } from "next";
+import {
+  attachmentIdRedirects,
+  attachmentPageRedirects,
+  pageIdRedirects,
+  uploadRedirects,
+} from "./redirects.generated";
+
+/** One entry of the array `next.config.ts`'s `redirects()` resolves to. */
+export type Redirect = Awaited<ReturnType<NonNullable<NextConfig["redirects"]>>>[number];
+
+/** Pages that existed on the WordPress site but were not ported (Q2/Q12), with their new home. */
+export const retiredPages: Readonly<Record<string, string>> = {
+  "/get-involved": "/join",
+  "/get-involved/join": "/join",
+  "/projects": "/programs",
+  "/stay-in-touch": "/contact",
+  "/board-of-directors": "/about",
+  "/sponsors": "/join",
+  "/where-to-ride": "https://map.tahoebike.org/",
+  "/volunteerdraft": "/volunteer",
+  "/bike-month-leaderboard": "https://www.tahoebikemonth.org/",
+  "/home": "/",
+};
+
+/** WordPress archive, feed, and system paths that have no equivalent on the new site. */
+const wordpressSystemPaths = [
+  "/category/:slug*",
+  "/tag/:slug*",
+  "/author/:slug*",
+  "/feed",
+  "/feed/:path*",
+  "/comments/feed",
+  "/wp-login.php",
+  "/wp-admin/:path*",
+  "/xmlrpc.php",
+];
+
+function permanent(source: string, destination: string): Redirect {
+  return { source, destination, permanent: true };
+}
+
+/** `/?<key>=<value>` → destination. Without `value`, any non-empty value matches. */
+function queryRedirect(key: string, value: string | undefined, destination: string): Redirect {
+  return {
+    source: "/",
+    has: [value === undefined ? { type: "query", key } : { type: "query", key, value }],
+    destination,
+    permanent: true,
+  };
+}
+
+/** Canonical host is the apex domain (Q23): send www traffic there, path and query intact. */
+const hostRedirects: Redirect[] = [
+  {
+    source: "/:path*",
+    has: [{ type: "host", value: "www.tahoebike.org" }],
+    destination: "https://tahoebike.org/:path*",
+    permanent: true,
+  },
+];
+
+/**
+ * WordPress "ugly" permalinks. Known ids first, then a catch-all per key that
+ * sends drafts and ids the export never had to the home page. `?p=` covers
+ * pages only; the export has no posts.
+ */
+const queryRedirects: Redirect[] = [
+  ...pageIdRedirects.flatMap(([id, destination]) => [
+    queryRedirect("page_id", String(id), destination),
+    queryRedirect("p", String(id), destination),
+  ]),
+  ...attachmentIdRedirects.map(([id, destination]) =>
+    queryRedirect("attachment_id", String(id), destination),
+  ),
+  queryRedirect("page_id", undefined, "/"),
+  queryRedirect("p", undefined, "/"),
+  queryRedirect("attachment_id", undefined, "/"),
+];
+
+const retiredPageRedirects: Redirect[] = Object.entries(retiredPages).map(([source, destination]) =>
+  permanent(source, destination),
+);
+
+const wordpressSystemRedirects: Redirect[] = wordpressSystemPaths.map((source) => permanent(source, "/"));
+
+/** Every redirect, in evaluation order. */
+export const redirects: Redirect[] = [
+  ...hostRedirects,
+  ...queryRedirects,
+  ...retiredPageRedirects,
+  ...wordpressSystemRedirects,
+  ...attachmentPageRedirects.map(([source, destination]) => permanent(source, destination)),
+  ...uploadRedirects.map(([source, destination]) => permanent(source, destination)),
+];
