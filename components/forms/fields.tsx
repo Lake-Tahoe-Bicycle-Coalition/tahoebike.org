@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, type ComponentProps, type ReactNode } from "react";
+import { useEffect, useId, useRef, type ComponentProps, type ReactNode } from "react";
 
 /**
  * Shared building blocks for the public forms: labelled controls with inline errors
@@ -179,12 +179,22 @@ export function SubmitButton({ pending, label }: { pending: boolean; label: stri
   );
 }
 
+/**
+ * Replaces the form after a successful submit and moves keyboard focus to itself so
+ * screen readers announce it. (`autoFocus` only works on form controls in React 19,
+ * hence the ref.)
+ */
 export function SuccessMessage({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    ref.current?.focus();
+  }, []);
+
   return (
     <p
+      ref={ref}
       role="status"
       tabIndex={-1}
-      autoFocus
       className="rounded border border-tahoe bg-tahoe/10 px-4 py-3 font-semibold"
     >
       {children}
