@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Libre_Franklin } from "next/font/google";
+import { AnnouncementBanner } from "@/components/announcement-banner";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { getSettings } from "@/lib/settings";
@@ -34,6 +35,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <a href="#main" className="skip-link">
           Skip to content
         </a>
+        <AnnouncementBanner />
         <SiteHeader />
         <main id="main" className="flex-1">
           {children}
