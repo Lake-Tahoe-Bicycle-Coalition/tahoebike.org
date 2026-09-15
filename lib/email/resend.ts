@@ -2,6 +2,9 @@ import type { EmailMessage, EmailProvider } from "./types";
 
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
 
+/** A hung Resend request must not hold a form submission (already stored) hostage. */
+const REQUEST_TIMEOUT_MS = 10_000;
+
 /** Sends through Resend's REST API (https://resend.com/docs/api-reference/emails/send-email). */
 export class ResendProvider implements EmailProvider {
   private readonly apiKey: string;
@@ -26,6 +29,7 @@ export class ResendProvider implements EmailProvider {
         text: message.text,
         ...(message.replyTo ? { reply_to: message.replyTo } : {}),
       }),
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
 
     if (!response.ok) {
