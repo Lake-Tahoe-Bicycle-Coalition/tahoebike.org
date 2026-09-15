@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { HomepageCard } from "@/lib/generated/prisma/client";
+import { isExternalUrl, isOptimizableImageUrl } from "@/lib/urls";
 
 type Card = Pick<HomepageCard, "id" | "title" | "blurb" | "ctaLabel" | "ctaUrl" | "imageUrl">;
 
@@ -27,9 +28,7 @@ export function HeroCards({ cards }: { cards: Card[] }) {
                   fill
                   sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                   className="object-cover"
-                  // Admin-entered absolute URLs (e.g. Vercel Blob) are served as-is until
-                  // their host is allowed in next.config images.remotePatterns.
-                  unoptimized={isAbsoluteUrl(card.imageUrl)}
+                  unoptimized={!isOptimizableImageUrl(card.imageUrl)}
                 />
               </div>
             ) : null}
@@ -49,10 +48,6 @@ export function HeroCards({ cards }: { cards: Card[] }) {
   );
 }
 
-function isAbsoluteUrl(url: string): boolean {
-  return /^https?:\/\//i.test(url);
-}
-
 function CtaLink({
   href,
   className,
@@ -69,7 +64,7 @@ function CtaLink({
       </Link>
     );
   }
-  if (isAbsoluteUrl(href)) {
+  if (isExternalUrl(href)) {
     return (
       <a href={href} className={className} target="_blank" rel="noopener">
         {children}

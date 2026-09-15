@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { BoardMember } from "@/lib/generated/prisma/client";
 import { Markdown } from "@/lib/markdown";
+import { isOptimizableImageUrl } from "@/lib/urls";
 
 function initials(name: string): string {
   return name
@@ -29,9 +30,7 @@ export function BoardRoster({ members }: { members: BoardMember[] }) {
                 fill
                 sizes="144px"
                 className="object-cover"
-                // Admin-uploaded photos may live on an external host that is not in next.config;
-                // serve those as-is instead of through the image optimizer.
-                unoptimized={/^https?:/i.test(member.photoUrl)}
+                unoptimized={!isOptimizableImageUrl(member.photoUrl)}
               />
             ) : (
               <div
