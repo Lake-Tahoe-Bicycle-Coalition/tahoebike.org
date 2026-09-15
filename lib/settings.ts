@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { prisma } from "@/lib/db";
 
 /**
@@ -55,8 +56,11 @@ export function isSettingKey(key: string): key is SettingKey {
   return Object.hasOwn(SETTING_DEFAULTS, key);
 }
 
-/** All settings, database values layered over code defaults. */
-export async function getSettings(): Promise<Settings> {
+/**
+ * All settings, database values layered over code defaults.
+ * Wrapped in React's cache() so the layout and the page share one query per render.
+ */
+export const getSettings = cache(async (): Promise<Settings> => {
   const settings: Settings = { ...SETTING_DEFAULTS };
   try {
     const rows = await prisma.siteSetting.findMany();
@@ -67,7 +71,7 @@ export async function getSettings(): Promise<Settings> {
     console.error("Could not load site settings; using defaults.", error);
   }
   return settings;
-}
+});
 
 export function settingIsTrue(value: string): boolean {
   return ["true", "1", "yes", "on"].includes(value.trim().toLowerCase());
