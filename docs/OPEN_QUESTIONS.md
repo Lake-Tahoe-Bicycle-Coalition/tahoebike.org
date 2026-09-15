@@ -53,7 +53,12 @@ The Printable Bike Map page links its two images to Google Drive PDFs (2026 maps
 **Assumed.** Keep the Google Drive links; do not download the unreferenced PDFs. Open: should the 2026 PDFs be hosted on the site instead of Drive?
 
 ### Q12. Redirect targets for retired pages (Phase 4)
-**Assumed** map, to be confirmed:
+**Decision (Sept 15 2026): Decided/implemented.** Built as described below; the full map
+(341 rules: host, `?page_id=`/`?p=`/`?attachment_id=`, retired pages, WordPress system paths,
+attachment pages, old upload URLs) lives in `lib/redirects.ts` + `lib/redirects.generated.ts`
+and is documented in [docs/REDIRECTS.md](REDIRECTS.md). Still worth a board sanity-check that
+each retired page points somewhere sensible:
+
 | Old path | Redirect to |
 |---|---|
 | `/get-involved/`, `/get-involved/join/` | `/join/` |
@@ -112,7 +117,7 @@ Plan says "Resend (or equivalent)".
 
 ### Q23. GitHub remote and deployment
 The repo had no git history and no remote; `gh` is not installed on this machine.
-**Decision (Sept 15 2026): Decided.** All work is committed directly on `main` (no feature branch or PR for this session). Still **open**: create the GitHub repository, add the remote, push `main`, and connect it to Vercel for preview deployments.
+**Decision (Sept 15 2026): Decided.** All work is committed directly on `main` (no feature branch or PR for this session). Still **open**: create the GitHub repository, add the remote, and push `main`. Once the repo exists, connect it to Vercel (import the repository, framework preset Next.js, package manager pnpm) so that `main` deploys production and every pull request gets a preview URL; the deployment steps are in the README.
 
 ### Q24. Admin allowlist
 **Open.** Which board emails go in `AdminUser`? The seed contains a clearly marked placeholder.
@@ -151,3 +156,29 @@ Board bios and event descriptions render through a small safe Markdown subset (p
 ### Q33. Print map image dimensions
 The brief guessed portrait maps; the 2026 print map images are 1908×1404 landscape. Pages use the measured dimensions.
 **Decided by measurement.** No action.
+
+### Q34. Query strings survive the legacy redirects
+Next appends the incoming query string to every `next.config` redirect destination, so an old
+`/?page_id=9` link lands on `/about?page_id=9` rather than `/about`. The same applies to every
+`?p=` and `?attachment_id=` rule. A `proxy.ts` (Next 16's middleware) could strip the leftover
+parameter and issue a clean redirect.
+**Assumed.** Acceptable as is: pages ignore unknown parameters and the canonical link tag tells
+search engines the clean URL. **Open:** add the proxy, or leave it? Related gap: `/bike-racks`,
+`/contact`, and `/programs/bike-valet` do not declare `alternates.canonical` yet, and all three
+are redirect destinations, so they rely on the parameter being ignored rather than on a canonical
+tag. Worth adding the three canonical entries whether or not the proxy is built.
+
+### Q35. Open Graph image typography
+`app/opengraph-image.tsx` renders the default share card with next/og, which bundles only Geist
+Regular. The brand's heavy display weight is approximated with a same-colour text shadow that
+thickens the strokes; up close it is not the real typeface.
+**Open.** Supplying a TTF (Libre Franklin Black, or Franklin Gothic ATF if LTBC gets Adobe
+access — see Q6) and loading it through `ImageResponse`'s `fonts` option would fix it properly.
+
+### Q36. Two-hop redirects for retired paths with trailing slashes
+The site runs with Next's default `trailingSlash: false`, so `/get-involved/` is first
+normalized to `/get-involved` (308) and then redirected to `/join` (308) — two hops for old
+inbound links that carry WordPress's trailing slash.
+**Assumed.** Acceptable: both hops are permanent, browsers and crawlers follow them, and the
+alternative (duplicating every rule with a slashed source) roughly doubles the rule count for no
+user-visible gain.
