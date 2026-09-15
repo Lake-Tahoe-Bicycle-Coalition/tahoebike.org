@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import { submitContact } from "@/lib/forms/actions";
-import { contactFieldLabels as labels } from "@/lib/forms/schemas";
+import { contactFieldLabels as labels } from "@/lib/forms/fields";
 import { initialFormState } from "@/lib/forms/state";
 import {
   FormAlert,

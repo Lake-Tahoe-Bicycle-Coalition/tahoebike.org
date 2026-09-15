@@ -6,7 +6,7 @@ import {
   matchingFundsOptions,
   rackApplicationFieldLabels as labels,
   rackStyleOptions,
-} from "@/lib/forms/schemas";
+} from "@/lib/forms/fields";
 import { initialFormState } from "@/lib/forms/state";
 import {
   FormAlert,

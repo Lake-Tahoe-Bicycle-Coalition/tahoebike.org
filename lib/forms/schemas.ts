@@ -1,9 +1,13 @@
 import { z } from "zod";
+import { matchingFundsValues, organizationTypeValues, rackStyleValues } from "./fields";
 
 /**
  * Validation for the three public forms. Field lists follow docs/OPEN_QUESTIONS.md
  * Q16 (valet), Q17 (racks), Q18 (contact). Every form also carries a honeypot
  * field named `website` that humans never see and that must stay empty.
+ *
+ * Server-only: the client components import labels and option lists from ./fields
+ * (which is zod-free) so that zod stays out of the browser bundle.
  */
 
 function requiredText(label: string, max: number) {
@@ -51,27 +55,12 @@ export const contactSchema = z.object({
 
 export type ContactInput = z.infer<typeof contactSchema>;
 
-export const contactFieldLabels = {
-  firstName: "First name",
-  lastName: "Last name",
-  email: "Email address",
-  phone: "Phone number",
-  message: "Message",
-} as const satisfies Record<Exclude<keyof ContactInput, "website">, string>;
-
 // --- Bike valet request (Q16) ------------------------------------------------
 
 const organizationType = z.enum(
-  ["nonprofit", "business-member", "both", "neither"],
+  organizationTypeValues,
   "Tell us whether you are a nonprofit or a Business Member.",
 );
-
-export const organizationTypeOptions: { value: z.infer<typeof organizationType>; label: string }[] = [
-  { value: "nonprofit", label: "Nonprofit organization" },
-  { value: "business-member", label: "Bike Coalition Business Member" },
-  { value: "both", label: "Both" },
-  { value: "neither", label: "Neither" },
-];
 
 export const valetRequestSchema = z.object({
   contactName: requiredText("Contact name", 100),
@@ -92,41 +81,11 @@ export const valetRequestSchema = z.object({
 
 export type ValetRequestInput = z.infer<typeof valetRequestSchema>;
 
-export const valetRequestFieldLabels = {
-  contactName: "Contact name",
-  organization: "Organization",
-  email: "Email address",
-  phone: "Phone number",
-  eventName: "Event name",
-  eventDate: "Event date",
-  startTime: "Start time",
-  endTime: "End time",
-  location: "Event location",
-  expectedAttendance: "Expected attendance",
-  expectedBikes: "Expected number of bikes",
-  organizationType: "Nonprofit or Business Member",
-  notes: "Notes",
-} as const satisfies Record<Exclude<keyof ValetRequestInput, "website">, string>;
-
 // --- Bike rack application (Q17) ---------------------------------------------
 
-const rackStyle = z.enum(["bolt-down", "free-standing"], "Choose a rack style.");
+const rackStyle = z.enum(rackStyleValues, "Choose a rack style.");
 
-export const rackStyleOptions: { value: z.infer<typeof rackStyle>; label: string }[] = [
-  { value: "bolt-down", label: "Bolt-down" },
-  { value: "free-standing", label: "Free-standing" },
-];
-
-const matchingFunds = z.enum(
-  ["yes", "partial", "no"],
-  "Tell us whether you can provide matching funds.",
-);
-
-export const matchingFundsOptions: { value: z.infer<typeof matchingFunds>; label: string }[] = [
-  { value: "yes", label: "Yes" },
-  { value: "partial", label: "Partially" },
-  { value: "no", label: "No" },
-];
+const matchingFunds = z.enum(matchingFundsValues, "Tell us whether you can provide matching funds.");
 
 export const rackApplicationSchema = z.object({
   businessName: requiredText("Business name", 200),
@@ -143,16 +102,3 @@ export const rackApplicationSchema = z.object({
 });
 
 export type RackApplicationInput = z.infer<typeof rackApplicationSchema>;
-
-export const rackApplicationFieldLabels = {
-  businessName: "Business name",
-  contactName: "Contact name",
-  email: "Email address",
-  phone: "Phone number",
-  businessAddress: "Business address",
-  racksRequested: "Number of racks requested",
-  rackStyle: "Rack style",
-  matchingFunds: "Able to provide matching funds",
-  expectedUse: "Expected use and community benefit",
-  notes: "Notes",
-} as const satisfies Record<Exclude<keyof RackApplicationInput, "website">, string>;

@@ -7,14 +7,8 @@ import { getEmailProvider } from "@/lib/email";
 import type { FormType } from "@/lib/generated/prisma/enums";
 import { getSettings, settingIsTrue, type Settings } from "@/lib/settings";
 import { verifyTurnstile } from "@/lib/turnstile";
-import {
-  contactFieldLabels,
-  contactSchema,
-  rackApplicationFieldLabels,
-  rackApplicationSchema,
-  valetRequestFieldLabels,
-  valetRequestSchema,
-} from "./schemas";
+import { contactFieldLabels, rackApplicationFieldLabels, valetRequestFieldLabels } from "./fields";
+import { contactSchema, rackApplicationSchema, valetRequestSchema } from "./schemas";
 import type { FormState } from "./state";
 
 const HONEYPOT_FIELD = "website";

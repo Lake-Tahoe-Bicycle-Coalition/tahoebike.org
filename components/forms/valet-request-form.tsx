@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import { submitValetRequest } from "@/lib/forms/actions";
-import { organizationTypeOptions, valetRequestFieldLabels as labels } from "@/lib/forms/schemas";
+import { organizationTypeOptions, valetRequestFieldLabels as labels } from "@/lib/forms/fields";
 import { initialFormState } from "@/lib/forms/state";
 import {
   FormAlert,
