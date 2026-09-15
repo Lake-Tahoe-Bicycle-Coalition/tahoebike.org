@@ -25,7 +25,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   pages: { signIn: "/admin/sign-in", error: "/admin/sign-in" },
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account, profile }) {
+      // Google's OIDC profile says whether it has verified the address. Refuse
+      // unverified ones so that an allowlisted email cannot be claimed by an account
+      // that merely asserts it.
+      if (account?.provider === "google" && profile?.email_verified !== true) return false;
       return isAllowedAdmin(user.email);
     },
   },
