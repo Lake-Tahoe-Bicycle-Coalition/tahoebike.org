@@ -10,8 +10,21 @@ export const metadata: Metadata = {
   alternates: { canonical: "/volunteer" },
 };
 
+/** POINT's original embed snippet used this widget id; the current one lives in the embed URL. */
+const DEFAULT_POINT_WIDGET_ID = "1149";
+
+/** The `widgetId` query parameter of the POINT embed URL, which its resize helper expects. */
+function pointWidgetId(embedUrl: string): string {
+  try {
+    return new URL(embedUrl).searchParams.get("widgetId") || DEFAULT_POINT_WIDGET_ID;
+  } catch {
+    return DEFAULT_POINT_WIDGET_ID;
+  }
+}
+
 export default async function VolunteerPage() {
   const settings = await getSettings();
+  const widgetId = pointWidgetId(settings.point_embed_url);
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -43,7 +56,11 @@ export default async function VolunteerPage() {
           className="w-full border-0"
         />
         {/* Optional helper from POINT: resizes #point_iframe to fit its content. The embed works without it. */}
-        <Script src="https://pointapp.org/embed/assets/js/iframe-scripts.js" strategy="lazyOnload" data-frame-id="1149" />
+        <Script
+          src="https://pointapp.org/embed/assets/js/iframe-scripts.js"
+          strategy="lazyOnload"
+          data-frame-id={widgetId}
+        />
         <p className="mt-4">
           <SmartLink href={settings.point_org_url}>Open the volunteer calendar on POINT</SmartLink>
         </p>

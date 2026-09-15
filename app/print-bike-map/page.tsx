@@ -40,6 +40,15 @@ const maps = [
   },
 ];
 
+/** "map.tahoebike.org" for https://map.tahoebike.org/; the raw value if it is not a URL. */
+function hostLabel(url: string): string {
+  try {
+    return new URL(url).host;
+  } catch {
+    return url;
+  }
+}
+
 export default async function PrintBikeMapPage() {
   const settings = await getSettings();
 
@@ -50,7 +59,7 @@ export default async function PrintBikeMapPage() {
         <p>
           Pick up a copy for free at all bike shops and visitor centers in Tahoe and Truckee, or
           save the paper and view the map online at{" "}
-          <SmartLink href={settings.map_url}>map.tahoebike.org</SmartLink>
+          <SmartLink href={settings.map_url}>{hostLabel(settings.map_url)}</SmartLink>
           .
         </p>
         <p>Click the images below to download a PDF.</p>
