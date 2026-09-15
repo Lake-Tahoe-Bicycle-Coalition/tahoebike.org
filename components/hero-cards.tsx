@@ -1,0 +1,86 @@
+import Image from "next/image";
+import Link from "next/link";
+import type { HomepageCard } from "@/lib/generated/prisma/client";
+
+type Card = Pick<HomepageCard, "id" | "title" | "blurb" | "ctaLabel" | "ctaUrl" | "imageUrl">;
+
+/**
+ * The homepage hero callout cards (admin-managed `HomepageCard` rows).
+ * Renders nothing when there are no active cards.
+ */
+export function HeroCards({ cards }: { cards: Card[] }) {
+  if (cards.length === 0) return null;
+
+  return (
+    <section aria-label="Highlights">
+      <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(15rem,1fr))]">
+        {cards.map((card) => (
+          <li
+            key={card.id}
+            className="flex flex-col overflow-hidden rounded-lg border border-asphalt/10 bg-white"
+          >
+            {card.imageUrl ? (
+              <div className="relative aspect-[4/3] w-full bg-tahoe/10">
+                <Image
+                  src={card.imageUrl}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover"
+                  // Admin-entered absolute URLs (e.g. Vercel Blob) are served as-is until
+                  // their host is allowed in next.config images.remotePatterns.
+                  unoptimized={isAbsoluteUrl(card.imageUrl)}
+                />
+              </div>
+            ) : null}
+            <div className="flex flex-1 flex-col gap-3 p-5">
+              <h2 className="text-xl sm:text-xl">{card.title}</h2>
+              <p className="flex-1">{card.blurb}</p>
+              <p>
+                <CtaLink href={card.ctaUrl} className="btn btn-primary">
+                  {card.ctaLabel}
+                </CtaLink>
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function isAbsoluteUrl(url: string): boolean {
+  return /^https?:\/\//i.test(url);
+}
+
+function CtaLink({
+  href,
+  className,
+  children,
+}: {
+  href: string;
+  className: string;
+  children: React.ReactNode;
+}) {
+  if (href.startsWith("/")) {
+    return (
+      <Link href={href} className={className}>
+        {children}
+      </Link>
+    );
+  }
+  if (isAbsoluteUrl(href)) {
+    return (
+      <a href={href} className={className} target="_blank" rel="noopener">
+        {children}
+        <span className="sr-only"> (opens in a new tab)</span>
+      </a>
+    );
+  }
+  // mailto:, tel:, #anchor and the like.
+  return (
+    <a href={href} className={className}>
+      {children}
+    </a>
+  );
+}
