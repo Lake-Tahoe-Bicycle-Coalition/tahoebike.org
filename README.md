@@ -83,6 +83,12 @@ managed at `/admin` (Phase 3).
    `DATABASE_URL=<production url> pnpm db:deploy`, and seed once with `pnpm db:seed`.
 5. Push to `main` to deploy production; every pull request gets a preview URL.
 
+`next build` prerenders every public page (they are static, revalidated every five
+minutes), so the build itself needs a reachable `DATABASE_URL`. On Vercel the Prisma
+Postgres integration provides it to build steps as well; anywhere else (CI, a local
+`pnpm build`) point `DATABASE_URL` at a database with the schema applied. Pages fall
+back to their code defaults if a query fails, but the build must be able to connect.
+
 DNS cutover (apex and `www` only; never touch the `map` subdomain or MX records) is described
 in the migration plan.
 
