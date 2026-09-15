@@ -214,13 +214,13 @@ export const attachmentPageRedirects: ReadonlyArray<readonly [source: string, de
 
 /**
  * `/?page_id=N` and `/?p=N` → the page's current path or retired-page target.
- * Draft ids (3, 625, 632, 1280) and unknown ids fall back to "/" in lib/redirects.ts.
+ * Ids that resolve to "/" (3, 51, 625, 632, 1280: the home page and drafts) and
+ * unknown ids have no rule; those URLs render the home page as-is.
  */
 export const pageIdRedirects: ReadonlyArray<readonly [id: number, destination: string]> = [
   [8, "/join"],
   [9, "/about"],
   [10, "https://map.tahoebike.org/"],
-  [51, "/"],
   [102, "/join"],
   [118, "/bike-safety"],
   [120, "/programs"],
@@ -239,7 +239,7 @@ export const pageIdRedirects: ReadonlyArray<readonly [id: number, destination: s
   [1232, "/advocacy"],
 ];
 
-/** `/?attachment_id=N` for attachments with a ported parent page; all others fall back to "/". */
+/** `/?attachment_id=N` for attachments with a ported parent page; all others render the home page as-is. */
 export const attachmentIdRedirects: ReadonlyArray<readonly [id: number, destination: string]> = [
   [108, "/join"],
   [109, "/join"],

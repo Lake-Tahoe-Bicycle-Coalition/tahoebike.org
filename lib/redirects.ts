@@ -10,23 +10,21 @@
  *
  * Trailing slashes: Next's default (`trailingSlash: false`) already answers
  * `/about/` with a 308 to `/about` before these rules run, so no source here
- * carries a trailing slash and nothing re-implements that normalization.
+ * carries a trailing slash and nothing re-implements that normalization. A
+ * retired path with a trailing slash therefore takes two hops
+ * (`/projects/` → `/projects` → `/programs`).
  *
  * Query strings: Next appends the request's query string to every redirect
  * destination (see `prepareDestination` in next/dist/shared/lib/router/utils),
  * so `/?page_id=9` lands on `/about?page_id=9`. That is harmless (pages ignore
  * unknown params and every page declares a canonical URL) and cannot be
- * avoided with next.config redirects. It also means a `/?s=term` → `/` search
- * redirect would redirect to itself forever, so there is none: `/?s=term`
- * simply renders the home page.
+ * avoided with next.config redirects. It also means any rule from `/` back to
+ * `/` would redirect to itself forever, so there is deliberately no
+ * `/?s=term` → `/` search rule and no catch-all for unknown `?page_id=` /
+ * `?p=` / `?attachment_id=` values: those URLs simply render the home page.
  */
 import type { NextConfig } from "next";
-import {
-  attachmentIdRedirects,
-  attachmentPageRedirects,
-  pageIdRedirects,
-  uploadRedirects,
-} from "./redirects.generated";
+import { attachmentIdRedirects, attachmentPageRedirects, pageIdRedirects, uploadRedirects } from "./redirects.generated";
 
 /** One entry of the array `next.config.ts`'s `redirects()` resolves to. */
 export type Redirect = Awaited<ReturnType<NonNullable<NextConfig["redirects"]>>>[number];
@@ -62,11 +60,11 @@ function permanent(source: string, destination: string): Redirect {
   return { source, destination, permanent: true };
 }
 
-/** `/?<key>=<value>` → destination. Without `value`, any non-empty value matches. */
-function queryRedirect(key: string, value: string | undefined, destination: string): Redirect {
+/** `/?<key>=<id>` → destination. The value is anchored (`^id$`) by Next, so 9 does not match 19. */
+function queryRedirect(key: string, id: number, destination: string): Redirect {
   return {
     source: "/",
-    has: [value === undefined ? { type: "query", key } : { type: "query", key, value }],
+    has: [{ type: "query", key, value: String(id) }],
     destination,
     permanent: true,
   };
@@ -75,29 +73,34 @@ function queryRedirect(key: string, value: string | undefined, destination: stri
 /** Canonical host is the apex domain (Q23): send www traffic there, path and query intact. */
 const hostRedirects: Redirect[] = [
   {
-    source: "/:path*",
+    source: "/",
     has: [{ type: "host", value: "www.tahoebike.org" }],
-    destination: "https://tahoebike.org/:path*",
+    destination: "https://tahoebike.org/",
+    permanent: true,
+  },
+  {
+    source: "/:path+",
+    has: [{ type: "host", value: "www.tahoebike.org" }],
+    destination: "https://tahoebike.org/:path+",
     permanent: true,
   },
 ];
 
 /**
- * WordPress "ugly" permalinks. Known ids first, then a catch-all per key that
- * sends drafts and ids the export never had to the home page. `?p=` covers
- * pages only; the export has no posts.
+ * WordPress "ugly" permalinks for pages and attachments whose new home is a
+ * real page. Anything resolving to "/" is skipped (see the query-string note
+ * above); `?p=` covers pages only because the export has no posts.
  */
 const queryRedirects: Redirect[] = [
-  ...pageIdRedirects.flatMap(([id, destination]) => [
-    queryRedirect("page_id", String(id), destination),
-    queryRedirect("p", String(id), destination),
-  ]),
-  ...attachmentIdRedirects.map(([id, destination]) =>
-    queryRedirect("attachment_id", String(id), destination),
-  ),
-  queryRedirect("page_id", undefined, "/"),
-  queryRedirect("p", undefined, "/"),
-  queryRedirect("attachment_id", undefined, "/"),
+  ...pageIdRedirects
+    .filter(([, destination]) => destination !== "/")
+    .flatMap(([id, destination]) => [
+      queryRedirect("page_id", id, destination),
+      queryRedirect("p", id, destination),
+    ]),
+  ...attachmentIdRedirects
+    .filter(([, destination]) => destination !== "/")
+    .map(([id, destination]) => queryRedirect("attachment_id", id, destination)),
 ];
 
 const retiredPageRedirects: Redirect[] = Object.entries(retiredPages).map(([source, destination]) =>

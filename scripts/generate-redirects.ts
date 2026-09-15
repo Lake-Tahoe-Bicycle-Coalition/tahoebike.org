@@ -7,8 +7,8 @@
  *   - attachment pages (`/<slug>/`, sometimes nested under the page the file
  *     was uploaded to) → that page's current path, or `/`
  *   - `?page_id=N` / `?p=N` for every published page → its current path or
- *     its retired-page target (drafts and unknown ids fall back to `/` via a
- *     catch-all rule in lib/redirects.ts)
+ *     its retired-page target (ids resolving to `/`, drafts, and unknown ids
+ *     get no rule and render the home page as-is)
  *   - `?attachment_id=N` → the same target as the attachment page
  *   - every `wp-content/uploads` URL in content/image-map.json → its `/images` path
  *
@@ -91,13 +91,15 @@ for (const att of data.attachments) {
   attachmentPages.set(source, destination);
 }
 
-// (b) ids
+// (b) ids. Ids that resolve to "/" (the home page itself, drafts) get no rule:
+// `/?page_id=N` already renders the home page, and a redirect from `/` to `/`
+// would loop because Next keeps the query string (see lib/redirects.ts).
 const pageIds: [number, string][] = [];
-const draftIds: number[] = [];
+const homeIds: number[] = [];
 for (const page of data.pages) {
-  const destination = pageDestination(page);
-  if (destination === null) {
-    draftIds.push(page.id);
+  const destination = pageDestination(page) ?? "/";
+  if (destination === "/") {
+    homeIds.push(page.id);
   } else {
     pageIds.push([page.id, destination]);
   }
@@ -129,7 +131,7 @@ const uploadEntries = [...uploads]
   .sort(byKey);
 pageIds.sort(byKey);
 attachmentIds.sort(byKey);
-draftIds.sort((a, b) => a - b);
+homeIds.sort((a, b) => a - b);
 
 function tuples(entries: ReadonlyArray<readonly [string | number, string]>): string {
   return entries.map(([a, b]) => `  [${JSON.stringify(a)}, ${JSON.stringify(b)}],`).join("\n");
@@ -147,13 +149,14 @@ ${tuples(attachmentPageEntries)}
 
 /**
  * \`/?page_id=N\` and \`/?p=N\` → the page's current path or retired-page target.
- * Draft ids (${draftIds.join(", ")}) and unknown ids fall back to "/" in lib/redirects.ts.
+ * Ids that resolve to "/" (${homeIds.join(", ")}: the home page and drafts) and
+ * unknown ids have no rule; those URLs render the home page as-is.
  */
 export const pageIdRedirects: ReadonlyArray<readonly [id: number, destination: string]> = [
 ${tuples(pageIds)}
 ];
 
-/** \`/?attachment_id=N\` for attachments with a ported parent page; all others fall back to "/". */
+/** \`/?attachment_id=N\` for attachments with a ported parent page; all others render the home page as-is. */
 export const attachmentIdRedirects: ReadonlyArray<readonly [id: number, destination: string]> = [
 ${tuples(attachmentIds)}
 ];
@@ -169,6 +172,6 @@ writeFileSync(OUT_PATH, output);
 const withParent = attachmentPageEntries.filter(([, destination]) => destination !== "/").length;
 console.log(`Wrote ${OUT_PATH}`);
 console.log(`  attachment pages: ${attachmentPageEntries.length} (${withParent} with a parent page)`);
-console.log(`  page ids: ${pageIds.length} (drafts → "/": ${draftIds.join(", ")})`);
+console.log(`  page ids: ${pageIds.length} (no rule for ids resolving to "/": ${homeIds.join(", ")})`);
 console.log(`  attachment ids with a parent page: ${attachmentIds.length}`);
 console.log(`  upload URLs: ${uploadEntries.length} (from ${Object.keys(imageMap).length} image-map keys)`);
