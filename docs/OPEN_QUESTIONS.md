@@ -110,9 +110,9 @@ Prisma 7 needs either a driver adapter (`@prisma/adapter-pg`, any Postgres URL) 
 Plan says "Resend (or equivalent)".
 **Assumed.** A thin `lib/email` adapter with a Resend implementation and a console/no-op implementation used when `RESEND_API_KEY` is absent.
 
-### Q23. GitHub remote and PR
+### Q23. GitHub remote and deployment
 The repo had no git history and no remote; `gh` is not installed on this machine.
-**Open.** Create the GitHub repo and add the remote, then the "Phase 1–2: scaffold and content migration" branch can be pushed and a PR opened. Vercel preview deployments need the repo connected too.
+**Decision (Sept 15 2026): Decided.** All work is committed directly on `main` (no feature branch or PR for this session). Still **open**: create the GitHub repository, add the remote, push `main`, and connect it to Vercel for preview deployments.
 
 ### Q24. Admin allowlist
 **Open.** Which board emails go in `AdminUser`? The seed contains a clearly marked placeholder.
@@ -123,3 +123,15 @@ The Divi contact form emails `info@tahoebike.org`; newsletter signups go to Cons
 
 ### Q26. Volunteer signup
 **Open** (carried over from the plan): keep the Constant Contact volunteer list link plus POINT, or add a native form?
+
+### Q27. Newsletter signup form target
+The Divi signup module posted to Constant Contact through the WordPress plugin (list id `1199281500`), so the export contains no plain form endpoint, only the hosted opt-in page URL (`visitor.r20.constantcontact.com/manage/optin?v=...`).
+**Assumed.** The new site renders a plain HTML form that submits GET to that hosted opt-in page with the `v` parameter and an `email` field. If Constant Contact ignores the `email` parameter, the visitor lands on the hosted page and re-enters their address, which still works. Better: generate an embeddable "Sign-up form" in the Constant Contact dashboard and paste its endpoint into the `constant_contact_signup_url` setting.
+
+### Q28. "Support the Coalition" call-to-action layout
+The Divi library contains a saved "Support the Coalition" header (Donate / Learn More buttons over a photo) that was probably shown above the footer on some pages. The export does not record where it was placed.
+**Assumed.** Not ported. Easy to add as a shared component under the footer if wanted.
+
+### Q29. Photo credits and alt text
+The export has no alt text for most images (only sponsor logos). Alt text on the new site was written by the migration agents from the image content and file names.
+**Open.** Have a board member review alt text and confirm no photo needs a credit.
