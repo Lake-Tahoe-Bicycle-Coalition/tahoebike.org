@@ -153,8 +153,8 @@ How it fits together:
    Set `AUTH_TRUST_HOST=true` for preview deployments.
 6. Run migrations against the production database once, then after any schema change:
    `DATABASE_URL=<production url> pnpm db:deploy`, and seed once with `pnpm db:seed`.
-   The seed allowlists the admin accounts from Q24 (`prisma/seed.ts`); further admins are
-   added at `/admin/users`.
+   Set `SEED_ADMIN_EMAILS` (comma-separated) in the shell running the seed so it allowlists
+   the first admins; further admins are added at `/admin/users`.
 7. Push to `main` to deploy production; every pull request gets a preview URL.
 
 `next build` prerenders every public page (they are static, revalidated every five
