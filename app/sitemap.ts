@@ -18,6 +18,7 @@ const priorities: Partial<Record<PublicPath, number>> = {
   "/programs/bike-valet": 0.7,
   "/print-bike-map": 0.7,
   "/about": 0.7,
+  "/privacy-policy": 0.3,
 };
 
 export default function sitemap(): MetadataRoute.Sitemap {

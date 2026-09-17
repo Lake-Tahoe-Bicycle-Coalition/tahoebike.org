@@ -80,4 +80,5 @@ export const publicPaths = [
   "/about",
   "/newsletter",
   "/contact",
+  "/privacy-policy",
 ] as const;
