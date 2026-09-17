@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { signupFormTarget } from "@/lib/constant-contact";
 
 type Props = {
@@ -5,13 +6,16 @@ type Props = {
   signupUrl: string;
   /** Optional id for the wrapper, so other pages can link to the form (e.g. /join#newsletter). */
   id?: string;
+  heading?: string;
+  /** When set, the intro ends with a "Read past newsletters here" link to this path. */
+  archiveHref?: string;
 };
 
 /**
  * Newsletter signup panel. A plain GET form that works without JavaScript: the browser
  * sends the visitor to Constant Contact's hosted opt-in page, which completes the signup.
  */
-export function NewsletterSignupForm({ signupUrl, id }: Props) {
+export function NewsletterSignupForm({ signupUrl, id, heading = "Newsletter", archiveHref }: Props) {
   const { action, hiddenFields } = signupFormTarget(signupUrl);
   const headingId = `${id ?? "newsletter-signup"}-heading`;
   const emailId = `${id ?? "newsletter-signup"}-email`;
@@ -22,10 +26,19 @@ export function NewsletterSignupForm({ signupUrl, id }: Props) {
       aria-labelledby={headingId}
       className="rounded-lg bg-safety p-6 text-asphalt sm:p-8"
     >
-      <h2 id={headingId}>Newsletter</h2>
+      <h2 id={headingId}>{heading}</h2>
       <p className="mt-3">
         Subscribe to our newsletter to stay up to date on the latest biking news and volunteer
         opportunities!
+        {archiveHref ? (
+          <>
+            {" "}
+            <Link href={archiveHref} className="font-semibold underline">
+              Read past newsletters here
+            </Link>
+            .
+          </>
+        ) : null}
       </p>
       <form action={action} method="get" className="mt-5">
         {Object.entries(hiddenFields).map(([name, value]) => (

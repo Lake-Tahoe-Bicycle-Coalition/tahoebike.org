@@ -15,6 +15,10 @@
  *    - The body is a bare JSON array of `{ subject, campaignUrl }`; `campaignUrl` is a
  *      `https://conta.cc/...` short link to the hosted campaign page. No date field
  *      is returned today.
+ *    - Items come back oldest-archived first (checked 2026-09-17 against the dates
+ *      inside the campaigns), so `fetchNewsletterArchive` reverses them. Whether `limit`
+ *      truncates from the old or the new end is unknown (the account has fewer
+ *      campaigns than any limit we pass), so keep `limit` generous.
  *    - The archive lists only campaigns that were sent with "archive" enabled; the
  *      account currently exposes four, so `limit` above that returns all of them.
  *    - Served with `cache-control: public, max-age=14400`.
@@ -64,7 +68,7 @@ export function newsletterArchiveUrl(accountId: string, limit: number): string {
 }
 
 /**
- * Fetch the most recent archived campaigns for an account.
+ * Fetch the most recent archived campaigns for an account, newest first.
  * Never throws: any network, HTTP, or parsing problem results in an empty list, and the
  * caller shows a subscribe link instead.
  */
@@ -84,7 +88,8 @@ export async function fetchNewsletterArchive(
       console.warn(`[constant-contact] archive responded ${response.status} ${response.statusText}`);
       return [];
     }
-    const items = parseArchiveItems(await response.json());
+    // The API lists oldest first; callers want the newest issue on top.
+    const items = parseArchiveItems(await response.json()).reverse();
     return items.slice(0, limit);
   } catch (error) {
     console.warn("[constant-contact] archive fetch failed", error);

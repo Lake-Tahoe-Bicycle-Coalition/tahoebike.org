@@ -79,7 +79,7 @@ The Divi footer links "Facebook" to a Facebook search URL rather than the page. 
 
 ### Q14. Untitled draft page (id 1280), modified Sept 15 2026
 A draft that prototypes a "Discover Our Newsletter Archive" page using the same Constant Contact widget as `/join/`, plus a signup block.
-**Assumed.** Not ported. The reusable widget from Q5 makes it easy to add such a page later if wanted.
+**Resolved (Sept 17 2026).** WordPress published it as `/newsletter/` and linked it from the "Learn More" menu and the homepage signup blurb ("Read past newsletters here"). Ported as `app/newsletter/page.tsx` using the Q5 `NewsletterArchive` component and `NewsletterSignupForm`; `/newsletters` redirects to it.
 
 ### Q15. Privacy policy draft
 `/privacy-policy/` exists as a 610-word draft that was never published.

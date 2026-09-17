@@ -44,6 +44,7 @@ re-implements that normalization. A retired path typed with a slash takes two ho
 | `?p=N` | 19 | `/?p=690` → `/programs/bike-kitchen` |
 | `?attachment_id=N` | 4 | `/?attachment_id=108` → `/join` |
 | Retired pages | 10 | `/projects` → `/programs` |
+| Path aliases | 1 | `/newsletters` → `/newsletter` |
 | WordPress system paths | 9 | `/wp-login.php` → `/` |
 | Attachment pages | 205 | `/june-3-bike-path-cleanup` → `/`; `/sponsors/tahoe_fund` → `/join` |
 | Old upload URLs | 73 | `/wp-content/uploads/2022/05/Nick-Speal-150x150.jpg` → `/images/2022/05/Nick-Speal.jpg` |
@@ -71,6 +72,14 @@ Pages that existed in WordPress and were not ported (see Q2 and Q12 in
 | `/volunteerdraft` | `/volunteer` |
 | `/bike-month-leaderboard` | `https://www.tahoebikemonth.org/` |
 | `/home` | `/` |
+
+### Path aliases (1)
+
+Plausible misspellings of current pages (`pathAliases` in `lib/redirects.ts`).
+
+| Alias | Goes to |
+|---|---|
+| `/newsletters` | `/newsletter` |
 
 ### WordPress system paths (9)
 
@@ -100,11 +109,11 @@ Re-run it after adding or removing a page, changing a path, or re-running
 ## Adding a rule by hand
 
 Edit `lib/redirects.ts`. Retired WordPress pages go in the `retiredPages` map (the
-generator reads it too, so `?page_id=` links to those pages follow along). Anything else
-is a plain entry in the exported `redirects` array. Rules are evaluated in order and the
+generator reads it too, so `?page_id=` links to those pages follow along). Misspellings of
+current pages go in `pathAliases`. Anything else is a plain entry in the exported `redirects` array. Rules are evaluated in order and the
 first match wins. Do not edit `lib/redirects.generated.ts` — it is overwritten.
 
-Vercel allows at most **1,024 redirects** in `next.config`. At 341 there is room, but a
+Vercel allows at most **1,024 redirects** in `next.config`. At 342 there is room, but a
 new bulk source (another site's worth of attachment pages, say) should be checked against
 that ceiling; the alternative is handling them in `proxy.ts` instead.
 

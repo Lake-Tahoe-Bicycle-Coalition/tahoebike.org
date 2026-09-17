@@ -30,6 +30,7 @@ export const primaryNav: NavItem[] = [
     href: "/about",
     children: [
       { label: "About", href: "/about" },
+      { label: "Newsletter", href: "/newsletter" },
       { label: "Contact", href: "/contact" },
     ],
   },
@@ -77,5 +78,6 @@ export const publicPaths = [
   "/advocacy",
   "/print-bike-map",
   "/about",
+  "/newsletter",
   "/contact",
 ] as const;

@@ -107,7 +107,10 @@ export default async function HomePage() {
             </p>
           </section>
 
-          <NewsletterSignupForm signupUrl={settings.constant_contact_signup_url} />
+          <NewsletterSignupForm
+            signupUrl={settings.constant_contact_signup_url}
+            archiveHref="/newsletter"
+          />
         </div>
 
         <PhotoGallery photos={galleryPhotos} />

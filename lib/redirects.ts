@@ -43,6 +43,11 @@ export const retiredPages: Readonly<Record<string, string>> = {
   "/home": "/",
 };
 
+/** Plausible misspellings of current pages, so a mistyped or guessed URL still lands. */
+export const pathAliases: Readonly<Record<string, string>> = {
+  "/newsletters": "/newsletter",
+};
+
 /** WordPress archive, feed, and system paths that have no equivalent on the new site. */
 const wordpressSystemPaths = [
   "/category/:slug*",
@@ -107,6 +112,10 @@ const retiredPageRedirects: Redirect[] = Object.entries(retiredPages).map(([sour
   permanent(source, destination),
 );
 
+const aliasRedirects: Redirect[] = Object.entries(pathAliases).map(([source, destination]) =>
+  permanent(source, destination),
+);
+
 const wordpressSystemRedirects: Redirect[] = wordpressSystemPaths.map((source) => permanent(source, "/"));
 
 /** Every redirect, in evaluation order. */
@@ -114,6 +123,7 @@ export const redirects: Redirect[] = [
   ...hostRedirects,
   ...queryRedirects,
   ...retiredPageRedirects,
+  ...aliasRedirects,
   ...wordpressSystemRedirects,
   ...attachmentPageRedirects.map(([source, destination]) => permanent(source, destination)),
   ...uploadRedirects.map(([source, destination]) => permanent(source, destination)),
