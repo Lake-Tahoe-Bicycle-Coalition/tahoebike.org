@@ -60,7 +60,8 @@ async function seedAdmins() {
     await prisma.adminUser.upsert({
       where: { email },
       create: { email, name: admin.name },
-      update: { name: admin.name },
+      // Add-only (see the header): a name edited at /admin/users survives a re-seed.
+      update: {},
     });
   }
   console.log(`admins: ${ADMIN_ALLOWLIST.length} allowlisted`);
