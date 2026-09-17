@@ -5,18 +5,11 @@ import { Notice } from "@/components/admin/notice";
 import { PageHeader } from "@/components/admin/page-header";
 import { requireAdmin } from "@/lib/admin/auth";
 import { deleteBoardMember, moveBoardMember, toggleBoardMemberActive } from "@/lib/admin/board/actions";
+import { initials } from "@/lib/initials";
 import { prisma } from "@/lib/db";
 import { isOptimizableImageUrl } from "@/lib/urls";
 
 /** Same fallback the public roster shows when a member has no photo. */
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter((word) => /^[A-Za-z]/.test(word))
-    .slice(0, 2)
-    .map((word) => word.charAt(0).toUpperCase())
-    .join("");
-}
 
 export default async function BoardPage({ searchParams }: PageProps<"/admin/board">) {
   await requireAdmin();
