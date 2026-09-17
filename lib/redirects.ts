@@ -40,6 +40,10 @@ export const retiredPages: Readonly<Record<string, string>> = {
   "/where-to-ride": "https://map.tahoebike.org/",
   "/volunteerdraft": "/volunteer",
   "/bike-month-leaderboard": "https://www.tahoebikemonth.org/",
+  // Rules from the WordPress Redirection plugin (not part of the export; checked live Sept 17 2026).
+  "/bike-month": "https://www.tahoebikemonth.org/",
+  "/bike-month-discounts": "https://www.tahoebikemonth.org/",
+  "/bike-month-prizes": "https://www.tahoebikemonth.org/prizes",
   "/home": "/",
 };
 

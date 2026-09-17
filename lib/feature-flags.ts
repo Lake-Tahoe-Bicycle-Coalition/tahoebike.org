@@ -26,7 +26,10 @@ export type NativeFormName = (typeof NATIVE_FORM_NAMES)[number];
  * the iframe and links to this URL for the new-tab fallback.
  */
 export const GOOGLE_FORM_URLS: Record<NativeFormName, string> = {
-  valet: "https://docs.google.com/forms/d/1vMeWKttoO9zJynpM7h6SihKUeX6iqqpAIFToyhrEPrk/viewform",
+  // The old site embedded the document-id URL (…/forms/d/1vMeWKttoO9zJynpM7h6SihKUeX6iqqpAIFToyhrEPrk/…),
+  // which 301s to this public URL.
+  valet:
+    "https://docs.google.com/forms/d/e/1FAIpQLSdtP_2aW2BmKFv1RwwKebdqWueIFhrxpR35xvbNW7mznNvbYQ/viewform",
   racks:
     "https://docs.google.com/forms/d/e/1FAIpQLScvMJk1HoApEevcLeAPsTJvd4rfuEWGCk0mJOeQZk1zum6OWA/viewform",
 };
