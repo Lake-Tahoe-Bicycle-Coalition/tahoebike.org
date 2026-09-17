@@ -8,14 +8,10 @@
  *   WordPress export (reference/…xml) with lib/wp-export, using content/image-map.json
  *   (written by `pnpm content:images`) to turn wp-content/uploads URLs into /images paths.
  *
- * Until the Phase 3 admin exists, the export is the source of truth for that content:
- * the upserts write every field in `update` too, so re-running the seed restores the
- * export values over any manual edits. Rows that an earlier run produced (ids prefixed
- * `seed-board-`, `seed-card-`, `seed-event-`) but this run did not are retired as well:
- * board members and cards are deactivated (`isActive = false`), events are deleted
- * (they have no active flag). Rows with other ids (created in /admin) are never touched.
- * Once board members edit rows in /admin, switch those `update` blocks to `{}` (as
- * settings already do) so their edits survive.
+ * The seed only ever adds. Every upsert has an empty `update`, so rows that already
+ * exist (ids prefixed `seed-board-`, `seed-card-`, `seed-event-`, or anything created in
+ * /admin) keep whatever the board has edited them to. To reload the export values from
+ * scratch, reset the database (`pnpm prisma migrate reset`, which re-runs the seed).
  */
 import { readFileSync } from "node:fs";
 import { prisma } from "../lib/db";
@@ -34,7 +30,7 @@ import {
 
 const IMAGE_MAP_PATH = "content/image-map.json";
 
-/** Id prefixes that mark rows as seed-owned (see the header comment). */
+/** Id prefixes for seed-created rows, so a re-run finds them (see the header comment). */
 const SEED_BOARD_PREFIX = "seed-board-";
 const SEED_CARD_PREFIX = "seed-card-";
 const SEED_EVENT_PREFIX = "seed-event-";
@@ -133,7 +129,6 @@ async function seedBoard(data: WpExport, imageMap: Record<string, string>) {
   if (board.length === 0) throw new Error("No board members (team cards with a position) found on /about.");
   if (advisors.length === 0) throw new Error("No advisors (name-only team cards) found on /about.");
 
-  const seededIds: string[] = [];
   let sortOrder = 0;
   for (const member of board) {
     if (member.imageUrl === null) {
@@ -149,8 +144,7 @@ async function seedBoard(data: WpExport, imageMap: Record<string, string>) {
       isActive: true,
     };
     const id = `${SEED_BOARD_PREFIX}${slugify(member.name)}`;
-    await prisma.boardMember.upsert({ where: { id }, create: { id, ...fields }, update: fields });
-    seededIds.push(id);
+    await prisma.boardMember.upsert({ where: { id }, create: { id, ...fields }, update: {} });
   }
   for (const advisor of advisors) {
     const fields = {
@@ -163,23 +157,13 @@ async function seedBoard(data: WpExport, imageMap: Record<string, string>) {
       isActive: true,
     };
     const id = `${SEED_BOARD_PREFIX}${slugify(advisor.name)}`;
-    await prisma.boardMember.upsert({ where: { id }, create: { id, ...fields }, update: fields });
-    seededIds.push(id);
+    await prisma.boardMember.upsert({ where: { id }, create: { id, ...fields }, update: {} });
   }
-  // Seed-owned rows no longer in the export (someone left the board): deactivate, keep.
-  const retired = await prisma.boardMember.updateMany({
-    where: { id: { startsWith: SEED_BOARD_PREFIX, notIn: seededIds }, isActive: true },
-    data: { isActive: false },
-  });
-  console.log(
-    `board: ${board.length} members + ${advisors.length} advisors upserted from /about` +
-      (retired.count ? `, ${retired.count} stale seed row(s) deactivated` : ""),
-  );
+  console.log(`board: ${board.length} members + ${advisors.length} advisors ensured from /about`);
 }
 
 async function seedHomepageCards(data: WpExport, imageMap: Record<string, string>) {
   const slides = extractSlides(requirePage(data, "/").body);
-  const seededIds: string[] = [];
   let sortOrder = 0;
   for (const slide of slides) {
     if (slide.backgroundImage === null) {
@@ -195,23 +179,14 @@ async function seedHomepageCards(data: WpExport, imageMap: Record<string, string
       isActive: true,
     };
     const id = `${SEED_CARD_PREFIX}${slugify(slide.heading)}`;
-    await prisma.homepageCard.upsert({ where: { id }, create: { id, ...fields }, update: fields });
-    seededIds.push(id);
+    await prisma.homepageCard.upsert({ where: { id }, create: { id, ...fields }, update: {} });
   }
-  const retired = await prisma.homepageCard.updateMany({
-    where: { id: { startsWith: SEED_CARD_PREFIX, notIn: seededIds }, isActive: true },
-    data: { isActive: false },
-  });
-  console.log(
-    `homepage cards: ${slides.length} upserted from the home page slider` +
-      (retired.count ? `, ${retired.count} stale seed row(s) deactivated` : ""),
-  );
+  console.log(`homepage cards: ${slides.length} ensured from the home page slider`);
 }
 
 async function seedBikeKitchenEvents(data: WpExport) {
   // All events in the accordion are seeded, past ones included; the site filters by date.
   const events = extractBikeKitchenEvents(requirePage(data, "/programs/bike-kitchen").body);
-  const seededIds: string[] = [];
   for (const event of events) {
     const fields = {
       title: event.venue,
@@ -224,17 +199,9 @@ async function seedBikeKitchenEvents(data: WpExport) {
       registrationUrl: SETTING_DEFAULTS.point_org_url,
     };
     const id = `${SEED_EVENT_PREFIX}${event.date}-${slugify(event.venue)}`;
-    await prisma.event.upsert({ where: { id }, create: { id, ...fields }, update: fields });
-    seededIds.push(id);
+    await prisma.event.upsert({ where: { id }, create: { id, ...fields }, update: {} });
   }
-  // Events have no active flag, so seed-owned rows that are no longer in the export go.
-  const removed = await prisma.event.deleteMany({
-    where: { id: { startsWith: SEED_EVENT_PREFIX, notIn: seededIds } },
-  });
-  console.log(
-    `events: ${events.length} Bike Kitchen events upserted from /programs/bike-kitchen` +
-      (removed.count ? `, ${removed.count} stale seed row(s) deleted` : ""),
-  );
+  console.log(`events: ${events.length} Bike Kitchen events ensured from /programs/bike-kitchen`);
 }
 
 async function main() {
