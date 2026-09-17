@@ -9,7 +9,8 @@
   .ltbc-news .ltbc-latest { font-size: 1.15em; margin-bottom: 1em; }
   .ltbc-news .ltbc-latest a { font-weight: 700; }
   .ltbc-news ul { list-style: none; padding: 0; margin: 0; }
-  .ltbc-news li { padding: .25em 0; border-top: 1px solid #e5e5e5; }
+  .ltbc-news li { padding: .5em 0; border-top: 1px solid #e5e5e5; }
+  .ltbc-news li:last-child { border-bottom: 1px solid #e5e5e5; }
 </style>
 
 <script>
@@ -44,6 +45,9 @@
     .then(function (items) {
       items = (items || []).filter(function (i) { return i && i.subject && i.campaignUrl; });
       if (!items.length) return showFallback();
+
+      // The API returns oldest-archived first, so reverse for newest-first.
+      items.reverse();
 
       var html = "<h3>Latest Newsletter</h3>" +
                  '<p class="ltbc-latest">' + link(items[0]) + "</p>";
