@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ValetRequestForm } from "@/components/forms/valet-request-form";
+import { GoogleFormEmbed } from "@/components/google-form-embed";
+import { GOOGLE_FORM_URLS, nativeFormEnabled } from "@/lib/feature-flags";
 import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/site-metadata";
 
@@ -108,9 +110,14 @@ export default async function BikeValetPage() {
         </div>
 
         <section aria-labelledby="valet-request-heading">
-          <h2 id="valet-request-heading">Request a Bike Valet for Your Event</h2>
+          <h2 id="valet-request-heading">Request for an Event</h2>
           <div className="mt-6">
-            <ValetRequestForm />
+            {/* Q16: the Google Form from the old site unless NATIVE_FORMS enables the native form. */}
+            {nativeFormEnabled("valet") ? (
+              <ValetRequestForm />
+            ) : (
+              <GoogleFormEmbed url={GOOGLE_FORM_URLS.valet} title="Bike valet request form" />
+            )}
           </div>
         </section>
       </div>

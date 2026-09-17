@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { RackApplicationForm } from "@/components/forms/rack-application-form";
+import { GoogleFormEmbed } from "@/components/google-form-embed";
+import { GOOGLE_FORM_URLS, nativeFormEnabled } from "@/lib/feature-flags";
 import { getSettings, settingIsTrue } from "@/lib/settings";
 import { pageMetadata } from "@/lib/site-metadata";
 
@@ -128,8 +130,15 @@ export default async function BikeRacksPage() {
         {programOpen ? (
           <section aria-labelledby="rack-application-heading">
             <h2 id="rack-application-heading">Apply for Bike Racks</h2>
+            <p className="mt-4 font-bold">Truckee businesses, apply here for bike racks!</p>
             <div className="mt-6">
-              <RackApplicationForm />
+              {/* Q17: the Google Form from the old site unless NATIVE_FORMS enables the native form.
+                  Either way the form only appears while rack_program_open is true. */}
+              {nativeFormEnabled("racks") ? (
+                <RackApplicationForm />
+              ) : (
+                <GoogleFormEmbed url={GOOGLE_FORM_URLS.racks} title="Bike rack application form" />
+              )}
             </div>
           </section>
         ) : null}

@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getEmailProvider } from "@/lib/email";
+import { nativeFormEnabled, type NativeFormName } from "@/lib/feature-flags";
 import type { FormType } from "@/lib/generated/prisma/enums";
 import { getSettings, settingIsTrue, type Settings } from "@/lib/settings";
 import { verifyTurnstile } from "@/lib/turnstile";
@@ -26,7 +27,7 @@ type SubmissionSpec<T extends Payload & { website: string }> = {
   recipient: (settings: Settings) => string;
   subject: (data: T) => string;
   intro: string;
-  /** Extra gate evaluated before anything else (e.g. "program closed"). */
+  /** Extra gate evaluated before anything else (feature flag off, program closed). */
   guard?: (settings: Settings) => string | null;
 };
 
@@ -42,7 +43,10 @@ export async function submitContact(_prev: FormState, formData: FormData): Promi
   });
 }
 
-/** Bike valet request on /programs/bike-valet. */
+/**
+ * Bike valet request on /programs/bike-valet. Refused unless `NATIVE_FORMS` enables
+ * the native form (the page shows the Google Form otherwise; see lib/feature-flags.ts).
+ */
 export async function submitValetRequest(
   _prev: FormState,
   formData: FormData,
@@ -55,10 +59,14 @@ export async function submitValetRequest(
     subject: (data) =>
       `[tahoebike.org] Bike valet request from ${data.contactName} (${data.eventName})`,
     intro: "New bike valet request from tahoebike.org.",
+    guard: () => nativeFormRefusal("valet", "/programs/bike-valet"),
   });
 }
 
-/** Bike rack application on /bike-racks. Refused while the program is closed. */
+/**
+ * Bike rack application on /bike-racks. Refused unless `NATIVE_FORMS` enables the
+ * native form, and while the program is closed.
+ */
 export async function submitRackApplication(
   _prev: FormState,
   formData: FormData,
@@ -71,10 +79,22 @@ export async function submitRackApplication(
     subject: (data) => `[tahoebike.org] Bike rack application from ${data.businessName}`,
     intro: "New Regional Bicycle Parking Program application from tahoebike.org.",
     guard: (settings) =>
-      settingIsTrue(settings.rack_program_open)
+      nativeFormRefusal("racks", "/bike-racks") ??
+      (settingIsTrue(settings.rack_program_open)
         ? null
-        : "The Regional Bicycle Parking Program is not currently accepting applications.",
+        : "The Regional Bicycle Parking Program is not currently accepting applications."),
   });
+}
+
+/**
+ * The refusal shown when a native form's server action is called while its feature
+ * flag is off. The page then embeds the Google Form instead, so the only way to get
+ * here is a page rendered before the flag changed, or a hand-made request.
+ */
+function nativeFormRefusal(form: NativeFormName, pagePath: string): string | null {
+  if (nativeFormEnabled(form)) return null;
+  console.warn(`[forms] ${form}: native form is disabled (NATIVE_FORMS), submission refused`);
+  return `This form is not in use at the moment. Please use the form at tahoebike.org${pagePath}.`;
 }
 
 /**
