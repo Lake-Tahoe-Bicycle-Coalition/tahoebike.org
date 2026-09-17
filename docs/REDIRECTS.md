@@ -92,34 +92,22 @@ Plausible misspellings of current pages (`pathAliases` in `lib/redirects.ts`).
 All go to the home page: `/category/*`, `/tag/*`, `/author/*`, `/feed`, `/feed/*`,
 `/comments/feed`, `/wp-login.php`, `/wp-admin/*`, `/xmlrpc.php`.
 
-## Regenerating the map
+## The generated file
 
-```bash
-pnpm content:redirects
-```
-
-This rebuilds `lib/redirects.generated.ts` from the WordPress XML export in `reference/`
-and `content/image-map.json`. The output is sorted and carries no timestamps, so running
-it against an unchanged export produces no diff. The generator fails loudly rather than
-guessing when:
-
-- a published page in the export is neither in `publicPaths` (`lib/navigation.ts`) nor in
-  `retiredPages` (`lib/redirects.ts`) — add it to one of them;
-- a generated source (an attachment page) would shadow a real page or a retired path;
-- a destination is not a public path, or the image map points somewhere other than
-  `/images/...`.
-
-Re-run it after adding or removing a page, changing a path, or re-running
-`pnpm content:images`.
+`lib/redirects.generated.ts` was built once, during the September 2026 migration, from the
+WordPress XML export (attachment pages, post ids, upload URLs). The export and its generator
+left the repo when it went public, so the file is now a hand-maintained list: edit it directly
+when an old URL needs a new destination, keeping entries sorted.
 
 ## Adding a rule by hand
 
-Edit `lib/redirects.ts`. Retired WordPress pages go in the `retiredPages` map (the
-generator reads it too, so `?page_id=` links to those pages follow along). Misspellings of
-current pages go in `pathAliases`. Anything else is a plain entry in the exported `redirects` array. Rules are evaluated in order and the
-first match wins. Do not edit `lib/redirects.generated.ts` — it is overwritten.
+Edit `lib/redirects.ts`. Retired WordPress pages go in the `retiredPages` map (a
+`?page_id=` entry for the same page in `lib/redirects.generated.ts` should point at the same
+destination). Misspellings of current pages go in `pathAliases`. Anything else is a plain
+entry in the exported `redirects` array. Rules are evaluated in order and the first match
+wins.
 
-Vercel allows at most **1,024 redirects** in `next.config`. At 342 there is room, but a
+Vercel allows at most **1,024 redirects** in `next.config`. At 345 there is room, but a
 new bulk source (another site's worth of attachment pages, say) should be checked against
 that ceiling; the alternative is handling them in `proxy.ts` instead.
 
