@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { isoDateInZone } from "@/lib/time";
 import { matchingFundsValues, organizationTypeValues, rackStyleValues } from "./fields";
+import { email, optionalLine, optionalText, requiredLine, requiredText, wholeNumber } from "./validators";
 
 /**
  * Validation for the three public forms. Field lists follow docs/OPEN_QUESTIONS.md
@@ -8,53 +9,10 @@ import { matchingFundsValues, organizationTypeValues, rackStyleValues } from "./
  * field named `website` that humans never see and that must stay empty.
  *
  * Server-only: the client components import labels and option lists from ./fields
- * (which is zod-free) so that zod stays out of the browser bundle.
+ * (which is zod-free) so that zod stays out of the browser bundle. The string
+ * primitives (requiredLine, email, …) live in ./validators and are shared with the
+ * admin forms.
  */
-
-/** Multi-line text (textarea). */
-function requiredText(label: string, max: number) {
-  return z
-    .string(`${label} is required.`)
-    .trim()
-    .min(1, `${label} is required.`)
-    .max(max, `${label} must be ${max} characters or fewer.`);
-}
-
-/** Multi-line text (textarea), may be empty. */
-function optionalText(label: string, max: number) {
-  return z.string().trim().max(max, `${label} must be ${max} characters or fewer.`);
-}
-
-/**
- * Single-line values must not contain line breaks: several of them end up in email
- * subjects, where an injected CR/LF could add headers.
- */
-const NO_LINE_BREAKS = /^[^\r\n]*$/;
-
-function requiredLine(label: string, max: number) {
-  return requiredText(label, max).regex(NO_LINE_BREAKS, { error: `${label} must be a single line.` });
-}
-
-function optionalLine(label: string, max: number) {
-  return optionalText(label, max).regex(NO_LINE_BREAKS, { error: `${label} must be a single line.` });
-}
-
-const email = z
-  .string("Email address is required.")
-  .trim()
-  .min(1, "Email address is required.")
-  .max(254, "Email address must be 254 characters or fewer.")
-  .pipe(z.email("Enter a valid email address."));
-
-function wholeNumber(label: string, max: number) {
-  return z
-    .string(`${label} is required.`)
-    .trim()
-    .min(1, `${label} is required.`)
-    .regex(/^\d+$/, `${label} must be a whole number.`)
-    .transform(Number)
-    .pipe(z.number().int().min(1, `${label} must be at least 1.`).max(max, `${label} must be ${max} or less.`));
-}
 
 /** Bots fill in every field; people never see this one. */
 const honeypot = { website: z.string().max(0, "Invalid submission.") };

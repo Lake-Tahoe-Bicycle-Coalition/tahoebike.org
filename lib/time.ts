@@ -90,3 +90,16 @@ export function isoDateInZone(instant: Date = new Date(), timeZone: string = SIT
   }
   return formatter.format(instant);
 }
+
+const isoTimeFormatterCache = new Map<string, Intl.DateTimeFormat>();
+
+/** The wall-clock time (`HH:MM`, 24-hour) of an instant in a zone; defaults to the site zone. */
+export function isoTimeInZone(instant: Date, timeZone: string = SITE_TIME_ZONE): string {
+  let formatter = isoTimeFormatterCache.get(timeZone);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat("en-GB", { timeZone, hourCycle: "h23", hour: "2-digit", minute: "2-digit" });
+    isoTimeFormatterCache.set(timeZone, formatter);
+  }
+  // Some engines have produced "24:00" for midnight under h23.
+  return formatter.format(instant).replace(/^24:/, "00:");
+}

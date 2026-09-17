@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { auth, authConfigured, isAllowedAdmin, signIn } from "@/lib/auth";
+import { getAdmin } from "@/lib/admin/auth";
+import { authConfigured, signIn } from "@/lib/auth";
 
 const errorMessages: Record<string, string> = {
   AccessDenied: "That Google account is not on the admin list.",
@@ -7,10 +8,7 @@ const errorMessages: Record<string, string> = {
 };
 
 export default async function SignInPage({ searchParams }: PageProps<"/admin/sign-in">) {
-  const session = await auth();
-  if (session?.user?.email && (await isAllowedAdmin(session.user.email))) {
-    redirect("/admin");
-  }
+  if (await getAdmin()) redirect("/admin");
 
   const { error } = await searchParams;
   const errorKey = typeof error === "string" ? error : undefined;
@@ -40,7 +38,8 @@ export default async function SignInPage({ searchParams }: PageProps<"/admin/sig
         <p className="rounded border border-asphalt/20 bg-neutral-50 px-4 py-3">
           Google sign-in is not configured. Set <code>AUTH_GOOGLE_ID</code>,{" "}
           <code>AUTH_GOOGLE_SECRET</code>, and <code>AUTH_SECRET</code> (see{" "}
-          <code>.env.example</code>).
+          <code>.env.example</code>). For local development, <code>ADMIN_DEV_EMAIL</code> signs you in
+          without Google.
         </p>
       )}
     </div>

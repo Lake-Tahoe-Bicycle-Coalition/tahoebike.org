@@ -8,6 +8,7 @@ import type { FormType } from "@/lib/generated/prisma/enums";
 import { getSettings, settingIsTrue, type Settings } from "@/lib/settings";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { contactFieldLabels, rackApplicationFieldLabels, valetRequestFieldLabels } from "./fields";
+import { fieldErrorsOf, pick, readString, readStrings } from "./parse";
 import { contactSchema, rackApplicationSchema, valetRequestSchema } from "./schemas";
 import type { FormState } from "./state";
 
@@ -96,10 +97,7 @@ async function handleSubmission<T extends Payload & { website: string }>(
   }
 
   const fieldNames = Object.keys(spec.labels);
-  const raw: Record<string, string> = {};
-  for (const name of [...fieldNames, HONEYPOT_FIELD]) {
-    raw[name] = readString(formData, name);
-  }
+  const raw = readStrings(formData, [...fieldNames, HONEYPOT_FIELD]);
 
   const parsed = spec.schema.safeParse(raw);
   if (!parsed.success) {
@@ -167,25 +165,8 @@ async function handleSubmission<T extends Payload & { website: string }>(
   return { status: "success" };
 }
 
-function readString(formData: FormData, name: string): string {
-  const value = formData.get(name);
-  return typeof value === "string" ? value : "";
-}
 
-function pick(source: Record<string, string>, keys: string[]): Record<string, string> {
-  const out: Record<string, string> = {};
-  for (const key of keys) out[key] = source[key] ?? "";
-  return out;
-}
 
-function fieldErrorsOf(error: z.ZodError): Record<string, string[]> {
-  const out: Record<string, string[]> = {};
-  for (const issue of error.issues) {
-    const key = issue.path.map(String).join(".") || "_form";
-    (out[key] ??= []).push(issue.message);
-  }
-  return out;
-}
 
 function formatEmail(
   intro: string,

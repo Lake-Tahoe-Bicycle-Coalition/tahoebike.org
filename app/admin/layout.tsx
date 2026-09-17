@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
-  return <div className="mx-auto w-full max-w-5xl px-4 py-10">{children}</div>;
+  return <div className="mx-auto w-full max-w-6xl px-4 py-10">{children}</div>;
 }

@@ -14,19 +14,24 @@ type FieldProps = {
   errors?: string[];
   required?: boolean;
   className?: string;
+  /** Short hint shown under the control and linked with aria-describedby. */
+  help?: string;
 };
 
-type FieldIds = { inputId: string; errorId: string };
+type FieldIds = { inputId: string; errorId: string; helpId: string };
 
 function useFieldIds(name: string): FieldIds {
   const id = useId();
-  return { inputId: `${id}-${name}`, errorId: `${id}-${name}-error` };
+  return { inputId: `${id}-${name}`, errorId: `${id}-${name}-error`, helpId: `${id}-${name}-help` };
 }
 
-function errorAttributes(errors: string[] | undefined, ids: FieldIds) {
-  return errors && errors.length > 0
-    ? { "aria-invalid": true as const, "aria-describedby": ids.errorId }
-    : {};
+function errorAttributes(errors: string[] | undefined, ids: FieldIds, help?: string) {
+  const hasErrors = errors !== undefined && errors.length > 0;
+  const describedBy = [hasErrors ? ids.errorId : null, help ? ids.helpId : null].filter(Boolean).join(" ");
+  return {
+    ...(hasErrors ? { "aria-invalid": true as const } : {}),
+    ...(describedBy ? { "aria-describedby": describedBy } : {}),
+  };
 }
 
 function FieldShell({
@@ -35,6 +40,7 @@ function FieldShell({
   ids,
   errors,
   className,
+  help,
   children,
 }: Omit<FieldProps, "name"> & { ids: FieldIds; children: ReactNode }) {
   return (
@@ -44,6 +50,11 @@ function FieldShell({
         {required ? <RequiredMark /> : null}
       </label>
       {children}
+      {help ? (
+        <p id={ids.helpId} className="mt-1 text-sm text-asphalt/70">
+          {help}
+        </p>
+      ) : null}
       {errors && errors.length > 0 ? (
         <p id={ids.errorId} className="mt-1 text-sm font-semibold text-red-700">
           {errors.join(" ")}
@@ -76,10 +87,10 @@ type InputExtras = Omit<
   "id" | "name" | "className" | "aria-invalid" | "aria-describedby" | "required"
 >;
 
-export function TextField({ label, name, errors, required, className, ...input }: FieldProps & InputExtras) {
+export function TextField({ label, name, errors, required, className, help, ...input }: FieldProps & InputExtras) {
   const ids = useFieldIds(name);
   return (
-    <FieldShell label={label} required={required} ids={ids} errors={errors} className={className}>
+    <FieldShell label={label} required={required} ids={ids} errors={errors} className={className} help={help}>
       <input
         id={ids.inputId}
         name={name}
@@ -87,7 +98,7 @@ export function TextField({ label, name, errors, required, className, ...input }
         className="field-input"
         type="text"
         {...input}
-        {...errorAttributes(errors, ids)}
+        {...errorAttributes(errors, ids, help)}
       />
     </FieldShell>
   );
@@ -98,10 +109,10 @@ type TextareaExtras = Omit<
   "id" | "name" | "className" | "aria-invalid" | "aria-describedby" | "required"
 >;
 
-export function TextareaField({ label, name, errors, required, className, ...textarea }: FieldProps & TextareaExtras) {
+export function TextareaField({ label, name, errors, required, className, help, ...textarea }: FieldProps & TextareaExtras) {
   const ids = useFieldIds(name);
   return (
-    <FieldShell label={label} required={required} ids={ids} errors={errors} className={className}>
+    <FieldShell label={label} required={required} ids={ids} errors={errors} className={className} help={help}>
       <textarea
         id={ids.inputId}
         name={name}
@@ -109,7 +120,7 @@ export function TextareaField({ label, name, errors, required, className, ...tex
         className="field-input"
         rows={5}
         {...textarea}
-        {...errorAttributes(errors, ids)}
+        {...errorAttributes(errors, ids, help)}
       />
     </FieldShell>
   );
@@ -121,26 +132,28 @@ export function SelectField({
   errors,
   required,
   className,
+  help,
   options,
   placeholder = "Choose one",
   defaultValue,
 }: FieldProps & {
   options: readonly { value: string; label: string }[];
-  placeholder?: string;
+  /** The empty first option; pass null to omit it (every option is a real choice). */
+  placeholder?: string | null;
   defaultValue?: string;
 }) {
   const ids = useFieldIds(name);
   return (
-    <FieldShell label={label} required={required} ids={ids} errors={errors} className={className}>
+    <FieldShell label={label} required={required} ids={ids} errors={errors} className={className} help={help}>
       <select
         id={ids.inputId}
         name={name}
         required={required}
         className="field-input"
         defaultValue={defaultValue ?? ""}
-        {...errorAttributes(errors, ids)}
+        {...errorAttributes(errors, ids, help)}
       >
-        <option value="">{placeholder}</option>
+        {placeholder === null ? null : <option value="">{placeholder}</option>}
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -148,6 +161,50 @@ export function SelectField({
         ))}
       </select>
     </FieldShell>
+  );
+}
+
+/**
+ * A single checkbox with its label to the right. Browsers send "on" when ticked and
+ * nothing when not, so read it with the `checkbox` validator in lib/forms/validators.ts.
+ */
+export function CheckboxField({
+  label,
+  name,
+  errors,
+  className,
+  help,
+  defaultChecked,
+}: Omit<FieldProps, "required"> & { help?: string; defaultChecked?: boolean }) {
+  const ids = useFieldIds(name);
+  return (
+    <div className={className}>
+      <div className="flex items-start gap-3">
+        <input
+          id={ids.inputId}
+          name={name}
+          type="checkbox"
+          defaultChecked={defaultChecked}
+          className="mt-1 h-5 w-5 shrink-0 accent-tahoe-deep"
+          {...errorAttributes(errors, ids, help)}
+        />
+        <div>
+          <label htmlFor={ids.inputId} className="font-semibold">
+            {label}
+          </label>
+          {help ? (
+            <p id={ids.helpId} className="text-sm text-asphalt/70">
+              {help}
+            </p>
+          ) : null}
+        </div>
+      </div>
+      {errors && errors.length > 0 ? (
+        <p id={ids.errorId} className="mt-1 text-sm font-semibold text-red-700">
+          {errors.join(" ")}
+        </p>
+      ) : null}
+    </div>
   );
 }
 
@@ -171,10 +228,18 @@ export function FormAlert({ message }: { message?: string }) {
   );
 }
 
-export function SubmitButton({ pending, label }: { pending: boolean; label: string }) {
+export function SubmitButton({
+  pending,
+  label,
+  pendingLabel = "Sending…",
+}: {
+  pending: boolean;
+  label: string;
+  pendingLabel?: string;
+}) {
   return (
     <button type="submit" className="btn btn-primary disabled:opacity-60" disabled={pending}>
-      {pending ? "Sending…" : label}
+      {pending ? pendingLabel : label}
     </button>
   );
 }
