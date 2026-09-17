@@ -1,6 +1,6 @@
 # tahoebike.org Migration Plan
 
-**Status:** Phases 1, 2 and 4 built (Sept 15 2026); Phase 3 (admin) next
+**Status:** Phases 1–4 built (Phase 3 admin landed Sept 17 2026); Phase 5 (cutover) next, gated on the GitHub repo and Vercel project (Q23)
 **Last updated:** September 2026
 
 ## Background
@@ -128,14 +128,19 @@ Newsletter signup continues to post to Constant Contact.
 - Port every page from the XML export, preserving paths (done)
 - Fix known content bugs during the port (duplicated Bike Valet body; stale 2022 rack deadline; past events) (done)
 - Wire events, board, hero cards, and announcements to the DB (done)
-- Download all referenced images from `wp-content/uploads` into `/public/images` (static) or Vercel Blob (admin-managed) (done: static images downloaded; Blob uploads arrive with Phase 3)
+- Download all referenced images from `wp-content/uploads` into `/public/images` (static) or Vercel Blob (admin-managed) (done: static images downloaded; admin uploads go to Blob since Phase 3)
 - Build the three native forms and email notifications (done)
 - Minimal, clean, accessible styling only, using the brand guidelines' colors and fonts. No attempt to replicate the WordPress theme. (done)
 
 ### Phase 3: Admin
-- CRUD pages for each model
-- Submissions inbox
-- Image uploads
+- CRUD pages for each model (done: `/admin/events`, `/admin/board`, `/admin/cards`,
+  `/admin/announcements`, `/admin/settings` (one form, all keys), `/admin/users` (allowlist))
+- Submissions inbox (done: `/admin/submissions`, filtered by form type and status, with a
+  detail view and read/archive/delete actions)
+- Image uploads (done: browser → Vercel Blob through `app/api/admin/upload`; fields fall back to
+  pasted URLs when `BLOB_READ_WRITE_TOKEN` is absent)
+- Also: `ADMIN_DEV_EMAIL` dev-only sign-in bypass (Q37); the seed became add-only so it can
+  never overwrite board edits (Q38)
 
 ### Phase 4: Redirects and SEO
 - Keep existing paths. Add a `next.config` redirect map for anything that changes and for old WordPress URLs found in the export (attachment pages, `?p=` links, etc.) (done: 341 rules, see `docs/REDIRECTS.md`)
@@ -167,7 +172,9 @@ Newsletter signup continues to post to Constant Contact.
 |---|---|
 | Page copy | `app/**/page.tsx` |
 | Shared components | `components/` |
-| Site setting keys and defaults | `lib/settings.ts` |
+| Site setting keys and defaults | `lib/settings.ts` (labels and groups for the admin form: `lib/admin/settings/fields.ts`) |
+| Admin console | `app/admin/(console)/**` (pages), `lib/admin/<model>/{fields,schema,actions}.ts` (validation and server actions), `components/admin/` (forms and widgets). Events is the template. |
+| Shared form validation | `lib/forms/validators.ts` (zod primitives), `lib/forms/parse.ts` (FormData helpers) |
 | Redirect map | `lib/redirects.ts` (+ `lib/redirects.generated.ts`), documented in `docs/REDIRECTS.md` |
 | Decisions and open questions log | `docs/OPEN_QUESTIONS.md` |
 | WordPress export parsing and content scripts | `lib/wp-export/` and `scripts/` |
@@ -175,7 +182,8 @@ Newsletter signup continues to post to Constant Contact.
 
 ## Open items
 
-- [ ] Confirm which board members should be in the admin allowlist
+- [x] Admin allowlist seeded (Q24); further admins are added at `/admin/users`
+- [ ] Create the Vercel Blob store so admin image uploads work (README, Deploying)
 - [ ] Confirm where current WordPress contact-form and newsletter submissions go
 - [ ] Get owner access to the two Google Forms (to download past responses before retiring them)
 - [ ] Export the current DNS zone before cutover

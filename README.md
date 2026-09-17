@@ -32,7 +32,9 @@ pnpm dev                     # http://localhost:3000
 
 Every variable is documented in [.env.example](.env.example). All external services
 (email, Turnstile, Vercel Blob, Google sign-in) no-op cleanly when their variables are absent,
-so only `DATABASE_URL` is required to run the public site.
+so only `DATABASE_URL` is required to run the public site. To open `/admin` locally without
+setting up Google OAuth, set `ADMIN_DEV_EMAIL=you@example.com`; `next dev` then treats that
+address as a signed-in admin (builds and deployments ignore the variable).
 
 ## Scripts
 
@@ -45,15 +47,15 @@ so only `DATABASE_URL` is required to run the public site.
 | `pnpm db:validate` | Validate `prisma/schema.prisma` |
 | `pnpm db:migrate --name <change>` | Create and apply a migration after editing the schema |
 | `pnpm db:deploy` | Apply pending migrations (production) |
-| `pnpm db:seed` | Run `prisma/seed.ts` (idempotent; upserts by stable keys) |
+| `pnpm db:seed` | Run `prisma/seed.ts` (add-only: creates missing rows, never overwrites existing ones) |
 | `pnpm content:parse` | Parse the WordPress export into `content/generated/{pages,attachments,nav-menu-items,layouts}.json` (gitignored, for inspection) |
 | `pnpm content:images` | Download referenced `wp-content/uploads` images into `public/images` and rewrite `content/image-map.json` |
 
 The seed reads the WordPress export in `reference/` directly and needs the committed
 `content/image-map.json` for headshot and card image paths. Re-run `pnpm content:images`
-if the set of referenced images changes. Until the Phase 3 admin exists the seed is the
-source of truth for board members, homepage cards, and events: re-seeding restores the
-export values.
+if the set of referenced images changes. The seed never modifies a row that already exists,
+so board edits made in `/admin` survive a re-run; to reload the export values from scratch,
+reset the database (`pnpm prisma migrate reset`, which re-runs the seed).
 
 When poking at the database with `psql`, note that Prisma stores `timestamp` columns as UTC
 while Postgres.app sessions default to local time; run `PGTZ=UTC psql ...` to avoid
@@ -69,19 +71,58 @@ beyond those in the migration plan without a discussion.
 
 Page copy is React code under `app/`. Change it in a pull request; every PR gets a Vercel
 preview deployment. Content that board members edit themselves lives in the database and is
-managed at `/admin` (Phase 3).
+managed at `/admin` (see below).
+
+## Admin console
+
+`/admin` is a small set of plain forms for the content that changes often. There is one
+section per database model, plus a submissions inbox:
+
+| Section | Edits | Shows up on |
+|---|---|---|
+| Events | Bike Kitchen fix-ups and other dated events; hidden automatically once they end | `/programs/bike-kitchen` |
+| Board | Board members and advisors: name, role, bio, headshot, order, active flag | `/about` |
+| Homepage cards | The hero callout cards: title, blurb, button, image, order | `/` |
+| Announcements | The site-wide banner, with a start and end time | every page |
+| Settings | Prices, contact addresses, external links, the bike-rack-program flag | wherever the value is used |
+| Submissions | Contact messages, valet requests, rack applications (also emailed when received) | nothing public |
+| Admins | The Google accounts allowed to sign in | — |
+
+How it fits together:
+
+- **Sign-in** is Google OAuth (Auth.js) restricted to the `AdminUser` table. `requireAdmin()`
+  in `lib/admin/auth.ts` runs at the top of every admin page and server action; the layout is
+  not the security boundary.
+- **Forms** are React server actions using the same zod validators as the public forms
+  (`lib/forms/validators.ts`). Each model has `lib/admin/<model>/{fields,schema,actions}.ts`
+  and a client form in `components/admin/<model>-form.tsx`; the Events files are the template.
+- **Times** are entered and shown in Pacific time and stored as UTC (`lib/admin/datetime.ts`).
+- **Rich text** is a small Markdown subset (`lib/markdown.tsx`) with a preview toggle. No WYSIWYG.
+- **Images** upload from the browser straight to Vercel Blob using a short-lived token from
+  `app/api/admin/upload/route.ts` (admins only, images only, 10 MB max). Without
+  `BLOB_READ_WRITE_TOKEN` the image fields still accept a pasted URL or a `/images/...` path.
+- **Freshness**: public pages are static and revalidate every five minutes; every admin save
+  also purges the affected pages (`lib/admin/revalidate.ts`), so edits show at once.
 
 ## Deploying
 
 1. Import the GitHub repository into Vercel (framework preset: Next.js, package manager: pnpm).
 2. Add the **Prisma Postgres** integration from the Vercel Marketplace. It sets `DATABASE_URL`.
-3. Add the remaining variables from `.env.example` in the Vercel project settings:
+3. Create a **Blob** store (Storage tab) and connect it to the project. It sets
+   `BLOB_READ_WRITE_TOKEN`, which enables image uploads in the admin.
+4. Create a Google OAuth client (Google Cloud Console > APIs & Services > Credentials, type
+   "Web application") with the authorized redirect URI
+   `https://tahoebike.org/api/auth/callback/google` (add the preview/`www` origins if admins
+   should sign in there too).
+5. Add the remaining variables from `.env.example` in the Vercel project settings:
    `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL`,
-   `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`, `EMAIL_FROM`,
-   `BLOB_READ_WRITE_TOKEN`. Set `AUTH_TRUST_HOST=true` for preview deployments.
-4. Run migrations against the production database once, then after any schema change:
+   `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`, `EMAIL_FROM`.
+   Set `AUTH_TRUST_HOST=true` for preview deployments.
+6. Run migrations against the production database once, then after any schema change:
    `DATABASE_URL=<production url> pnpm db:deploy`, and seed once with `pnpm db:seed`.
-5. Push to `main` to deploy production; every pull request gets a preview URL.
+   The seed allowlists the admin accounts from Q24 (`prisma/seed.ts`); further admins are
+   added at `/admin/users`.
+7. Push to `main` to deploy production; every pull request gets a preview URL.
 
 `next build` prerenders every public page (they are static, revalidated every five
 minutes), so the build itself needs a reachable `DATABASE_URL`. On Vercel the Prisma

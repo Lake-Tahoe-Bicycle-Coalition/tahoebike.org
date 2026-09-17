@@ -3,7 +3,7 @@
  * Idempotent: every write is an upsert keyed on a stable value, so it can be re-run safely.
  *
  * - Site settings: code defaults from lib/settings.ts; existing rows are left alone.
- * - Admin allowlist: placeholders (see TODO below).
+ * - Admin allowlist: the three accounts from Q24.
  * - Board members, homepage cards and Bike Kitchen events: parsed straight from the
  *   WordPress export (reference/…xml) with lib/wp-export, using content/image-map.json
  *   (written by `pnpm content:images`) to turn wp-content/uploads URLs into /images paths.
@@ -35,11 +35,11 @@ const SEED_BOARD_PREFIX = "seed-board-";
 const SEED_CARD_PREFIX = "seed-card-";
 const SEED_EVENT_PREFIX = "seed-event-";
 
-// TODO(allowlist): replace these placeholders with the real board member Google account
-// emails before the first production deploy. See docs/OPEN_QUESTIONS.md Q24.
+// Initial admin allowlist (docs/OPEN_QUESTIONS.md Q24). Further admins are added at /admin/users.
 const ADMIN_ALLOWLIST: { email: string; name: string }[] = [
-  { email: "president@example.com", name: "Placeholder President" },
-  { email: "webmaster@example.com", name: "Placeholder Webmaster" },
+  { email: "nick@speal.ca", name: "Nick Speal" },
+  { email: "info@tahoebike.org", name: "LTBC Info" },
+  { email: "ltbcboard@gmail.com", name: "LTBC Board" },
 ];
 
 async function seedSettings() {
@@ -63,7 +63,7 @@ async function seedAdmins() {
       update: { name: admin.name },
     });
   }
-  console.log(`admins: ${ADMIN_ALLOWLIST.length} allowlisted (placeholders; see TODO)`);
+  console.log(`admins: ${ADMIN_ALLOWLIST.length} allowlisted`);
 }
 
 // ---------------------------------------------------------------------------

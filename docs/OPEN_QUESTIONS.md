@@ -1,8 +1,8 @@
 # Open questions, discrepancies, and decisions
 
-Running log for the WordPress → Next.js migration. Each entry records what was found, what was assumed, and what still needs a human decision. Resolve an item by editing its **Decision** line and, if code changes are needed, opening a PR.
+Running log for the WordPress → Next.js migration. Each entry records what was found, what was assumed, and what still needs a human decision. Resolve an item by editing its **Decision** line and, if code changes are needed, committing directly to main.
 
-Legend: **Assumed** = built this way for now, revisit any time. **Decided** = confirmed by Nick. **Open** = nobody has decided yet.
+Legend: **Assumed** = built this way for now, revisit any time. **Decided** = confirmed by Nick. **To do** = decided, but the work is not done yet. **Open** = nobody has decided yet.
 
 ## Content and pages
 
@@ -14,11 +14,13 @@ The WordPress page at `/programs/` is an empty Divi placeholder. The only index-
 These exist in the export but are not in the plan's page table:
 `/bike-month-leaderboard/`, `/get-involved/`, `/projects/`, `/sponsors/`, `/stay-in-touch/`, `/where-to-ride/`, `/board-of-directors/`, `/volunteerdraft/`.
 `/sponsors/` and `/stay-in-touch/` contain literal "TODO" text; `/where-to-ride/`, `/board-of-directors/`, `/volunteerdraft/` are empty; `/get-involved/` has a PayPal donate link and a dead link to `/get-involved/join/`.
-**Decision (Sept 15 2026): Decided.** Leave them out for now; they may be obsolete. Phase 4 adds redirects so inbound links do not 404 (see Q12). Revisit whether the Bike Month leaderboard (10 iframes to `ride.tahoebike.org`) should be ported or moved to tahoebikemonth.org.
+**Decision (Sept 15 2026): Decided.** Leave them out for now; they may be obsolete. Phase 4 adds redirects so inbound links do not 404 (see Q12).
+**Decision (Sept 17 2026): Decided.** Do not port the Bike Month leaderboard. `/bike-month-leaderboard/` redirects to `https://www.tahoebikemonth.org/`. The main site should carry no Bike Month content of its own; it only links out to tahoebikemonth.org.
+**To do.** Look into how the leaderboard (10 iframes to `ride.tahoebike.org`) is actually used before it is retired for good. Also check that the Tahoe Bike Month entry on the programs index (Q1) only links out.
 
 ### Q3. Main contact email
 Plan says `ltbcboard@gmail.com` for contact-form notifications and the rack application. The live contact form and the Advocacy page use `info@tahoebike.org`, which the plan never mentions. The Bike Kitchen "Join a fix-up" card links to `ltbcboard@gmail.com` while the page headline says `bikekitchen@tahoebike.org`.
-**Decision (Sept 15 2026): Decided.** `info@tahoebike.org` is the main email everywhere. Program-specific addresses stay: `bikekitchen@tahoebike.org`, `bikevalet@tahoebike.org`. `ltbcboard@gmail.com` is no longer shown on the site.
+**Decision (Sept 15 2026): Decided.** `info@tahoebike.org` is the main email everywhere. Program-specific addresses stay: `bikekitchen@tahoebike.org`, `bikevalet@tahoebike.org`. `ltbcboard@gmail.com` is no longer shown on the site. (It is on the admin allowlist for sign-in only; see Q24.)
 
 ### Q4. POINT (pointapp.org) volunteer embed
 The Volunteer page is mostly an iframe of the POINT shift calendar, and the Bike Kitchen events box links to the POINT org page. POINT is not in the plan's external-services list.
@@ -50,7 +52,7 @@ The three advisors (Curtis Fong, Karen Fink, Pete Fink) are name-only team cards
 
 ### Q11. Print map PDFs
 The Printable Bike Map page links its two images to Google Drive PDFs (2026 maps). The export also contains 11 PDF attachments (2022, 2023, 2025 print maps and a Bike Month sponsor packet) that no published page links to.
-**Assumed.** Keep the Google Drive links; do not download the unreferenced PDFs. Open: should the 2026 PDFs be hosted on the site instead of Drive?
+**Decision (Sept 17 2026): Decided.** Keep the 2026 PDFs on Google Drive and keep the existing links; do not host them on the site. Do not download the unreferenced PDFs.
 
 ### Q12. Redirect targets for retired pages (Phase 4)
 **Decision (Sept 15 2026): Decided/implemented.** Built as described below; the full map
@@ -68,7 +70,7 @@ each retired page points somewhere sensible:
 | `/sponsors/` | `/join/` |
 | `/where-to-ride/` | `https://map.tahoebike.org/` |
 | `/volunteerdraft/` | `/volunteer/` |
-| `/bike-month-leaderboard/` | `https://www.tahoebikemonth.org/` (or port; see Q2) |
+| `/bike-month-leaderboard/` | `https://www.tahoebikemonth.org/` (confirmed Sept 17 2026; see Q2) |
 | `/home/` | `/` |
 | `/?page_id=N`, `/?p=N` | the page's current path |
 | attachment pages (`/<image-slug>/`) | the parent page, else `/` |
@@ -83,15 +85,20 @@ A draft that prototypes a "Discover Our Newsletter Archive" page using the same 
 
 ### Q15. Privacy policy draft
 `/privacy-policy/` exists as a 610-word draft that was never published.
-**Open.** Should the new site publish a privacy policy? The native forms collect names, emails, and phone numbers, so one is advisable.
+**Decision (Sept 17 2026): Decided.** Publish a privacy policy as a static page. It rarely changes, so it lives in the source code and is updated with a code change when needed; no admin setting or external link.
+**To do.** Build the page (not yet done).
 
 ### Q16. Bike Valet request form fields
 The current Google Form's questions are not in the export (only the embed URL is).
 **Assumed, implemented.** Fields: contact name, organization, email, phone, event name, event date, start time, end time, location, expected attendance, expected number of bikes, organization type (nonprofit / Bike Coalition business member / both / neither), notes. Notifications go to `bike_valet_email`. Compare with the Google Form before retiring it and adjust `lib/forms/schemas.ts`.
+**Decision (Sept 17 2026): Decided.** Launch with the existing embedded Google Form. Keep the native form built, but hidden behind a feature flag so the two can be switched and compared later. The flag lives in code or config, not on the admin page.
+**To do.** Add the feature flag (default: Google Form) and restore the Google Form embed.
 
 ### Q17. Bike Rack application form fields
 Same situation as Q16.
 **Assumed, implemented.** Fields: business name, contact name, email, phone, business address, number of racks requested (1–100), rack style (bolt-down / free-standing), matching funds (yes / partial / no), expected use and community benefit, notes. Shown only while `rack_program_open` is true; the server action also refuses submissions when the flag is off. Notifications go to `contact_email`.
+**Decision (Sept 17 2026): Decided.** Same as Q16: launch with the embedded Google Form; keep the native form behind the same kind of code-level feature flag.
+**To do.** Add the feature flag (default: Google Form) and restore the Google Form embed.
 
 ### Q18. Contact form fields
 The Divi form has First Name, Last Name, Email, Phone (optional), Message.
@@ -117,17 +124,25 @@ Plan says "Resend (or equivalent)".
 
 ### Q23. GitHub remote and deployment
 The repo had no git history and no remote; `gh` is not installed on this machine.
-**Decision (Sept 15 2026): Decided.** All work is committed directly on `main` (no feature branch or PR for this session). Still **open**: create the GitHub repository, add the remote, and push `main`. Once the repo exists, connect it to Vercel (import the repository, framework preset Next.js, package manager pnpm) so that `main` deploys production and every pull request gets a preview URL; the deployment steps are in the README.
+**Decision (Sept 15 2026): Decided.** All work is committed directly on `main` (no feature branch or PR for this session).
+**To do (confirmed Sept 17 2026).** Create the GitHub repository, add the remote, and push `main`. Once the repo exists, connect it to Vercel (import the repository, framework preset Next.js, package manager pnpm) so that `main` deploys production and every pull request gets a preview URL; the deployment steps are in the README.
 
 ### Q24. Admin allowlist
-**Open.** Which board emails go in `AdminUser`? The seed contains a clearly marked placeholder.
+**Decision (Sept 17 2026): Decided.** `AdminUser` contains:
+- `nick@speal.ca`
+- `info@tahoebike.org`
+- `ltbcboard@gmail.com`
+
+`ltbcboard@gmail.com` is used for admin sign-in only; it is still not displayed on the site (Q3 stands).
+**Done (Sept 17 2026).** The seed allowlists these three addresses.
 
 ### Q25. Where WordPress form submissions currently go
 The Divi contact form emails `info@tahoebike.org`; newsletter signups go to Constant Contact list `1199281500`. Google Form responses (valet, racks) live in the Google account that owns the forms.
-**Open** (carried over from the plan): export Google Form responses before retiring the forms.
+**Resolved (Sept 17 2026).** The valet and rack Google Forms stay in use for launch (see Q16, Q17), so nothing is being retired and no response export is needed.
 
 ### Q26. Volunteer signup
 **Open** (carried over from the plan): keep the Constant Contact volunteer list link plus POINT, or add a native form?
+**Update (Sept 17 2026).** Constraint decided: volunteer signups are stored in Constant Contact, not in the site's own database. Still open: whether the signup form uses the site's own UI or Constant Contact's UI; no strong preference yet. Nick will evaluate by looking at both. Also check how signup currently works (Nick recalled it already being a native form).
 
 ### Q27. Newsletter signup form target
 The Divi signup module posted to Constant Contact through the WordPress plugin (list id `1199281500`), so the export contains no plain form endpoint, only the hosted opt-in page URL (`visitor.r20.constantcontact.com/manage/optin?v=...`).
@@ -139,11 +154,12 @@ The Divi library contains a saved "Support the Coalition" header (Donate / Learn
 
 ### Q29. Photo credits and alt text
 The export has no alt text for most images (only sponsor logos). Alt text on the new site was written by the migration agents from the image content and file names.
-**Open.** Have a board member review alt text and confirm no photo needs a credit.
+**Decision (Sept 17 2026): Decided.** Do not add photo credits that did not exist on the old site; keep any credits that did exist.
+**To do.** Create a document indexing every image on the site with its alt text, so Nick can review the alt text for accuracy.
 
 ### Q30. Large hero image
 The "Tahoe Bike Map" homepage card uses `2023/05/LTBC_SouthLake-2023-Print.png` (5.0 MB, the full print map). next/image serves resized versions, so visitors never download the original, but the repo carries it.
-**Open.** Swap the card image for a photo or a smaller crop via the admin once Phase 3 lands.
+**To do (Sept 17 2026).** Replace the image with a resized, more compressed version. Also look for other images in the repo that should be resized the same way.
 
 ### Q31. Retired page links inside ported copy
 The programs index reuses the old `/projects/` "Communications" blurb, whose "Stay In Touch" link pointed at the retired `/stay-in-touch/` page. It now links to the newsletter signup on `/join#newsletter` (Q12 sends the retired path to `/contact`).
@@ -162,22 +178,23 @@ Next appends the incoming query string to every `next.config` redirect destinati
 `/?page_id=9` link lands on `/about?page_id=9` rather than `/about`. The same applies to every
 `?p=` and `?attachment_id=` rule. A `proxy.ts` (Next 16's middleware) could strip the leftover
 parameter and issue a clean redirect.
-**Assumed.** Acceptable as is: pages ignore unknown parameters and the canonical link tag tells
-search engines the clean URL. **Open:** add the proxy, or leave it?
+**Decision (Sept 17 2026): Decided.** Leave as is; no proxy. The leftover parameter is harmless
+cruft: pages ignore unknown parameters and the canonical link tag tells search engines the clean URL.
 
 **Related gap: closed (Sept 15 2026).** Every public page now declares
 `alternates.canonical` through the shared `pageMetadata()` helper in `lib/site-metadata.ts`,
 including the three redirect destinations that previously lacked one (`/bike-racks`,
 `/contact`, `/programs/bike-valet`). Verified Sept 17 2026: all three serve
 `<link rel="canonical">` at the clean path, so they no longer rely on the leftover query
-parameter simply being ignored. Only the proxy question above remains open.
+parameter simply being ignored.
 
 ### Q35. Open Graph image typography
 `app/opengraph-image.tsx` renders the default share card with next/og, which bundles only Geist
 Regular. The brand's heavy display weight is approximated with a same-colour text shadow that
 thickens the strokes; up close it is not the real typeface.
-**Open.** Supplying a TTF (Libre Franklin Black, or Franklin Gothic ATF if LTBC gets Adobe
-access — see Q6) and loading it through `ImageResponse`'s `fonts` option would fix it properly.
+**Decision (Sept 17 2026): Decided.** Won't fix for now; keep the text-shadow approximation.
+Supplying a TTF (Libre Franklin Black, or Franklin Gothic ATF if LTBC gets Adobe access — see
+Q6) through `ImageResponse`'s `fonts` option remains the fix if this is ever revisited.
 
 ### Q36. Two-hop redirects for retired paths with trailing slashes
 The site runs with Next's default `trailingSlash: false`, so `/get-involved/` is first
