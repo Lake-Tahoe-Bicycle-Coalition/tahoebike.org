@@ -73,6 +73,30 @@ Page copy is React code under `app/`. Change it in a pull request; every PR gets
 preview deployment. Content that board members edit themselves lives in the database and is
 managed at `/admin` (see below).
 
+## Feature flags
+
+The Bike Valet request (`/programs/bike-valet`) and the Bike Rack application (`/bike-racks`)
+each exist twice: the Google Form the old site embedded, and a native form that stores
+submissions in the database and shows them in the admin inbox. The site launches with the
+Google Forms (decisions Q16 and Q17 in `docs/OPEN_QUESTIONS.md`); the native forms stay in
+the code so the two can be compared later.
+
+`NATIVE_FORMS` chooses which native forms are shown instead of their Google Form. It is an
+environment variable, not an admin setting, so it is set per deployment in the Vercel project
+(for example on a preview) or in `.env`:
+
+| Value | Effect |
+|---|---|
+| unset, `none` | Both pages embed their Google Form (the default) |
+| `valet`, `racks`, `valet,racks` | The named native forms replace their Google Form |
+| `all` | Both native forms |
+
+The logic and the two Google Form URLs live in `lib/feature-flags.ts`; the embed is
+`components/google-form-embed.tsx`. While a native form is off, its server action refuses
+submissions as well, so a stale page cannot post to it. The bike-rack `rack_program_open`
+admin setting still decides whether any application form appears; the flag only picks
+which one. A change takes effect on the next deployment, since the pages are prerendered.
+
 ## Admin console
 
 `/admin` is a small set of plain forms for the content that changes often. There is one
