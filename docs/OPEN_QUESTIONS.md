@@ -167,7 +167,7 @@ The programs index reuses the old `/projects/` "Communications" blurb, whose "St
 
 ### Q32. Markdown link policy for admin-entered content
 Board bios and event descriptions render through a small safe Markdown subset (paragraphs, bold, italic, links, bullet lists). Links are limited to http, https, and mailto, so a root-relative link such as `/join` renders as plain text.
-**Assumed.** Relax to allow root-relative paths if editors need internal links.
+**Assumed.** Relax to allow root-relative paths if editors need internal links. (The admin's dedicated URL fields — card buttons, sign-up links, announcement links — do accept site paths such as `/join` via `optionalLink`/`requiredLink` in `lib/forms/validators.ts`; only links typed inside Markdown text are restricted.)
 
 ### Q33. Print map image dimensions
 The brief guessed portrait maps; the 2026 print map images are 1908×1404 landscape. Pages use the measured dimensions.
@@ -203,3 +203,25 @@ inbound links that carry WordPress's trailing slash.
 **Assumed.** Acceptable: both hops are permanent, browsers and crawlers follow them, and the
 alternative (duplicating every rule with a slashed source) roughly doubles the rule count for no
 user-visible gain.
+
+## Admin console (Phase 3)
+
+### Q37. Development sign-in bypass
+Google OAuth is not configured locally, and the admin cannot be exercised without a session.
+**Assumed, implemented (Sept 17 2026).** `ADMIN_DEV_EMAIL` in `.env` signs that address in under `next dev` only (`lib/admin/auth.ts` checks `NODE_ENV === "development"`, which builds, `next start` and every Vercel deployment do not set). It skips the allowlist on purpose so the allowlist page can be tested from an empty table. If this feels too permissive, the alternative is a local Google OAuth client for `http://localhost:3000`.
+
+### Q38. Seed no longer overwrites content
+The seed used to restore the WordPress export values over every board member, card and event on each run, and to retire seed rows missing from the export. With `/admin` in place that would silently undo board edits (the README's deploy steps say to seed production once, but nothing would stop a second run).
+**Assumed, implemented (Sept 17 2026).** Every upsert now has an empty `update`: the seed only adds rows that do not exist. To reload the export from scratch, `pnpm prisma migrate reset`. If content still needs fixing from the export before launch, do it once via reset or via the admin. The allowlist (Q24) is now also editable at `/admin/users`.
+
+### Q39. Events for programs other than Bike Kitchen
+`Event.program` has BIKE_KITCHEN, BIKE_VALET and OTHER, but only `/programs/bike-kitchen` lists events. Bike Valet and Other events can be entered in `/admin/events` and are stored, but appear nowhere.
+**Open.** Add an events list to `/programs/bike-valet` (and/or a general upcoming-events section on the home page), or trim the enum to what the site shows. The admin form says so in its help text.
+
+### Q40. Orphaned uploads in Vercel Blob
+Images upload from the browser to Blob before the form is saved. If the editor then abandons the form, or replaces an image and later cancels, the uploaded file stays in the store. Deleting a row or replacing a saved image does remove the old blob (`deleteBlobIfOurs`).
+**Assumed.** Acceptable: orphaned images are small and cheap. A periodic sweep (list blobs under `uploads/`, delete any URL not referenced by `BoardMember.photoUrl` or `HomepageCard.imageUrl`) could be added as a script if the store grows.
+
+### Q41. Public-page freshness after admin edits
+Public pages are static (`revalidate = 300` on the root layout). Admin actions call `revalidatePath` for the affected pages (`lib/admin/revalidate.ts`); announcements and settings purge the whole site because they render in the layout.
+**Assumed.** Good enough for a site this size. If the Vercel CDN still shows stale HTML for a moment after a save, that is the edge cache catching up, not a bug.
