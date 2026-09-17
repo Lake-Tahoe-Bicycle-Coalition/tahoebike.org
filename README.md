@@ -5,6 +5,9 @@ Page copy lives in code; a small set of frequently changing content (events, boa
 homepage cards, announcements, site settings, form submissions) lives in Postgres and is
 edited at `/admin`.
 
+The source is public so it can be read and contributed to, but it is not open source:
+see [LICENSE](LICENSE). LTBC's name, logos and photos are not licensed for reuse.
+
 Read [docs/MIGRATION_PLAN.md](docs/MIGRATION_PLAN.md) for the why and the architecture, and
 [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md) for decisions still pending.
 
@@ -48,16 +51,14 @@ address as a signed-in admin (builds and deployments ignore the variable).
 | `pnpm db:migrate --name <change>` | Create and apply a migration after editing the schema |
 | `pnpm db:deploy` | Apply pending migrations (production) |
 | `pnpm db:seed` | Run `prisma/seed.ts` (add-only: creates missing rows, never overwrites existing ones) |
-| `pnpm content:parse` | Parse the WordPress export into `content/generated/{pages,attachments,nav-menu-items,layouts}.json` (gitignored, for inspection) |
-| `pnpm content:images` | Download referenced `wp-content/uploads` images into `public/images` and rewrite `content/image-map.json` |
 | `pnpm content:optimize [--dry-run] [--all]` | Resize (long edge ≤ 2400 px) and recompress oversized images in `public/images` in place; paths and formats never change. Idempotent |
 | `pnpm content:image-index` | Regenerate `docs/IMAGE_INDEX.md`, the list of every image on the site with its alt text and where it is used |
 
-The seed reads the WordPress export in `reference/` directly and needs the committed
-`content/image-map.json` for headshot and card image paths. Re-run `pnpm content:images`
-if the set of referenced images changes. The seed never modifies a row that already exists,
-so board edits made in `/admin` survive a re-run; to reload the export values from scratch,
-reset the database (`pnpm prisma migrate reset`, which re-runs the seed).
+The seed loads board members, homepage cards and Bike Kitchen events from
+`prisma/seed-data.json`, a snapshot of the old WordPress site's public content, and
+allowlists the addresses in `SEED_ADMIN_EMAILS` for `/admin`. It never modifies a row that
+already exists, so board edits made in `/admin` survive a re-run; to reload the snapshot
+values from scratch, reset the database (`pnpm prisma migrate reset`, which re-runs the seed).
 
 When poking at the database with `psql`, note that Prisma stores `timestamp` columns as UTC
 while Postgres.app sessions default to local time; run `PGTZ=UTC psql ...` to avoid
@@ -76,10 +77,34 @@ preview deployment. Content that board members edit themselves lives in the data
 managed at `/admin` (see below).
 
 Images live in `public/images` and are referenced by path from page code, from
-`content/image-map.json` and from seeded database rows, so never rename or move one. After
-adding a large photo run `pnpm content:optimize` to shrink it in place, and after adding,
-removing or re-describing an image run `pnpm content:image-index` and commit the updated
+`prisma/seed-data.json` and from database rows, so never rename or move one. After adding a
+large photo run `pnpm content:optimize` to shrink it in place, and after adding, removing or
+re-describing an image run `pnpm content:image-index` and commit the updated
 [docs/IMAGE_INDEX.md](docs/IMAGE_INDEX.md), which is where alt text is reviewed.
+
+## Feature flags
+
+The Bike Valet request (`/programs/bike-valet`) and the Bike Rack application (`/bike-racks`)
+each exist twice: the Google Form the old site embedded, and a native form that stores
+submissions in the database and shows them in the admin inbox. The site launches with the
+Google Forms (decisions Q16 and Q17 in `docs/OPEN_QUESTIONS.md`); the native forms stay in
+the code so the two can be compared later.
+
+`NATIVE_FORMS` chooses which native forms are shown instead of their Google Form. It is an
+environment variable, not an admin setting, so it is set per deployment in the Vercel project
+(for example on a preview) or in `.env`:
+
+| Value | Effect |
+|---|---|
+| unset, `none` | Both pages embed their Google Form (the default) |
+| `valet`, `racks`, `valet,racks` | The named native forms replace their Google Form |
+| `all` | Both native forms |
+
+The logic and the two Google Form URLs live in `lib/feature-flags.ts`; the embed is
+`components/google-form-embed.tsx`. While a native form is off, its server action refuses
+submissions as well, so a stale page cannot post to it. The bike-rack `rack_program_open`
+admin setting still decides whether any application form appears; the flag only picks
+which one. A change takes effect on the next deployment, since the pages are prerendered.
 
 ## Admin console
 

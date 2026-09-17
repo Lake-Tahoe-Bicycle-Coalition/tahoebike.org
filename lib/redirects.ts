@@ -4,8 +4,8 @@
  * docs/OPEN_QUESTIONS.md).
  *
  * Generated entries (attachment pages, `?p=` / `?page_id=` / `?attachment_id=`
- * ids, old `wp-content/uploads` URLs) live in lib/redirects.generated.ts and
- * are rebuilt with `pnpm content:redirects`. Everything else is hand-written
+ * ids, old `wp-content/uploads` URLs) live in lib/redirects.generated.ts, a
+ * one-time snapshot from the WordPress export. Everything else is hand-written
  * here. Order matters: Next applies the first matching rule.
  *
  * Trailing slashes: Next's default (`trailingSlash: false`) already answers
@@ -40,6 +40,10 @@ export const retiredPages: Readonly<Record<string, string>> = {
   "/where-to-ride": "https://map.tahoebike.org/",
   "/volunteerdraft": "/volunteer",
   "/bike-month-leaderboard": "https://www.tahoebikemonth.org/",
+  // Rules from the WordPress Redirection plugin (not part of the export; checked live Sept 17 2026).
+  "/bike-month": "https://www.tahoebikemonth.org/",
+  "/bike-month-discounts": "https://www.tahoebikemonth.org/",
+  "/bike-month-prizes": "https://www.tahoebikemonth.org/prizes",
   "/home": "/",
 };
 

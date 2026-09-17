@@ -3,8 +3,8 @@
  *
  * Resizes and recompresses oversized raster images under public/images in place
  * (docs/OPEN_QUESTIONS.md Q30). Paths and formats never change, because they are
- * referenced from page code, content/image-map.json and database rows seeded from
- * the WordPress export (homepage cards, board headshots).
+ * referenced from page code, prisma/seed-data.json and database rows (homepage
+ * cards, board headshots) that nothing here can update.
  *
  * A file is a candidate when it is over SIZE_THRESHOLD_BYTES or its long edge is
  * over MAX_EDGE_PX. Each candidate is resized so the long edge is at most MAX_EDGE_PX

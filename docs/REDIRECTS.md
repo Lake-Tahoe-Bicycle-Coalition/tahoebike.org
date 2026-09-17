@@ -4,7 +4,7 @@ Every URL the WordPress site answered should keep working. The redirect map live
 `lib/redirects.ts` (hand-written rules) plus `lib/redirects.generated.ts` (built from the
 WordPress export), and `next.config.ts` hands the combined list to Next.
 
-**341 rules total, all permanent (HTTP 308).**
+**345 rules total, all permanent (HTTP 308).**
 
 ## Canonical host
 
@@ -43,7 +43,7 @@ re-implements that normalization. A retired path typed with a slash takes two ho
 | `?page_id=N` | 19 | `/?page_id=9` → `/about` |
 | `?p=N` | 19 | `/?p=690` → `/programs/bike-kitchen` |
 | `?attachment_id=N` | 4 | `/?attachment_id=108` → `/join` |
-| Retired pages | 10 | `/projects` → `/programs` |
+| Retired pages | 13 | `/projects` → `/programs` |
 | Path aliases | 1 | `/newsletters` → `/newsletter` |
 | WordPress system paths | 9 | `/wp-login.php` → `/` |
 | Attachment pages | 205 | `/june-3-bike-path-cleanup` → `/`; `/sponsors/tahoe_fund` → `/join` |
@@ -55,7 +55,7 @@ page and go to the home page. Old upload URLs cover the images that were downloa
 `/public/images`, including WordPress's resized variants (`-150x150`), which all point at
 the full-size file.
 
-### Retired pages (10)
+### Retired pages (13)
 
 Pages that existed in WordPress and were not ported (see Q2 and Q12 in
 [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md)).
@@ -71,7 +71,13 @@ Pages that existed in WordPress and were not ported (see Q2 and Q12 in
 | `/where-to-ride` | `https://map.tahoebike.org/` |
 | `/volunteerdraft` | `/volunteer` |
 | `/bike-month-leaderboard` | `https://www.tahoebikemonth.org/` |
+| `/bike-month` | `https://www.tahoebikemonth.org/` |
+| `/bike-month-discounts` | `https://www.tahoebikemonth.org/` |
+| `/bike-month-prizes` | `https://www.tahoebikemonth.org/prizes` |
 | `/home` | `/` |
+
+The last three come from the WordPress Redirection plugin, whose rules are not in the export;
+they were read from the live site on Sept 17 2026.
 
 ### Path aliases (1)
 

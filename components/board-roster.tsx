@@ -1,16 +1,9 @@
 import Image from "next/image";
 import type { BoardMember } from "@/lib/generated/prisma/client";
+import { initials } from "@/lib/initials";
 import { Markdown } from "@/lib/markdown";
 import { isOptimizableImageUrl } from "@/lib/urls";
 
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter((word) => /^[A-Za-z]/.test(word))
-    .slice(0, 2)
-    .map((word) => word.charAt(0).toUpperCase())
-    .join("");
-}
 
 /** Grid of board member cards. Pages fetch the rows and pass them in. */
 export function BoardRoster({ members }: { members: BoardMember[] }) {

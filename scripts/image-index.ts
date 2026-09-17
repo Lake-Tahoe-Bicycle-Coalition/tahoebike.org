@@ -13,10 +13,10 @@
  *      the array is passed to (`<PhotoGallery photos={galleryPhotos} />`), and any alt
  *      template such as `${map.alt} (PDF, opens in a new tab)` is applied.
  *   3. `pageMetadata({ image: { url, alt } })` Open Graph images.
- *   4. Database-seeded images: homepage cards and board headshots are parsed from the
- *      WordPress export exactly as prisma/seed.ts does, and the alt each one gets is
+ *   4. Database-seeded images: the homepage cards and board headshots in
+ *      prisma/seed-data.json (what prisma/seed.ts loads), with the alt each one gets
  *      read from the `<Image>` in components/hero-cards.tsx and components/board-roster.tsx.
- *      Rows edited in /admin after seeding are not visible to this script.
+ *      Rows added or edited in /admin after seeding are not visible to this script.
  *   5. The favicon (app/icon.png), the Apple touch icon (app/apple-icon.png) and the
  *      default share image (app/opengraph-image.tsx).
  *
@@ -28,17 +28,10 @@
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import sharp from "sharp";
-import {
-  WP_EXPORT_PATH,
-  extractSlides,
-  extractTeamMembers,
-  parseWpExport,
-  requirePage,
-} from "../lib/wp-export";
 
 const OUTPUT_PATH = join("docs", "IMAGE_INDEX.md");
 const IMAGES_DIR = join("public", "images");
-const IMAGE_MAP_PATH = join("content", "image-map.json");
+const SEED_DATA_PATH = join("prisma", "seed-data.json");
 const SOURCE_DIRS = ["app", "components"];
 const SKIPPED_DIRS = [join("app", "admin"), join("components", "admin")];
 const THUMBNAIL_WIDTH = 120;
@@ -332,29 +325,39 @@ interface SeededSource {
   items: { label: string; path: string; fields: Record<string, string>; origin: string }[];
 }
 
+/** The parts of prisma/seed-data.json that carry image paths (see the SeedData type in prisma/seed.ts). */
+interface SeedImages {
+  board: { name: string; role: string; photoUrl: string }[];
+  homepageCards: { title: string; blurb: string; imageUrl: string }[];
+}
+
+function loadSeedImages(): SeedImages {
+  const parsed: unknown = JSON.parse(readFileSync(SEED_DATA_PATH, "utf8"));
+  if (typeof parsed !== "object" || parsed === null) throw new Error(`${SEED_DATA_PATH} must be a JSON object`);
+  const data = parsed as Partial<SeedImages>;
+  if (!Array.isArray(data.board) || !Array.isArray(data.homepageCards)) {
+    throw new Error(`${SEED_DATA_PATH}: "board" and "homepageCards" must be arrays`);
+  }
+  return { board: data.board, homepageCards: data.homepageCards };
+}
+
 function seededSources(): SeededSource[] {
-  const data = parseWpExport(WP_EXPORT_PATH);
-  const imageMap = JSON.parse(readFileSync(IMAGE_MAP_PATH, "utf8")) as Record<string, string>;
-  const local = (url: string, context: string): string => {
-    const path = imageMap[url];
-    if (path === undefined) throw new Error(`${context}: ${url} is not in ${IMAGE_MAP_PATH}`);
-    return path;
-  };
-  const cards = extractSlides(requirePage(data, "/").body)
-    .filter((slide) => slide.backgroundImage !== null)
-    .map((slide) => ({
-      label: `homepage card "${slide.heading}"`,
-      path: local(slide.backgroundImage ?? "", `card "${slide.heading}"`),
-      fields: { title: slide.heading, blurb: slide.text, imageUrl: "" },
-      origin: "prisma/seed.ts seedHomepageCards (HomepageCard.imageUrl)",
+  const data = loadSeedImages();
+  const cards = data.homepageCards
+    .filter((card) => typeof card.imageUrl === "string" && card.imageUrl !== "")
+    .map((card) => ({
+      label: `homepage card "${card.title}"`,
+      path: card.imageUrl,
+      fields: { title: card.title, blurb: card.blurb, imageUrl: card.imageUrl },
+      origin: `${SEED_DATA_PATH} homepageCards[].imageUrl (HomepageCard.imageUrl via prisma/seed.ts)`,
     }));
-  const members = extractTeamMembers(requirePage(data, "/about").body)
-    .filter((member) => member.imageUrl !== null)
+  const members = data.board
+    .filter((member) => typeof member.photoUrl === "string" && member.photoUrl !== "")
     .map((member) => ({
       label: `board member ${member.name}`,
-      path: local(member.imageUrl ?? "", `board member ${member.name}`),
-      fields: { name: member.name, role: member.position ?? "", photoUrl: "" },
-      origin: "prisma/seed.ts seedBoard (BoardMember.photoUrl)",
+      path: member.photoUrl,
+      fields: { name: member.name, role: member.role, photoUrl: member.photoUrl },
+      origin: `${SEED_DATA_PATH} board[].photoUrl (BoardMember.photoUrl via prisma/seed.ts)`,
     }));
   return [
     { component: "components/hero-cards.tsx", items: cards },
@@ -570,10 +573,11 @@ async function main(): Promise<void> {
   out.push("");
   out.push("- Images in page code: edit the `alt` in the file named in the *Used in* column (app/ and components/).");
   out.push(
-    "- Homepage cards and board headshots come from the database (seeded from the WordPress export by prisma/seed.ts). " +
+    "- Homepage cards and board headshots come from the database (seeded from prisma/seed-data.json by prisma/seed.ts). " +
       "Their alt text is derived in the rendering component: cards are decorative (`alt=\"\"`, the card title sits next to " +
       "the image), headshots use the member's name. Change the derivation in the component; change the image or the " +
-      "name in `/admin` (or in the export before re-seeding).",
+      "name in `/admin` (or in prisma/seed-data.json before re-seeding). The rows listed here are the seed snapshot; " +
+      "rows added or edited in `/admin` since are not visible to the generator.",
   );
   out.push("- Open Graph share images (`pageMetadata({ image })`) are what Facebook, Slack, etc. show for a link; their alt is the `og:image:alt` tag.");
   out.push("");
@@ -598,12 +602,11 @@ async function main(): Promise<void> {
   out.push("## Unreferenced files in public/images");
   out.push("");
   out.push(
-    "Nothing in app/, components/, the seeded rows or the icons references these. The dated folders were downloaded " +
-      "because the WordPress export referenced them somewhere (old sliders, footers, sponsor logos, unused " +
-      "attachments); each is still listed in content/image-map.json and its old `wp-content/uploads` URL redirects " +
-      "here (lib/redirects.generated.ts), so deleting one breaks inbound links to that file. Sponsor logos may be " +
-      "wanted back once sponsors are decided. Files under `brand/` are the source artwork for the icons and the " +
-      "share image and are kept on purpose.",
+    "Nothing in app/, components/, the seeded rows or the icons references these. The dated folders hold every " +
+      "image the old WordPress site used somewhere (old sliders, footers, sponsor logos, unused attachments); each " +
+      "one's old `wp-content/uploads` URL still redirects here (lib/redirects.generated.ts), so deleting a file " +
+      "breaks inbound links to it. Sponsor logos may be wanted back once sponsors are decided. Files under `brand/` " +
+      "are the source artwork for the icons and the share image and are kept on purpose.",
   );
   out.push("");
   out.push("| Thumbnail | File | Size |");

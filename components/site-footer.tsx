@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SmartLink } from "@/components/smart-link";
 import { footerColumns } from "@/lib/navigation";
 import type { Settings } from "@/lib/settings";
@@ -46,7 +47,14 @@ export function SiteFooter({ settings }: { settings: Settings }) {
         </div>
       </div>
       <div className="border-t border-white/10 px-4 py-4 text-center text-sm text-white/70">
-        © {new Date().getFullYear()} Lake Tahoe Bicycle Coalition, an all-volunteer nonprofit.
+        <p className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+          <span>
+            © {new Date().getFullYear()} Lake Tahoe Bicycle Coalition, an all-volunteer nonprofit.
+          </span>
+          <Link href="/privacy-policy" className="text-white/70 decoration-white/40 hover:text-white">
+            Privacy policy
+          </Link>
+        </p>
       </div>
     </footer>
   );

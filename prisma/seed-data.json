@@ -1,0 +1,141 @@
+{
+  "board": [
+    {
+      "name": "Nick Speal",
+      "role": "President",
+      "bio": "Nick believes in the power of bikes as a tool to liberate people from the environmental, financial, and social crises of our time. He's lucky enough to live in South Lake Tahoe where everything we need is accessible without a car. Nick is in charge of LTBC's online bike map and the advocacy committee, and his goal is to make it easier for everyone to get around by bike.",
+      "photoUrl": "/images/2022/05/Nick-Speal.jpg"
+    },
+    {
+      "name": "Kira Richardson",
+      "role": "Vice President",
+      "bio": "Kira is a transportation planner passionate about replacing car trips with bicycle trips to help preserve the natural beauty of Lake Tahoe. Kira heads the Bike Kitchen & Bike Donation program for LTBC and is in charge of organizing Tahoe Bike Month. She works as a Senior Transportation Planner for the Tahoe Regional Planning Agency.",
+      "photoUrl": "/images/2022/05/Kira-Smith.jpeg"
+    },
+    {
+      "name": "Victoria \"V\" Ortiz",
+      "role": "Secretary",
+      "bio": "V loves to travel on two wheels - on roads and trails! She helps coordinate LTBC’s communications and assists with events like bike valets and Bike Month. You'll often see her sporting helmet hair at town meetings in her role as Community Engagement Manager with the Tahoe Regional Planning Agency.",
+      "photoUrl": "/images/2023/05/V-board-profile-2023.jpg"
+    },
+    {
+      "name": "Gavin Feiger",
+      "role": "Treasurer",
+      "bio": "Gavin loves biking, skiing, and burritos more than just about anything else (except his family and friends, of course!). He has been involved in the local bike community everywhere he has lived and plans to continue using his experience and optimism to make Tahoe more Bike Friendly for decades to come.",
+      "photoUrl": "/images/2022/05/Gavin-Feiger.jpg"
+    },
+    {
+      "name": "Nanette Hansel",
+      "role": "Board Member",
+      "bio": "Nanette is an outdoors enthusiast who takes full advantage of the recreational opportunities offered by the beautiful Lake Tahoe area and finds great fulfillment in volunteering with local nonprofit and community service groups, as well as watching her children participate in sports and other teen activities. I also love cooking hot soup on a cold day.",
+      "photoUrl": "/images/2022/05/Nanette-Hansel-1.jpg"
+    },
+    {
+      "name": "Carlie Murphy",
+      "role": "Board Member",
+      "bio": "Carlie is passionate about biking and spends whatever free time she has making sure people know about the work LTBC does for the community by managing our newsletters. Carlie works for the Lake Tahoe Community College as the Forestry Education Grant Manager. In addition to volunteering with LTBC and working full-time, Carlie is also pursuing a Master's degree at the University of Nevada Reno.",
+      "photoUrl": "/images/2022/05/Carlie-Murphy.jpeg"
+    },
+    {
+      "name": "Amanda Milici",
+      "role": "Board Member",
+      "bio": "Amanda is an avid road cyclist and passionate about bike safety. She helps coordinate LTBC's bike safety campaign and manages our social media. When she's not putting down miles on her road bike, Amanda is the Fire Adapted Communities Coordinator for the Tahoe Resource Conservation District.",
+      "photoUrl": "/images/2022/05/Amanda-Milici.jpeg"
+    },
+    {
+      "name": "Sherry Hao",
+      "role": "Board Member",
+      "bio": "Sherry has been a staple on the LTBC board for several years keeping the organizaiton on track and true to our mission. Sherry is in charge of coordinating our print map updates and distribution and also serves on the advocacy committee. By day, Sherry is the Energy Services Program Director for the Sierra Business Council and also serves on the Tahoe Transportation District Board of Directors.",
+      "photoUrl": "/images/2022/05/Sherry-Hao.jpg"
+    },
+    {
+      "name": "Chris Carney",
+      "role": "Board Member",
+      "bio": "Chris is an avid bicyclist with communications and photography skills that have greatly benefitted LTBC over the years. Chris currently serves as the Communications Director for the California Tahoe Conservancy.",
+      "photoUrl": "/images/2022/05/Chris-Carney.jpg"
+    },
+    {
+      "name": "Charles Nelson",
+      "role": "Founding Board Member",
+      "bio": "As a founding member of the Lake Tahoe Bicycle Coaltion, Charles's institutional knowledge and passion for cycling are invaluable to the LTBC. In addition to his service on the bike coalition, Charles is also a member of the South Tahoe Recreation Facilities JPA's Bicycle Advisory Committee, which provides critical funding for bike path maintenance in South Lake Tahoe and El Dorado County.",
+      "photoUrl": "/images/2022/05/Charles-Nelson-1.jpg"
+    },
+    {
+      "name": "Sara Monson",
+      "role": "Board Member",
+      "bio": "Sara is LTBC's go-to North Shore representative and advocate. Sara's work as Executive Director of the Truckee North Tahoe Transportation Management Association inspires her to encourage others to ditch their cars and hop on their bikes or public transit. Sara is in charge of membership development for LTBC.",
+      "photoUrl": "/images/2022/05/Sara-Monson.jpeg"
+    },
+    {
+      "name": "Ian Marten",
+      "role": "Board Member",
+      "bio": "Ian loves the freedom, fresh air and sunshine of riding bikes just about anywhere - except major roads with no bike infrastructure. He contributes to bike kitchens, bike valets and bike advocacy in North Lake Tahoe & Truckee. In addition to his work for LTBC, he supports regional transit at the Truckee North Tahoe Transportation Management Association.",
+      "photoUrl": "/images/2026/04/ian-marten.jpg"
+    }
+  ],
+  "advisors": [
+    "Curtis Fong",
+    "Karen Fink",
+    "Pete Fink"
+  ],
+  "homepageCards": [
+    {
+      "title": "Join our Bike Kitchen Events",
+      "blurb": "Learn how to donate a bike, ask for a bike, and join one of our pop-up events.",
+      "ctaLabel": "Learn More",
+      "ctaUrl": "/programs/bike-kitchen",
+      "imageUrl": "/images/2023/04/2022.09.01_bike-kitchen_5P6A2427_reduced.jpg"
+    },
+    {
+      "title": "Tahoe Bike Map",
+      "blurb": "Find out where to ride and keep up to date on winter path conditions and construction.",
+      "ctaLabel": "Explore the Map",
+      "ctaUrl": "https://map.tahoebike.org/",
+      "imageUrl": "/images/2023/05/LTBC_SouthLake-2023-Print.png"
+    },
+    {
+      "title": "Join the Lake Tahoe Bicycle Coalition",
+      "blurb": "Join LTBC to help promote safe an enjoyable bicycle transportation and recreation. Become a member or learn about volunteer opportunities.",
+      "ctaLabel": "Become a Member",
+      "ctaUrl": "/join",
+      "imageUrl": "/images/2022/05/Bike-valet-in-action.jpg"
+    },
+    {
+      "title": "June is Tahoe Bike Month",
+      "blurb": "Ride bikes, win prizes, and attend events all month long",
+      "ctaLabel": "Sign Up",
+      "ctaUrl": "https://www.tahoebikemonth.org",
+      "imageUrl": "/images/2023/09/Critical-Mass.jpg"
+    }
+  ],
+  "bikeKitchenEvents": [
+    {
+      "date": "2026-08-26",
+      "startTime": "14:00",
+      "endTime": "16:00",
+      "venue": "Sierra Community House",
+      "address": "265 Bear St, Kings Beach, CA"
+    },
+    {
+      "date": "2026-09-16",
+      "startTime": "16:30",
+      "endTime": "19:00",
+      "venue": "South Lake Tahoe Library",
+      "address": "1000 Rufus Allen Blvd, South Lake Tahoe, CA"
+    },
+    {
+      "date": "2026-09-17",
+      "startTime": "17:00",
+      "endTime": "19:00",
+      "venue": "Truckee Community Block Party",
+      "address": "Truckee Depot, Truckee, CA"
+    },
+    {
+      "date": "2026-10-21",
+      "startTime": "16:30",
+      "endTime": "19:00",
+      "venue": "South Lake Tahoe Library",
+      "address": "1000 Rufus Allen Blvd, South Lake Tahoe, CA"
+    }
+  ]
+}

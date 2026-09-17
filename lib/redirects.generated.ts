@@ -1,6 +1,7 @@
 // GENERATED FILE - DO NOT EDIT.
-// Built by scripts/generate-redirects.ts (`pnpm content:redirects`) from
-// reference/laketahoebicyclecoalition.WordPress.2026-09-15.xml and content/image-map.json.
+// Built once during the September 2026 migration from the WordPress site's export
+// (attachment pages, post ids and upload URLs). The export and the generator are no
+// longer in the repo; edit by hand if an old URL needs a new destination.
 // lib/redirects.ts turns these entries into next.config redirects.
 
 /** WordPress attachment pages → the current path of the page the file was uploaded to, or "/". */

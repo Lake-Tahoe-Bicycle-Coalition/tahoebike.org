@@ -16,11 +16,13 @@ These exist in the export but are not in the plan's page table:
 `/sponsors/` and `/stay-in-touch/` contain literal "TODO" text; `/where-to-ride/`, `/board-of-directors/`, `/volunteerdraft/` are empty; `/get-involved/` has a PayPal donate link and a dead link to `/get-involved/join/`.
 **Decision (Sept 15 2026): Decided.** Leave them out for now; they may be obsolete. Phase 4 adds redirects so inbound links do not 404 (see Q12).
 **Decision (Sept 17 2026): Decided.** Do not port the Bike Month leaderboard. `/bike-month-leaderboard/` redirects to `https://www.tahoebikemonth.org/`. The main site should carry no Bike Month content of its own; it only links out to tahoebikemonth.org.
-**To do.** Look into how the leaderboard (10 iframes to `ride.tahoebike.org`) is actually used before it is retired for good. Also check that the Tahoe Bike Month entry on the programs index (Q1) only links out.
+**Checked (Sept 17 2026); to-do closed.** The export page (id 527, last modified June 15 2025) holds nine `ride.tahoebike.org/leaderboard/*` iframes (a library layout has two more, hence "10"); nothing in the export links to it except a 2022 test draft. `ride.tahoebike.org` and `www.tahoebikemonth.org` are the same custom Strava-based app, live with 2026 data, and its `/leaderboards` page already carries the WordPress page's copy and every board; the old iframe URLs now redirect to full pages, so the embeds are dead. The live WordPress site already 301s `/bike-month-leaderboard/` to `https://www.tahoebikemonth.org/leaderboard` through the Redirection plugin (whose rules are not in the export). TRPA's July 18 2023 press release, syndicated by three local papers, links straight to `tahoebike.org/bike-month-leaderboard/`, so the redirect must stay. Nothing is lost by retiring the page.
+Verified the same day that the new site carries no Bike Month content of its own: every reference is an outbound link to `https://www.tahoebikemonth.org/` (the programs index card via the `bike_month_url` setting, the primary-nav and footer entries in `lib/navigation.ts`, and the seeded "June is Tahoe Bike Month" homepage card). The sponsor-logo and leaderboard Divi library layouts were not ported and had no public URL.
+**Open.** The redirect currently lands on the Bike Month home page as decided; `https://www.tahoebikemonth.org/leaderboards` would match the press links better. Change it?
 
 ### Q3. Main contact email
 Plan says `ltbcboard@gmail.com` for contact-form notifications and the rack application. The live contact form and the Advocacy page use `info@tahoebike.org`, which the plan never mentions. The Bike Kitchen "Join a fix-up" card links to `ltbcboard@gmail.com` while the page headline says `bikekitchen@tahoebike.org`.
-**Decision (Sept 15 2026): Decided.** `info@tahoebike.org` is the main email everywhere. Program-specific addresses stay: `bikekitchen@tahoebike.org`, `bikevalet@tahoebike.org`. `ltbcboard@gmail.com` is no longer shown on the site. (It is on the admin allowlist for sign-in only; see Q24.)
+**Decision (Sept 15 2026): Decided.** `info@tahoebike.org` is the main email everywhere. Program-specific addresses stay: `bikekitchen@tahoebike.org`, `bikevalet@tahoebike.org`. `ltbcboard@gmail.com` is no longer shown on the site.
 
 ### Q4. POINT (pointapp.org) volunteer embed
 The Volunteer page is mostly an iframe of the POINT shift calendar, and the Bike Kitchen events box links to the POINT org page. POINT is not in the plan's external-services list.
@@ -56,7 +58,7 @@ The Printable Bike Map page links its two images to Google Drive PDFs (2026 maps
 
 ### Q12. Redirect targets for retired pages (Phase 4)
 **Decision (Sept 15 2026): Decided/implemented.** Built as described below; the full map
-(341 rules: host, `?page_id=`/`?p=`/`?attachment_id=`, retired pages, WordPress system paths,
+(345 rules: host, `?page_id=`/`?p=`/`?attachment_id=`, retired pages, WordPress system paths,
 attachment pages, old upload URLs) lives in `lib/redirects.ts` + `lib/redirects.generated.ts`
 and is documented in [docs/REDIRECTS.md](REDIRECTS.md). Still worth a board sanity-check that
 each retired page points somewhere sensible:
@@ -71,6 +73,8 @@ each retired page points somewhere sensible:
 | `/where-to-ride/` | `https://map.tahoebike.org/` |
 | `/volunteerdraft/` | `/volunteer/` |
 | `/bike-month-leaderboard/` | `https://www.tahoebikemonth.org/` (confirmed Sept 17 2026; see Q2) |
+| `/bike-month/`, `/bike-month-discounts/` | `https://www.tahoebikemonth.org/` (added Sept 17 2026 from the live Redirection plugin) |
+| `/bike-month-prizes/` | `https://www.tahoebikemonth.org/prizes` (same) |
 | `/home/` | `/` |
 | `/?page_id=N`, `/?p=N` | the page's current path |
 | attachment pages (`/<image-slug>/`) | the parent page, else `/` |
@@ -86,19 +90,22 @@ A draft that prototypes a "Discover Our Newsletter Archive" page using the same 
 ### Q15. Privacy policy draft
 `/privacy-policy/` exists as a 610-word draft that was never published.
 **Decision (Sept 17 2026): Decided.** Publish a privacy policy as a static page. It rarely changes, so it lives in the source code and is updated with a code change when needed; no admin setting or external link.
-**To do.** Build the page (not yet done).
+**Done (Sept 17 2026).** `/privacy-policy` is a static page in `app/privacy-policy/page.tsx` (the last-updated date is a constant in the file), linked from the footer copyright line and listed in the sitemap. Its claims were checked against the code: three site forms at most (contact always; valet and racks only when `NATIVE_FORMS` enables them, otherwise the page describes the embedded Google Forms), Turnstile, Constant Contact, POINT, Memberful, YouTube (nocookie), Google Drive, Resend, Vercel, Google sign-in for admins only, no analytics and no cookies for visitors. Retention periods and the WordPress-era comment/Gravatar boilerplate from the draft were left out.
 
 ### Q16. Bike Valet request form fields
 The current Google Form's questions are not in the export (only the embed URL is).
 **Assumed, implemented.** Fields: contact name, organization, email, phone, event name, event date, start time, end time, location, expected attendance, expected number of bikes, organization type (nonprofit / Bike Coalition business member / both / neither), notes. Notifications go to `bike_valet_email`. Compare with the Google Form before retiring it and adjust `lib/forms/schemas.ts`.
 **Decision (Sept 17 2026): Decided.** Launch with the existing embedded Google Form. Keep the native form built, but hidden behind a feature flag so the two can be switched and compared later. The flag lives in code or config, not on the admin page.
-**To do.** Add the feature flag (default: Google Form) and restore the Google Form embed.
+**Done (Sept 17 2026).** The page embeds the old site's Google Form (URL in `lib/feature-flags.ts`, embed in `components/google-form-embed.tsx`) unless the `NATIVE_FORMS` environment variable enables the native form (`valet`, `racks`, `all`; default none; see README "Feature flags"). The native server action also refuses submissions while its flag is off. The section heading reverted to the old page's "Request for an Event". The iframe uses the form's public `/forms/d/e/1FAIpQLSdtP_…/viewform` URL (the old document-id URL 301s to it).
+**Compared (Sept 17 2026).** The Google Form ("Valet Bicycle Parking Request Form") has 16 questions in two sections and still accepts responses. Beyond the native schema it asks for the bike-parking location (surface, space constraints), an event web address, an event description for promotion and volunteer recruiting, and a separate mobile number for the day of the event; it asks only "Business Member? Yes/No" rather than the native nonprofit/member/both/neither choice; it has no numeric or date validation; and its intro asks for a month's notice and says pricing follows. Before the flag is ever flipped, add those four fields to `lib/forms/schemas.ts` and carry the intro copy.
 
 ### Q17. Bike Rack application form fields
 Same situation as Q16.
 **Assumed, implemented.** Fields: business name, contact name, email, phone, business address, number of racks requested (1–100), rack style (bolt-down / free-standing), matching funds (yes / partial / no), expected use and community benefit, notes. Shown only while `rack_program_open` is true; the server action also refuses submissions when the flag is off. Notifications go to `contact_email`.
 **Decision (Sept 17 2026): Decided.** Same as Q16: launch with the embedded Google Form; keep the native form behind the same kind of code-level feature flag.
-**To do.** Add the feature flag (default: Google Form) and restore the Google Form embed.
+**Done (Sept 17 2026).** Same `NATIVE_FORMS` flag (`racks`). `rack_program_open` still decides whether any application form appears; the flag only chooses which one. The old page's bold line "Truckee businesses, apply here for bike racks!" was restored above the form.
+**Open.** That line dates from the 2022 Truckee round (the old copy also said "apply until August 15, 2022", which was not ported). Is the next round Truckee-only, or should the line say "Tahoe and Truckee businesses"?
+**Compared (Sept 17 2026).** The embedded Google Form is still titled "2022 Truckee Bike Rack Program", with 2022 dates and funders in its intro, and it accepts responses indefinitely; only name, email and organization are required. Beyond the native schema it asks about LTBC membership, the match amount, legal access to the installation site, and self-installation vs. assistance, and it never asks rack style. **Open:** the form needs a refresh in Google before the next round opens (`rack_program_open` is off, so it is not shown today), and the native schema should gain the membership, legal-access and installation questions before the flag is flipped.
 
 ### Q18. Contact form fields
 The Divi form has First Name, Last Name, Email, Phone (optional), Message.
@@ -128,13 +135,8 @@ The repo had no git history and no remote; `gh` is not installed on this machine
 **To do (confirmed Sept 17 2026).** Create the GitHub repository, add the remote, and push `main`. Once the repo exists, connect it to Vercel (import the repository, framework preset Next.js, package manager pnpm) so that `main` deploys production and every pull request gets a preview URL; the deployment steps are in the README.
 
 ### Q24. Admin allowlist
-**Decision (Sept 17 2026): Decided.** `AdminUser` contains:
-- `nick@speal.ca`
-- `info@tahoebike.org`
-- `ltbcboard@gmail.com`
-
-`ltbcboard@gmail.com` is used for admin sign-in only; it is still not displayed on the site (Q3 stands).
-**Done (Sept 17 2026).** The seed allowlists these three addresses.
+**Decision (Sept 17 2026): Decided.** Three initial addresses: the site maintainer, `info@tahoebike.org`, and the board's shared mailbox. The board mailbox is used for admin sign-in only; it is still not displayed on the site (Q3 stands).
+**Done (Sept 17 2026).** The seed allowlists whatever `SEED_ADMIN_EMAILS` contains (set it in the deployment's environment before seeding); the addresses are deliberately not in the repo since it is public.
 
 ### Q25. Where WordPress form submissions currently go
 The Divi contact form emails `info@tahoebike.org`; newsletter signups go to Constant Contact list `1199281500`. Google Form responses (valet, racks) live in the Google account that owns the forms.
@@ -143,10 +145,13 @@ The Divi contact form emails `info@tahoebike.org`; newsletter signups go to Cons
 ### Q26. Volunteer signup
 **Open** (carried over from the plan): keep the Constant Contact volunteer list link plus POINT, or add a native form?
 **Update (Sept 17 2026).** Constraint decided: volunteer signups are stored in Constant Contact, not in the site's own database. Still open: whether the signup form uses the site's own UI or Constant Contact's UI; no strong preference yet. Nick will evaluate by looking at both. Also check how signup currently works (Nick recalled it already being a native form).
+**Checked (Sept 17 2026).** On the WordPress site the volunteer list has never had a native form: `/volunteer/`, `/join/`, `/get-involved/` and `/contact/` all link to Constant Contact's hosted page `https://lp.constantcontactpages.com/su/siO8tF5/volunteer`, and the export contains no volunteer list id (the only list id is the newsletter's, `1199281500`). The "native form" is the Divi Email Optin module on the home page and footer, which posts First/Last/Email to the **newsletter** list through Divi's stored Constant Contact credentials (v2 API, not reusable). The new site links to the same hosted volunteer page; its newsletter form is a GET hand-off to Constant Contact's hosted opt-in page, so nothing on the site can write to a list today. The hosted volunteer page could not be fetched from a script (Cloudflare challenge); Nick to open it in a browser.
+**Options for Nick to evaluate.** (a) Own UI: a server action calling `POST https://api.cc.email/v3/contacts/sign_up_form` with the volunteer list id, which needs a Constant Contact developer app, a one-time OAuth2 grant (`contact_data offline_access`) by an LTBC account owner, a refresh token stored as a Vercel env var, plus Turnstile and the honeypot as in `lib/forms/actions.ts`; the same action would fix Q27's two-step newsletter signup. (b) Constant Contact's UI: keep the link (or iframe the landing page if it allows framing; unknown). URLs to look at: `https://tahoebike.org/volunteer/`, the volunteer landing page above, and the Divi form at the bottom of `https://tahoebike.org/`.
 
 ### Q27. Newsletter signup form target
 The Divi signup module posted to Constant Contact through the WordPress plugin (list id `1199281500`), so the export contains no plain form endpoint, only the hosted opt-in page URL (`visitor.r20.constantcontact.com/manage/optin?v=...`).
 **Assumed.** The new site renders a plain HTML form that submits GET to that hosted opt-in page with the `v` parameter and an `email` field. Tested Sept 15 2026: the hosted page loads but does **not** prefill the email, so visitors retype their address there (two steps instead of one). Fix options: generate an embeddable sign-up form in the Constant Contact dashboard and point the `constant_contact_signup_url` setting at its endpoint, or add a server action using the Constant Contact API. The newsletter archive endpoint (`campaignlp.constantcontact.com/v1/archive/<account>/activities`) works server-side and currently returns four campaigns with `subject` and `campaignUrl` only (no dates).
+**Update (Sept 17 2026).** The live `/join/` page was edited after the Sept 15 export: its "Get Email Updates" button now points to a newer Constant Contact landing page, `https://lp.constantcontactpages.com/sl/thRVMu4/bikecoalitionsignup` (not in the export), and draft page 1280 (Q14) is now published at `https://tahoebike.org/newsletter/`. That landing page is a candidate target for `constant_contact_signup_url` either way; see also option (a) under Q26.
 
 ### Q28. "Support the Coalition" call-to-action layout
 The Divi library contains a saved "Support the Coalition" header (Donate / Learn More buttons over a photo) that was probably shown above the footer on some pages. The export does not record where it was placed.
@@ -167,7 +172,7 @@ The programs index reuses the old `/projects/` "Communications" blurb, whose "St
 
 ### Q32. Markdown link policy for admin-entered content
 Board bios and event descriptions render through a small safe Markdown subset (paragraphs, bold, italic, links, bullet lists). Links are limited to http, https, and mailto, so a root-relative link such as `/join` renders as plain text.
-**Assumed.** Relax to allow root-relative paths if editors need internal links.
+**Assumed.** Relax to allow root-relative paths if editors need internal links. (The admin's dedicated URL fields — card buttons, sign-up links, announcement links — do accept site paths such as `/join` via `optionalLink`/`requiredLink` in `lib/forms/validators.ts`; only links typed inside Markdown text are restricted.)
 
 ### Q33. Print map image dimensions
 The brief guessed portrait maps; the 2026 print map images are 1908×1404 landscape. Pages use the measured dimensions.
@@ -203,3 +208,25 @@ inbound links that carry WordPress's trailing slash.
 **Assumed.** Acceptable: both hops are permanent, browsers and crawlers follow them, and the
 alternative (duplicating every rule with a slashed source) roughly doubles the rule count for no
 user-visible gain.
+
+## Admin console (Phase 3)
+
+### Q37. Development sign-in bypass
+Google OAuth is not configured locally, and the admin cannot be exercised without a session.
+**Assumed, implemented (Sept 17 2026).** `ADMIN_DEV_EMAIL` in `.env` signs that address in under `next dev` only (`lib/admin/auth.ts` checks `NODE_ENV === "development"`, which builds, `next start` and every Vercel deployment do not set). It skips the allowlist on purpose so the allowlist page can be tested from an empty table. If this feels too permissive, the alternative is a local Google OAuth client for `http://localhost:3000`.
+
+### Q38. Seed no longer overwrites content
+The seed used to restore the WordPress export values over every board member, card and event on each run, and to retire seed rows missing from the export. With `/admin` in place that would silently undo board edits (the README's deploy steps say to seed production once, but nothing would stop a second run).
+**Assumed, implemented (Sept 17 2026).** Every upsert now has an empty `update`: the seed only adds rows that do not exist. To reload the export from scratch, `pnpm prisma migrate reset`. If content still needs fixing from the export before launch, do it once via reset or via the admin. The allowlist (Q24) is now also editable at `/admin/users`.
+
+### Q39. Events for programs other than Bike Kitchen
+`Event.program` has BIKE_KITCHEN, BIKE_VALET and OTHER, but only `/programs/bike-kitchen` lists events. Bike Valet and Other events can be entered in `/admin/events` and are stored, but appear nowhere.
+**Open.** Add an events list to `/programs/bike-valet` (and/or a general upcoming-events section on the home page), or trim the enum to what the site shows. The admin form says so in its help text.
+
+### Q40. Orphaned uploads in Vercel Blob
+Images upload from the browser to Blob before the form is saved. If the editor then abandons the form, or replaces an image and later cancels, the uploaded file stays in the store. Deleting a row or replacing a saved image does remove the old blob (`deleteBlobIfOurs`).
+**Assumed.** Acceptable: orphaned images are small and cheap. A periodic sweep (list blobs under `uploads/`, delete any URL not referenced by `BoardMember.photoUrl` or `HomepageCard.imageUrl`) could be added as a script if the store grows.
+
+### Q41. Public-page freshness after admin edits
+Public pages are static (`revalidate = 300` on the root layout). Admin actions call `revalidatePath` for the affected pages (`lib/admin/revalidate.ts`); announcements and settings purge the whole site because they render in the layout.
+**Assumed.** Good enough for a site this size. If the Vercel CDN still shows stale HTML for a moment after a save, that is the edge cache catching up, not a bug.
