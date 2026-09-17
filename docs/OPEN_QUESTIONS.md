@@ -92,13 +92,14 @@ A draft that prototypes a "Discover Our Newsletter Archive" page using the same 
 The current Google Form's questions are not in the export (only the embed URL is).
 **Assumed, implemented.** Fields: contact name, organization, email, phone, event name, event date, start time, end time, location, expected attendance, expected number of bikes, organization type (nonprofit / Bike Coalition business member / both / neither), notes. Notifications go to `bike_valet_email`. Compare with the Google Form before retiring it and adjust `lib/forms/schemas.ts`.
 **Decision (Sept 17 2026): Decided.** Launch with the existing embedded Google Form. Keep the native form built, but hidden behind a feature flag so the two can be switched and compared later. The flag lives in code or config, not on the admin page.
-**To do.** Add the feature flag (default: Google Form) and restore the Google Form embed.
+**Done (Sept 17 2026).** The page embeds the old site's Google Form (URL in `lib/feature-flags.ts`, embed in `components/google-form-embed.tsx`) unless the `NATIVE_FORMS` environment variable enables the native form (`valet`, `racks`, `all`; default none; see README "Feature flags"). The native server action also refuses submissions while its flag is off. The section heading reverted to the old page's "Request for an Event".
 
 ### Q17. Bike Rack application form fields
 Same situation as Q16.
 **Assumed, implemented.** Fields: business name, contact name, email, phone, business address, number of racks requested (1–100), rack style (bolt-down / free-standing), matching funds (yes / partial / no), expected use and community benefit, notes. Shown only while `rack_program_open` is true; the server action also refuses submissions when the flag is off. Notifications go to `contact_email`.
 **Decision (Sept 17 2026): Decided.** Same as Q16: launch with the embedded Google Form; keep the native form behind the same kind of code-level feature flag.
-**To do.** Add the feature flag (default: Google Form) and restore the Google Form embed.
+**Done (Sept 17 2026).** Same `NATIVE_FORMS` flag (`racks`). `rack_program_open` still decides whether any application form appears; the flag only chooses which one. The old page's bold line "Truckee businesses, apply here for bike racks!" was restored above the form.
+**Open.** That line dates from the 2022 Truckee round (the old copy also said "apply until August 15, 2022", which was not ported). Is the next round Truckee-only, or should the line say "Tahoe and Truckee businesses"?
 
 ### Q18. Contact form fields
 The Divi form has First Name, Last Name, Email, Phone (optional), Message.
