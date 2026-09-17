@@ -109,9 +109,9 @@ Three native forms replace the current mix of WordPress forms and Google Forms. 
 
 | Form | Page | Notify |
 |---|---|---|
-| Contact | `/contact/` | `ltbcboard@gmail.com` (configurable via `SiteSetting`) |
+| Contact | `/contact/` | `info@tahoebike.org` (the `contact_email` `SiteSetting`; see Q3) |
 | Bike valet request | `/programs/bike-valet/` | `bikevalet@tahoebike.org` |
-| Bike rack application | `/bike-racks/` | `ltbcboard@gmail.com`; only shown when the program is flagged open |
+| Bike rack application | `/bike-racks/` | `info@tahoebike.org` (the `contact_email` `SiteSetting`; see Q3); only shown when the program is flagged open |
 
 Newsletter signup continues to post to Constant Contact.
 
@@ -140,7 +140,9 @@ Newsletter signup continues to post to Constant Contact.
 ### Phase 4: Redirects and SEO
 - Keep existing paths. Add a `next.config` redirect map for anything that changes and for old WordPress URLs found in the export (attachment pages, `?p=` links, etc.) (done: 341 rules, see `docs/REDIRECTS.md`)
 - Choose `tahoebike.org` (non-www, matching current canonical) as canonical; redirect `www` (done)
-- Metadata, Open Graph, sitemap, robots (done; three pages still need `alternates.canonical`, Q34)
+- Metadata, Open Graph, sitemap, robots (done; every public page declares `alternates.canonical`
+  via `pageMetadata()` in `lib/site-metadata.ts`. The remaining Q34 item is whether to add a
+  `proxy.ts` that strips the leftover `?page_id=`/`?p=` parameter from redirect destinations.)
 
 ### Phase 5: Cutover
 - Board reviews the Vercel preview

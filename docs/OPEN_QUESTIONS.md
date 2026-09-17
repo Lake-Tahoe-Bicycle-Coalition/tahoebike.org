@@ -163,10 +163,14 @@ Next appends the incoming query string to every `next.config` redirect destinati
 `?p=` and `?attachment_id=` rule. A `proxy.ts` (Next 16's middleware) could strip the leftover
 parameter and issue a clean redirect.
 **Assumed.** Acceptable as is: pages ignore unknown parameters and the canonical link tag tells
-search engines the clean URL. **Open:** add the proxy, or leave it? Related gap: `/bike-racks`,
-`/contact`, and `/programs/bike-valet` do not declare `alternates.canonical` yet, and all three
-are redirect destinations, so they rely on the parameter being ignored rather than on a canonical
-tag. Worth adding the three canonical entries whether or not the proxy is built.
+search engines the clean URL. **Open:** add the proxy, or leave it?
+
+**Related gap: closed (Sept 15 2026).** Every public page now declares
+`alternates.canonical` through the shared `pageMetadata()` helper in `lib/site-metadata.ts`,
+including the three redirect destinations that previously lacked one (`/bike-racks`,
+`/contact`, `/programs/bike-valet`). Verified Sept 17 2026: all three serve
+`<link rel="canonical">` at the clean path, so they no longer rely on the leftover query
+parameter simply being ignored. Only the proxy question above remains open.
 
 ### Q35. Open Graph image typography
 `app/opengraph-image.tsx` renders the default share card with next/og, which bundles only Geist
