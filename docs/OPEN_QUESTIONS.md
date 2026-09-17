@@ -132,7 +132,7 @@ Plan says "Resend (or equivalent)".
 ### Q23. GitHub remote and deployment
 The repo had no git history and no remote; `gh` is not installed on this machine.
 **Decision (Sept 15 2026): Decided.** All work is committed directly on `main` (no feature branch or PR for this session).
-**To do (confirmed Sept 17 2026).** Create the GitHub repository, add the remote, and push `main`. Once the repo exists, connect it to Vercel (import the repository, framework preset Next.js, package manager pnpm) so that `main` deploys production and every pull request gets a preview URL; the deployment steps are in the README.
+**Done (Sept 17 2026).** Repository: `github.com/Lake-Tahoe-Bicycle-Coalition/tahoebike.org` (public, so Vercel's Hobby plan can deploy it; the seed therefore takes admin emails from `SEED_ADMIN_EMAILS` instead of source). Vercel project `tahoebike.org` in team `tahoebike`, production at `https://tahoebikeorg.vercel.app`; `main` deploys production, pull requests get previews. Functions pinned to `sfo1` (`vercel.json`) and the Prisma Postgres store is in the same region. Migration and seed applied to production on Sept 17 2026. Still to set up: the Blob store, Google OAuth credentials, Turnstile and Resend keys (README, Deploying).
 
 ### Q24. Admin allowlist
 **Decision (Sept 17 2026): Decided.** Three initial addresses: the site maintainer, `info@tahoebike.org`, and the board's shared mailbox. The board mailbox is used for admin sign-in only; it is still not displayed on the site (Q3 stands).

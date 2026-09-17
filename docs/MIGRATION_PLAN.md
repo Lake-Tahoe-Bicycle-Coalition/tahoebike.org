@@ -1,6 +1,6 @@
 # tahoebike.org Migration Plan
 
-**Status:** Phases 1–4 built (Phase 3 admin landed Sept 17 2026); Phase 5 (cutover) next, gated on the GitHub repo and Vercel project (Q23)
+**Status:** Phases 1–4 built (Phase 3 admin landed Sept 17 2026); Phase 5 (cutover) in progress: repo and Vercel production deploy are up (Q23, Sept 17 2026); board review, OAuth and DNS remain
 **Last updated:** September 2026
 
 ## Background
@@ -150,7 +150,8 @@ Newsletter signup continues to post to Constant Contact.
   `proxy.ts` that strips the leftover `?page_id=`/`?p=` parameter from redirect destinations.)
 
 ### Phase 5: Cutover
-- Board reviews the Vercel preview
+- GitHub repo and Vercel project exist; production deploys from `main` to `https://tahoebikeorg.vercel.app` (done Sept 17 2026)
+- Board reviews the Vercel deployment
 - Point apex and `www` DNS to Vercel. **Do not touch** the `map` subdomain or MX records.
 - Keep WordPress hosting alive for two weeks as a fallback, then cancel
 

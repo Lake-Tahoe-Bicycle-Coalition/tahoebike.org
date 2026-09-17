@@ -28,3 +28,5 @@ next-env.d.ts
 
 # agent worktrees
 /.claude/worktrees/
+
+.hidden-notes.md
