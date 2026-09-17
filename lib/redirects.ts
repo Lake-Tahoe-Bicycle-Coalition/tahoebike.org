@@ -47,6 +47,12 @@ export const retiredPages: Readonly<Record<string, string>> = {
   "/home": "/",
 };
 
+/** Previous paths of current pages (shortened Sept 17 2026), so links published under the old URL still land. */
+export const movedPages: Readonly<Record<string, string>> = {
+  "/programs/bike-kitchen": "/bike-kitchen",
+  "/programs/bike-valet": "/bike-valet",
+};
+
 /** Plausible misspellings of current pages, so a mistyped or guessed URL still lands. */
 export const pathAliases: Readonly<Record<string, string>> = {
   "/newsletters": "/newsletter",
@@ -116,6 +122,10 @@ const retiredPageRedirects: Redirect[] = Object.entries(retiredPages).map(([sour
   permanent(source, destination),
 );
 
+const movedPageRedirects: Redirect[] = Object.entries(movedPages).map(([source, destination]) =>
+  permanent(source, destination),
+);
+
 const aliasRedirects: Redirect[] = Object.entries(pathAliases).map(([source, destination]) =>
   permanent(source, destination),
 );
@@ -127,6 +137,7 @@ export const redirects: Redirect[] = [
   ...hostRedirects,
   ...queryRedirects,
   ...retiredPageRedirects,
+  ...movedPageRedirects,
   ...aliasRedirects,
   ...wordpressSystemRedirects,
   ...attachmentPageRedirects.map(([source, destination]) => permanent(source, destination)),

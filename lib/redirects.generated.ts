@@ -231,11 +231,11 @@ export const pageIdRedirects: ReadonlyArray<readonly [id: number, destination: s
   [152, "/join"],
   [274, "/contact"],
   [291, "/contact"],
-  [342, "/programs/bike-valet"],
+  [342, "/bike-valet"],
   [527, "https://www.tahoebikemonth.org/"],
   [636, "/print-bike-map"],
   [666, "/bike-racks"],
-  [690, "/programs/bike-kitchen"],
+  [690, "/bike-kitchen"],
   [1050, "/volunteer"],
   [1232, "/advocacy"],
 ];

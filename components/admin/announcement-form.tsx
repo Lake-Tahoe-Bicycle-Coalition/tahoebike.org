@@ -50,7 +50,7 @@ export function AnnouncementForm({
         maxLength={2000}
         defaultValue={values.linkUrl}
         errors={errors.linkUrl}
-        help="Optional. Where the “Learn more” link after the message goes, e.g. /programs/bike-valet or https://…"
+        help="Optional. Where the “Learn more” link after the message goes, e.g. /bike-valet or https://…"
       />
 
       <DateTimeField

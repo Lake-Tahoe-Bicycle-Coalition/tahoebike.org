@@ -190,7 +190,7 @@ cruft: pages ignore unknown parameters and the canonical link tag tells search e
 **Related gap: closed (Sept 15 2026).** Every public page now declares
 `alternates.canonical` through the shared `pageMetadata()` helper in `lib/site-metadata.ts`,
 including the three redirect destinations that previously lacked one (`/bike-racks`,
-`/contact`, `/programs/bike-valet`). Verified Sept 17 2026: all three serve
+`/contact`, `/bike-valet`). Verified Sept 17 2026: all three serve
 `<link rel="canonical">` at the clean path, so they no longer rely on the leftover query
 parameter simply being ignored.
 
@@ -221,8 +221,8 @@ The seed used to restore the WordPress export values over every board member, ca
 **Assumed, implemented (Sept 17 2026).** Every upsert now has an empty `update`: the seed only adds rows that do not exist. To reload the export from scratch, `pnpm prisma migrate reset`. If content still needs fixing from the export before launch, do it once via reset or via the admin. The allowlist (Q24) is now also editable at `/admin/users`.
 
 ### Q39. Events for programs other than Bike Kitchen
-`Event.program` has BIKE_KITCHEN, BIKE_VALET and OTHER, but only `/programs/bike-kitchen` lists events. Bike Valet and Other events can be entered in `/admin/events` and are stored, but appear nowhere.
-**Open.** Add an events list to `/programs/bike-valet` (and/or a general upcoming-events section on the home page), or trim the enum to what the site shows. The admin form says so in its help text.
+`Event.program` has BIKE_KITCHEN, BIKE_VALET and OTHER, but only `/bike-kitchen` lists events. Bike Valet and Other events can be entered in `/admin/events` and are stored, but appear nowhere.
+**Open.** Add an events list to `/bike-valet` (and/or a general upcoming-events section on the home page), or trim the enum to what the site shows. The admin form says so in its help text.
 
 ### Q40. Orphaned uploads in Vercel Blob
 Images upload from the browser to Blob before the form is saved. If the editor then abandons the form, or replaces an image and later cancels, the uploaded file stays in the store. Deleting a row or replacing a saved image does remove the old blob (`deleteBlobIfOurs`).

@@ -4,7 +4,7 @@ Every URL the WordPress site answered should keep working. The redirect map live
 `lib/redirects.ts` (hand-written rules) plus `lib/redirects.generated.ts` (built from the
 WordPress export), and `next.config.ts` hands the combined list to Next.
 
-**345 rules total, all permanent (HTTP 308).**
+**347 rules total, all permanent (HTTP 308).**
 
 ## Canonical host
 
@@ -41,9 +41,10 @@ re-implements that normalization. A retired path typed with a slash takes two ho
 |---|---:|---|
 | `www` → apex | 2 | `https://www.tahoebike.org/join` → `https://tahoebike.org/join` |
 | `?page_id=N` | 19 | `/?page_id=9` → `/about` |
-| `?p=N` | 19 | `/?p=690` → `/programs/bike-kitchen` |
+| `?p=N` | 19 | `/?p=690` → `/bike-kitchen` |
 | `?attachment_id=N` | 4 | `/?attachment_id=108` → `/join` |
 | Retired pages | 13 | `/projects` → `/programs` |
+| Moved pages | 2 | `/programs/bike-kitchen` → `/bike-kitchen` |
 | Path aliases | 1 | `/newsletters` → `/newsletter` |
 | WordPress system paths | 9 | `/wp-login.php` → `/` |
 | Attachment pages | 205 | `/june-3-bike-path-cleanup` → `/`; `/sponsors/tahoe_fund` → `/join` |
@@ -79,6 +80,16 @@ Pages that existed in WordPress and were not ported (see Q2 and Q12 in
 The last three come from the WordPress Redirection plugin, whose rules are not in the export;
 they were read from the live site on Sept 17 2026.
 
+### Moved pages (2)
+
+Current pages whose URL was shortened on Sept 17 2026 (`movedPages` in `lib/redirects.ts`).
+Both forms work; the short one is canonical and is what the sitemap and navigation use.
+
+| Old path | Goes to |
+|---|---|
+| `/programs/bike-kitchen` | `/bike-kitchen` |
+| `/programs/bike-valet` | `/bike-valet` |
+
 ### Path aliases (1)
 
 Plausible misspellings of current pages (`pathAliases` in `lib/redirects.ts`).
@@ -103,11 +114,13 @@ when an old URL needs a new destination, keeping entries sorted.
 
 Edit `lib/redirects.ts`. Retired WordPress pages go in the `retiredPages` map (a
 `?page_id=` entry for the same page in `lib/redirects.generated.ts` should point at the same
-destination). Misspellings of current pages go in `pathAliases`. Anything else is a plain
+destination). A page whose URL changes goes in `movedPages` (and every reference to the old path,
+including `?page_id=` entries in the generated file, should move with it). Misspellings of
+current pages go in `pathAliases`. Anything else is a plain
 entry in the exported `redirects` array. Rules are evaluated in order and the first match
 wins.
 
-Vercel allows at most **1,024 redirects** in `next.config`. At 345 there is room, but a
+Vercel allows at most **1,024 redirects** in `next.config`. At 347 there is room, but a
 new bulk source (another site's worth of attachment pages, say) should be checked against
 that ceiling; the alternative is handling them in `proxy.ts` instead.
 

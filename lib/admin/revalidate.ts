@@ -7,8 +7,8 @@ import { revalidatePath } from "next/cache";
  */
 
 export function revalidateEvents() {
-  revalidatePath("/programs/bike-kitchen");
-  revalidatePath("/programs/bike-valet");
+  revalidatePath("/bike-kitchen");
+  revalidatePath("/bike-valet");
 }
 
 export function revalidateBoard() {

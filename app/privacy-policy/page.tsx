@@ -41,7 +41,7 @@ export default async function PrivacyPolicyPage() {
   const googleForms = [
     ...(nativeValet
       ? []
-      : [{ label: "Bike Valet request form", href: "/programs/bike-valet", page: "Bike Valet" }]),
+      : [{ label: "Bike Valet request form", href: "/bike-valet", page: "Bike Valet" }]),
     ...(nativeRacks ? [] : [{ label: "bike rack application", href: "/bike-racks", page: "Bike Racks" }]),
   ];
 
@@ -72,7 +72,7 @@ export default async function PrivacyPolicyPage() {
           </li>
           {nativeValet ? (
             <li>
-              The <Link href="/programs/bike-valet">Bike Valet request form</Link>: your name,
+              The <Link href="/bike-valet">Bike Valet request form</Link>: your name,
               organization, email address, and phone number; the event name, date, times,
               location, expected attendance, and expected number of bikes; whether you are a
               nonprofit or a Business Member; and any notes.

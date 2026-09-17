@@ -65,6 +65,18 @@ Thumbnails are relative links into public/images, so they render in GitHub and V
 | <img src="../public/images/2026/05/IMG_8347.jpeg" width="120" alt=""> | `/images/2026/05/IMG_8347.jpeg`<br>1800x2400, 541 KB | app/advocacy/page.tsx:11 | A “Share the Road” sign beside a road-work sign at a signalized crosswalk on a Tahoe street | Open Graph share image (`pageMetadata({ image })`); the alt is the og:image:alt tag |
 | <img src="../public/images/2026/05/IMG_8347.jpeg" width="120" alt=""> | `/images/2026/05/IMG_8347.jpeg`<br>1800x2400, 541 KB | app/advocacy/page.tsx:27 | A “Share the Road” sign beside a road-work sign at a signalized crosswalk on a Tahoe street |  |
 
+## /bike-kitchen
+
+| Thumbnail | File | Used in | Alt text | Notes |
+|---|---|---|---|---|
+| <img src="../public/images/2022/09/unnamed.jpg" width="120" alt=""> | `/images/2022/09/unnamed.jpg`<br>1600x1200, 512 KB | app/bike-kitchen/page.tsx:14 | Volunteers repairing bikes on work stands at an outdoor Bike Kitchen fix-up event | Open Graph share image (`pageMetadata({ image })`); the alt is the og:image:alt tag |
+| <img src="../public/images/2022/09/IMG_3107.jpg" width="120" alt=""> | `/images/2022/09/IMG_3107.jpg`<br>480x640, 96 KB | app/bike-kitchen/page.tsx:21 (`gallery`) | Two volunteers fixing a bike on a repair stand outside a community building | rendered by app/bike-kitchen/page.tsx:129 |
+| <img src="../public/images/2022/09/IMG_3110.jpg" width="120" alt=""> | `/images/2022/09/IMG_3110.jpg`<br>480x640, 96 KB | app/bike-kitchen/page.tsx:25 (`gallery`) | Two smiling volunteers with refurbished bikes at a Bike Kitchen event | rendered by app/bike-kitchen/page.tsx:129 |
+| <img src="../public/images/2022/09/IMG_7376.jpg" width="120" alt=""> | `/images/2022/09/IMG_7376.jpg`<br>1512x2016, 861 KB | app/bike-kitchen/page.tsx:29 (`gallery`) | A volunteer kneeling on the pavement to assemble an adult tricycle | rendered by app/bike-kitchen/page.tsx:129 |
+| <img src="../public/images/2022/09/IMG_1635.jpg" width="120" alt=""> | `/images/2022/09/IMG_1635.jpg`<br>640x480, 129 KB | app/bike-kitchen/page.tsx:33 (`gallery`) | Two volunteers adjusting a bike clamped in a repair stand | rendered by app/bike-kitchen/page.tsx:129 |
+| <img src="../public/images/2022/09/IMG_2848.jpg" width="120" alt=""> | `/images/2022/09/IMG_2848.jpg`<br>1512x2016, 335 KB | app/bike-kitchen/page.tsx:37 (`gallery`) | A volunteer cleaning a mountain bike on a repair stand under the pines | rendered by app/bike-kitchen/page.tsx:129 |
+| <img src="../public/images/2022/09/unnamed.jpg" width="120" alt=""> | `/images/2022/09/unnamed.jpg`<br>1600x1200, 512 KB | app/bike-kitchen/page.tsx:70 | Volunteers repairing bikes on work stands at an outdoor Bike Kitchen fix-up event |  |
+
 ## /bike-racks
 
 | Thumbnail | File | Used in | Alt text | Notes |
@@ -82,6 +94,17 @@ Thumbnails are relative links into public/images, so they render in GitHub and V
 | <img src="../public/images/2022/05/BSmeets_141113_90004-4.jpg" width="120" alt=""> | `/images/2022/05/BSmeets_141113_90004-4.jpg`<br>2273x1844, 353 KB | app/bike-safety/page.tsx:11 | A road cyclist in a yellow jersey riding the highway above Emerald Bay | Open Graph share image (`pageMetadata({ image })`); the alt is the og:image:alt tag |
 | <img src="../public/images/2022/05/BSmeets_141113_90004-4.jpg" width="120" alt=""> | `/images/2022/05/BSmeets_141113_90004-4.jpg`<br>2273x1844, 353 KB | app/bike-safety/page.tsx:75 | A road cyclist in a yellow jersey riding the highway above Emerald Bay |  |
 
+## /bike-valet
+
+| Thumbnail | File | Used in | Alt text | Notes |
+|---|---|---|---|---|
+| <img src="../public/images/2022/05/Bike-valet-in-action.jpg" width="120" alt=""> | `/images/2022/05/Bike-valet-in-action.jpg`<br>2400x1600, 863 KB | app/bike-valet/page.tsx:14 | Volunteers checking bikes into a busy bike valet corral at a community event | Open Graph share image (`pageMetadata({ image })`); the alt is the og:image:alt tag |
+| <img src="../public/images/2022/05/Bike-valet-in-action.jpg" width="120" alt=""> | `/images/2022/05/Bike-valet-in-action.jpg`<br>2400x1600, 863 KB | app/bike-valet/page.tsx:21 (`photos`) | Volunteers checking bikes into a busy bike valet corral at a community event | rendered by app/bike-valet/page.tsx:100 |
+| <img src="../public/images/2022/05/Lakeview-Valet.jpg" width="120" alt=""> | `/images/2022/05/Lakeview-Valet.jpg`<br>1600x1200, 350 KB | app/bike-valet/page.tsx:25 (`photos`) | Rows of bicycles parked at the bike valet at Lakeview Commons | rendered by app/bike-valet/page.tsx:100 |
+| <img src="../public/images/2022/05/Bike-Valet-2016-Cycle-Celebration-3.jpg" width="120" alt=""> | `/images/2022/05/Bike-Valet-2016-Cycle-Celebration-3.jpg`<br>960x720, 136 KB | app/bike-valet/page.tsx:29 (`photos`) | The bike valet tent and racks at the 2016 Cycle Celebration | rendered by app/bike-valet/page.tsx:100 |
+| <img src="../public/images/2022/05/Bike-Valet_Live@Lakeview-2019.6-3.jpg" width="120" alt=""> | `/images/2022/05/Bike-Valet_Live@Lakeview-2019.6-3.jpg`<br>2400x1800, 890 KB | app/bike-valet/page.tsx:33 (`photos`) | Bikes lined up in the valet at a Live at Lakeview concert in 2019 | rendered by app/bike-valet/page.tsx:100 |
+| <img src="../public/images/2022/05/Bike-Valet-Main-Image.png" width="120" alt=""> | `/images/2022/05/Bike-Valet-Main-Image.png`<br>472x393, 35 KB | app/bike-valet/page.tsx:49 | Bike Valet: bicycles parked in a fenced valet corral |  |
+
 ## /print-bike-map
 
 | Thumbnail | File | Used in | Alt text | Notes |
@@ -89,29 +112,6 @@ Thumbnails are relative links into public/images, so they render in GitHub and V
 | <img src="../public/images/2026/06/LTBC_SouthLake-2026-print.jpg" width="120" alt=""> | `/images/2026/06/LTBC_SouthLake-2026-print.jpg`<br>1908x1404, 266 KB | app/print-bike-map/page.tsx:11 | South Tahoe bike map, 2026 print edition | Open Graph share image (`pageMetadata({ image })`); the alt is the og:image:alt tag |
 | <img src="../public/images/2026/06/LTBC_NorthLake-2026-print.jpg" width="120" alt=""> | `/images/2026/06/LTBC_NorthLake-2026-print.jpg`<br>1908x1404, 266 KB | app/print-bike-map/page.tsx:19 (`maps`) | Truckee / North Tahoe bike map, 2026 print edition (PDF, opens in a new tab) | rendered by app/print-bike-map/page.tsx:69; alt template {`${map.alt} (PDF, opens in a new tab)`} |
 | <img src="../public/images/2026/06/LTBC_SouthLake-2026-print.jpg" width="120" alt=""> | `/images/2026/06/LTBC_SouthLake-2026-print.jpg`<br>1908x1404, 266 KB | app/print-bike-map/page.tsx:26 (`maps`) | South Tahoe bike map, 2026 print edition (PDF, opens in a new tab) | rendered by app/print-bike-map/page.tsx:69; alt template {`${map.alt} (PDF, opens in a new tab)`} |
-
-## /programs/bike-kitchen
-
-| Thumbnail | File | Used in | Alt text | Notes |
-|---|---|---|---|---|
-| <img src="../public/images/2022/09/unnamed.jpg" width="120" alt=""> | `/images/2022/09/unnamed.jpg`<br>1600x1200, 512 KB | app/programs/bike-kitchen/page.tsx:14 | Volunteers repairing bikes on work stands at an outdoor Bike Kitchen fix-up event | Open Graph share image (`pageMetadata({ image })`); the alt is the og:image:alt tag |
-| <img src="../public/images/2022/09/IMG_3107.jpg" width="120" alt=""> | `/images/2022/09/IMG_3107.jpg`<br>480x640, 96 KB | app/programs/bike-kitchen/page.tsx:21 (`gallery`) | Two volunteers fixing a bike on a repair stand outside a community building | rendered by app/programs/bike-kitchen/page.tsx:129 |
-| <img src="../public/images/2022/09/IMG_3110.jpg" width="120" alt=""> | `/images/2022/09/IMG_3110.jpg`<br>480x640, 96 KB | app/programs/bike-kitchen/page.tsx:25 (`gallery`) | Two smiling volunteers with refurbished bikes at a Bike Kitchen event | rendered by app/programs/bike-kitchen/page.tsx:129 |
-| <img src="../public/images/2022/09/IMG_7376.jpg" width="120" alt=""> | `/images/2022/09/IMG_7376.jpg`<br>1512x2016, 861 KB | app/programs/bike-kitchen/page.tsx:29 (`gallery`) | A volunteer kneeling on the pavement to assemble an adult tricycle | rendered by app/programs/bike-kitchen/page.tsx:129 |
-| <img src="../public/images/2022/09/IMG_1635.jpg" width="120" alt=""> | `/images/2022/09/IMG_1635.jpg`<br>640x480, 129 KB | app/programs/bike-kitchen/page.tsx:33 (`gallery`) | Two volunteers adjusting a bike clamped in a repair stand | rendered by app/programs/bike-kitchen/page.tsx:129 |
-| <img src="../public/images/2022/09/IMG_2848.jpg" width="120" alt=""> | `/images/2022/09/IMG_2848.jpg`<br>1512x2016, 335 KB | app/programs/bike-kitchen/page.tsx:37 (`gallery`) | A volunteer cleaning a mountain bike on a repair stand under the pines | rendered by app/programs/bike-kitchen/page.tsx:129 |
-| <img src="../public/images/2022/09/unnamed.jpg" width="120" alt=""> | `/images/2022/09/unnamed.jpg`<br>1600x1200, 512 KB | app/programs/bike-kitchen/page.tsx:70 | Volunteers repairing bikes on work stands at an outdoor Bike Kitchen fix-up event |  |
-
-## /programs/bike-valet
-
-| Thumbnail | File | Used in | Alt text | Notes |
-|---|---|---|---|---|
-| <img src="../public/images/2022/05/Bike-valet-in-action.jpg" width="120" alt=""> | `/images/2022/05/Bike-valet-in-action.jpg`<br>2400x1600, 863 KB | app/programs/bike-valet/page.tsx:14 | Volunteers checking bikes into a busy bike valet corral at a community event | Open Graph share image (`pageMetadata({ image })`); the alt is the og:image:alt tag |
-| <img src="../public/images/2022/05/Bike-valet-in-action.jpg" width="120" alt=""> | `/images/2022/05/Bike-valet-in-action.jpg`<br>2400x1600, 863 KB | app/programs/bike-valet/page.tsx:21 (`photos`) | Volunteers checking bikes into a busy bike valet corral at a community event | rendered by app/programs/bike-valet/page.tsx:100 |
-| <img src="../public/images/2022/05/Lakeview-Valet.jpg" width="120" alt=""> | `/images/2022/05/Lakeview-Valet.jpg`<br>1600x1200, 350 KB | app/programs/bike-valet/page.tsx:25 (`photos`) | Rows of bicycles parked at the bike valet at Lakeview Commons | rendered by app/programs/bike-valet/page.tsx:100 |
-| <img src="../public/images/2022/05/Bike-Valet-2016-Cycle-Celebration-3.jpg" width="120" alt=""> | `/images/2022/05/Bike-Valet-2016-Cycle-Celebration-3.jpg`<br>960x720, 136 KB | app/programs/bike-valet/page.tsx:29 (`photos`) | The bike valet tent and racks at the 2016 Cycle Celebration | rendered by app/programs/bike-valet/page.tsx:100 |
-| <img src="../public/images/2022/05/Bike-Valet_Live@Lakeview-2019.6-3.jpg" width="120" alt=""> | `/images/2022/05/Bike-Valet_Live@Lakeview-2019.6-3.jpg`<br>2400x1800, 890 KB | app/programs/bike-valet/page.tsx:33 (`photos`) | Bikes lined up in the valet at a Live at Lakeview concert in 2019 | rendered by app/programs/bike-valet/page.tsx:100 |
-| <img src="../public/images/2022/05/Bike-Valet-Main-Image.png" width="120" alt=""> | `/images/2022/05/Bike-Valet-Main-Image.png`<br>472x393, 35 KB | app/programs/bike-valet/page.tsx:49 | Bike Valet: bicycles parked in a fenced valet corral |  |
 
 ## Icons and default share image
 

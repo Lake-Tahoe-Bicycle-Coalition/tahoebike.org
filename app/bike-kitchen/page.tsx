@@ -10,7 +10,7 @@ export const metadata = pageMetadata({
   title: "Bike Kitchen",
   description:
     "Recycle your old or unwanted bicycle: LTBC volunteers collect donated bikes, repair them, and give them to community members who need one.",
-  path: "/programs/bike-kitchen",
+  path: "/bike-kitchen",
   image: {
     url: "/images/2022/09/unnamed.jpg",
     alt: "Volunteers repairing bikes on work stands at an outdoor Bike Kitchen fix-up event",

@@ -44,7 +44,7 @@ export async function submitContact(_prev: FormState, formData: FormData): Promi
 }
 
 /**
- * Bike valet request on /programs/bike-valet. Refused unless `NATIVE_FORMS` enables
+ * Bike valet request on /bike-valet. Refused unless `NATIVE_FORMS` enables
  * the native form (the page shows the Google Form otherwise; see lib/feature-flags.ts).
  */
 export async function submitValetRequest(
@@ -59,7 +59,7 @@ export async function submitValetRequest(
     subject: (data) =>
       `[tahoebike.org] Bike valet request from ${data.contactName} (${data.eventName})`,
     intro: "New bike valet request from tahoebike.org.",
-    guard: () => nativeFormRefusal("valet", "/programs/bike-valet"),
+    guard: () => nativeFormRefusal("valet", "/bike-valet"),
   });
 }
 

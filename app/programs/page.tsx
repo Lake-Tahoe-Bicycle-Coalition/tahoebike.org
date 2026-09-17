@@ -19,13 +19,13 @@ export default async function ProgramsPage() {
       title: "Bike Kitchen",
       blurb:
         "Recycle your old or unwanted bicycle: LTBC volunteers collect bikes from donors, perform needed repairs and maintenance, and donate them to community members through local social service organizations. Community fix-up events happen about once per month.",
-      href: "/programs/bike-kitchen",
+      href: "/bike-kitchen",
     },
     {
       title: "Bike Valet",
       blurb:
         "Safe and convenient valet bicycle parking for Tahoe’s community events, at no cost to the bicyclists. A bike valet is like a coat check for bikes!",
-      href: "/programs/bike-valet",
+      href: "/bike-valet",
     },
     {
       title: "Regional Bicycle Parking Program",

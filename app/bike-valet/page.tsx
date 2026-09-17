@@ -10,7 +10,7 @@ export const metadata = pageMetadata({
   title: "Bike Valet",
   description:
     "The Lake Tahoe Bicycle Coalition provides safe and convenient valet bicycle parking for Tahoe’s community events, at no cost to the bicyclists.",
-  path: "/programs/bike-valet",
+  path: "/bike-valet",
   image: {
     url: "/images/2022/05/Bike-valet-in-action.jpg",
     alt: "Volunteers checking bikes into a busy bike valet corral at a community event",

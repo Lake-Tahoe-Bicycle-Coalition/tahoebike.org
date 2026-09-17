@@ -84,7 +84,7 @@ re-describing an image run `pnpm content:image-index` and commit the updated
 
 ## Feature flags
 
-The Bike Valet request (`/programs/bike-valet`) and the Bike Rack application (`/bike-racks`)
+The Bike Valet request (`/bike-valet`) and the Bike Rack application (`/bike-racks`)
 each exist twice: the Google Form the old site embedded, and a native form that stores
 submissions in the database and shows them in the admin inbox. The site launches with the
 Google Forms (decisions Q16 and Q17 in `docs/OPEN_QUESTIONS.md`); the native forms stay in
@@ -113,7 +113,7 @@ section per database model, plus a submissions inbox:
 
 | Section | Edits | Shows up on |
 |---|---|---|
-| Events | Bike Kitchen fix-ups and other dated events; hidden automatically once they end | `/programs/bike-kitchen` |
+| Events | Bike Kitchen fix-ups and other dated events; hidden automatically once they end | `/bike-kitchen` |
 | Board | Board members and advisors: name, role, bio, headshot, order, active flag | `/about` |
 | Homepage cards | The hero callout cards: title, blurb, button, image, order | `/` |
 | Announcements | The site-wide banner, with a start and end time | every page |
