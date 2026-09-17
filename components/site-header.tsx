@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { NavMenus } from "@/components/nav-menus";
 import { SmartLink } from "@/components/smart-link";
 import { primaryNav, type NavLink } from "@/lib/navigation";
 
@@ -27,8 +28,9 @@ export function SiteHeader() {
           />
         </Link>
 
-        {/* No-JavaScript-required navigation: <details> handles the mobile menu and dropdowns. */}
-        <nav aria-label="Primary" className="w-full md:w-auto">
+        {/* No-JavaScript-required navigation: <details> handles the mobile menu and dropdowns;
+            NavMenus adds click-outside/Escape closing when JavaScript is available. */}
+        <NavMenus className="w-full md:w-auto">
           <details className="group md:hidden">
             <summary className="btn btn-secondary w-full cursor-pointer list-none">
               Menu
@@ -81,7 +83,7 @@ export function SiteHeader() {
               ),
             )}
           </ul>
-        </nav>
+        </NavMenus>
       </div>
     </header>
   );
