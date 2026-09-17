@@ -19,6 +19,8 @@
     "db:validate": "prisma validate",
     "content:parse": "tsx scripts/parse-wp-export.ts",
     "content:images": "tsx scripts/download-images.ts",
+    "content:optimize": "tsx scripts/optimize-images.ts",
+    "content:image-index": "tsx scripts/image-index.ts",
     "content:redirects": "tsx scripts/generate-redirects.ts"
   },
   "dependencies": {
@@ -40,6 +42,7 @@
     "eslint-config-next": "16.3.5",
     "fast-xml-parser": "^5.11.1",
     "prisma": "7.10.0",
+    "sharp": "0.35.4",
     "tailwindcss": "^4",
     "tsx": "^4",
     "typescript": "^5"

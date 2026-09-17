@@ -50,6 +50,8 @@ address as a signed-in admin (builds and deployments ignore the variable).
 | `pnpm db:seed` | Run `prisma/seed.ts` (add-only: creates missing rows, never overwrites existing ones) |
 | `pnpm content:parse` | Parse the WordPress export into `content/generated/{pages,attachments,nav-menu-items,layouts}.json` (gitignored, for inspection) |
 | `pnpm content:images` | Download referenced `wp-content/uploads` images into `public/images` and rewrite `content/image-map.json` |
+| `pnpm content:optimize [--dry-run] [--all]` | Resize (long edge ≤ 2400 px) and recompress oversized images in `public/images` in place; paths and formats never change. Idempotent |
+| `pnpm content:image-index` | Regenerate `docs/IMAGE_INDEX.md`, the list of every image on the site with its alt text and where it is used |
 
 The seed reads the WordPress export in `reference/` directly and needs the committed
 `content/image-map.json` for headshot and card image paths. Re-run `pnpm content:images`
@@ -72,6 +74,12 @@ beyond those in the migration plan without a discussion.
 Page copy is React code under `app/`. Change it in a pull request; every PR gets a Vercel
 preview deployment. Content that board members edit themselves lives in the database and is
 managed at `/admin` (see below).
+
+Images live in `public/images` and are referenced by path from page code, from
+`content/image-map.json` and from seeded database rows, so never rename or move one. After
+adding a large photo run `pnpm content:optimize` to shrink it in place, and after adding,
+removing or re-describing an image run `pnpm content:image-index` and commit the updated
+[docs/IMAGE_INDEX.md](docs/IMAGE_INDEX.md), which is where alt text is reviewed.
 
 ## Admin console
 
