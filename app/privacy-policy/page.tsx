@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SmartLink } from "@/components/smart-link";
+import { nativeFormEnabled } from "@/lib/feature-flags";
 import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/site-metadata";
 
@@ -33,6 +34,16 @@ export default async function PrivacyPolicyPage() {
   const settings = await getSettings();
   const contactEmail = settings.contact_email;
   const contactLink = <a href={`mailto:${contactEmail}`}>{contactEmail}</a>;
+  // Q16/Q17: each of these is either the site's own form or an embedded Google Form,
+  // chosen by NATIVE_FORMS. Describe whichever is live so the policy stays accurate.
+  const nativeValet = nativeFormEnabled("valet");
+  const nativeRacks = nativeFormEnabled("racks");
+  const googleForms = [
+    ...(nativeValet
+      ? []
+      : [{ label: "Bike Valet request form", href: "/programs/bike-valet", page: "Bike Valet" }]),
+    ...(nativeRacks ? [] : [{ label: "bike rack application", href: "/bike-racks", page: "Bike Racks" }]),
+  ];
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -51,36 +62,61 @@ export default async function PrivacyPolicyPage() {
 
         <h2>Information you send us</h2>
         <p>
-          The only personal information this site collects is what you type into one of its
-          three forms:
+          The only personal information this site collects is what you type into one of its own
+          forms:
         </p>
         <ul>
           <li>
             The <Link href="/contact">contact form</Link>: your first and last name, email
             address, phone number (optional), and message.
           </li>
-          <li>
-            The <Link href="/programs/bike-valet">Bike Valet request form</Link>: your name,
-            organization, email address, and phone number; the event name, date, times,
-            location, expected attendance, and expected number of bikes; whether you are a
-            nonprofit or a Business Member; and any notes.
-          </li>
-          <li>
-            The <Link href="/bike-racks">bike rack application</Link>: the business name and
-            address, your name, email address, and phone number; the number and style of racks
-            requested; whether you can provide matching funds; the expected use and community
-            benefit; and any notes.
-          </li>
+          {nativeValet ? (
+            <li>
+              The <Link href="/programs/bike-valet">Bike Valet request form</Link>: your name,
+              organization, email address, and phone number; the event name, date, times,
+              location, expected attendance, and expected number of bikes; whether you are a
+              nonprofit or a Business Member; and any notes.
+            </li>
+          ) : null}
+          {nativeRacks ? (
+            <li>
+              The <Link href="/bike-racks">bike rack application</Link>: the business name and
+              address, your name, email address, and phone number; the number and style of racks
+              requested; whether you can provide matching funds; the expected use and community
+              benefit; and any notes.
+            </li>
+          ) : null}
         </ul>
         <p>
-          When you submit a form, the site saves your answers in its database and emails them to
-          the Coalition: contact messages and rack applications go to {contactLink}, and Bike
-          Valet requests go to{" "}
-          <a href={`mailto:${settings.bike_valet_email}`}>{settings.bike_valet_email}</a>. The
-          database copy means your message is not lost if an email goes astray. We use what you
-          send us to reply to you and to run the program you asked about, and for nothing else.
-          Submitting a form does not sign you up for our newsletter.
+          When you submit one of these forms, the site saves your answers in its database and
+          emails them to the Coalition at {contactLink}
+          {nativeValet ? (
+            <>
+              {" "}
+              (Bike Valet requests go to{" "}
+              <a href={`mailto:${settings.bike_valet_email}`}>{settings.bike_valet_email}</a>)
+            </>
+          ) : null}
+          . The database copy means your message is not lost if an email goes astray. We use
+          what you send us to reply to you and to run the program you asked about, and for
+          nothing else. Submitting a form does not sign you up for our newsletter.
         </p>
+        {googleForms.length > 0 ? (
+          <p>
+            The{" "}
+            {googleForms.map((form, index) => (
+              <span key={form.href}>
+                {index > 0 ? " and the " : ""}
+                <Link href={form.href}>{form.label}</Link>
+              </span>
+            ))}{" "}
+            {googleForms.length > 1 ? "are Google Forms" : "is a Google Form"} embedded on{" "}
+            {googleForms.length > 1 ? "those pages" : "that page"}. What you enter there goes to
+            Google and is kept in the Coalition&apos;s Google account, not in this site&apos;s
+            database; <SmartLink href={POLICY_URLS.google}>Google&apos;s privacy policy</SmartLink>{" "}
+            covers the form itself, and the Coalition uses your answers only to run that program.
+          </p>
+        ) : null}
         <p>
           Those notification emails are delivered by{" "}
           <SmartLink href={POLICY_URLS.resend}>Resend</SmartLink>, an email service, so the
@@ -152,11 +188,18 @@ export default async function PrivacyPolicyPage() {
             The <Link href="/advocacy">Advocacy page</Link> embeds a Google Drive folder of our
             comment letters.
           </li>
+          {googleForms.length > 0 ? (
+            <li>
+              The {googleForms.map((form) => form.page).join(" and ")}{" "}
+              {googleForms.length > 1 ? "pages embed Google Forms" : "page embeds a Google Form"},
+              described above.
+            </li>
+          ) : null}
           <li>The Volunteer page embeds POINT&apos;s calendar, described above.</li>
           <li>The forms load the Cloudflare Turnstile check, described above.</li>
         </ul>
         <p>
-          YouTube and Google Drive are covered by{" "}
+          YouTube, Google Drive, and Google Forms are covered by{" "}
           <SmartLink href={POLICY_URLS.google}>Google&apos;s privacy policy</SmartLink>. Links
           to other websites, such as Tahoe Bike Month, our interactive bike map at
           map.tahoebike.org, the print map PDFs on Google Drive, and Google Maps directions for
