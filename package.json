@@ -16,10 +16,7 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
-    "db:validate": "prisma validate",
-    "content:parse": "tsx scripts/parse-wp-export.ts",
-    "content:images": "tsx scripts/download-images.ts",
-    "content:redirects": "tsx scripts/generate-redirects.ts"
+    "db:validate": "prisma validate"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.0",
@@ -38,7 +35,6 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
-    "fast-xml-parser": "^5.11.1",
     "prisma": "7.10.0",
     "tailwindcss": "^4",
     "tsx": "^4",

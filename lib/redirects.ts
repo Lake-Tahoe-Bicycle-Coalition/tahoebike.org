@@ -4,8 +4,8 @@
  * docs/OPEN_QUESTIONS.md).
  *
  * Generated entries (attachment pages, `?p=` / `?page_id=` / `?attachment_id=`
- * ids, old `wp-content/uploads` URLs) live in lib/redirects.generated.ts and
- * are rebuilt with `pnpm content:redirects`. Everything else is hand-written
+ * ids, old `wp-content/uploads` URLs) live in lib/redirects.generated.ts, a
+ * one-time snapshot from the WordPress export. Everything else is hand-written
  * here. Order matters: Next applies the first matching rule.
  *
  * Trailing slashes: Next's default (`trailingSlash: false`) already answers

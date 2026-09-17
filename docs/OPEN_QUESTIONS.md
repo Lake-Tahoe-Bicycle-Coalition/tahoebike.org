@@ -22,7 +22,7 @@ Verified the same day that the new site carries no Bike Month content of its own
 
 ### Q3. Main contact email
 Plan says `ltbcboard@gmail.com` for contact-form notifications and the rack application. The live contact form and the Advocacy page use `info@tahoebike.org`, which the plan never mentions. The Bike Kitchen "Join a fix-up" card links to `ltbcboard@gmail.com` while the page headline says `bikekitchen@tahoebike.org`.
-**Decision (Sept 15 2026): Decided.** `info@tahoebike.org` is the main email everywhere. Program-specific addresses stay: `bikekitchen@tahoebike.org`, `bikevalet@tahoebike.org`. `ltbcboard@gmail.com` is no longer shown on the site. (It is on the admin allowlist for sign-in only; see Q24.)
+**Decision (Sept 15 2026): Decided.** `info@tahoebike.org` is the main email everywhere. Program-specific addresses stay: `bikekitchen@tahoebike.org`, `bikevalet@tahoebike.org`. `ltbcboard@gmail.com` is no longer shown on the site.
 
 ### Q4. POINT (pointapp.org) volunteer embed
 The Volunteer page is mostly an iframe of the POINT shift calendar, and the Bike Kitchen events box links to the POINT org page. POINT is not in the plan's external-services list.
@@ -135,13 +135,8 @@ The repo had no git history and no remote; `gh` is not installed on this machine
 **To do (confirmed Sept 17 2026).** Create the GitHub repository, add the remote, and push `main`. Once the repo exists, connect it to Vercel (import the repository, framework preset Next.js, package manager pnpm) so that `main` deploys production and every pull request gets a preview URL; the deployment steps are in the README.
 
 ### Q24. Admin allowlist
-**Decision (Sept 17 2026): Decided.** `AdminUser` contains:
-- `nick@speal.ca`
-- `info@tahoebike.org`
-- `ltbcboard@gmail.com`
-
-`ltbcboard@gmail.com` is used for admin sign-in only; it is still not displayed on the site (Q3 stands).
-**Done (Sept 17 2026).** The seed allowlists these three addresses.
+**Decision (Sept 17 2026): Decided.** Three initial addresses: the site maintainer, `info@tahoebike.org`, and the board's shared mailbox. The board mailbox is used for admin sign-in only; it is still not displayed on the site (Q3 stands).
+**Done (Sept 17 2026).** The seed allowlists whatever `SEED_ADMIN_EMAILS` contains (set it in the deployment's environment before seeding); the addresses are deliberately not in the repo since it is public.
 
 ### Q25. Where WordPress form submissions currently go
 The Divi contact form emails `info@tahoebike.org`; newsletter signups go to Constant Contact list `1199281500`. Google Form responses (valet, racks) live in the Google account that owns the forms.

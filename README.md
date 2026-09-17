@@ -5,6 +5,9 @@ Page copy lives in code; a small set of frequently changing content (events, boa
 homepage cards, announcements, site settings, form submissions) lives in Postgres and is
 edited at `/admin`.
 
+The source is public so it can be read and contributed to, but it is not open source:
+see [LICENSE](LICENSE). LTBC's name, logos and photos are not licensed for reuse.
+
 Read [docs/MIGRATION_PLAN.md](docs/MIGRATION_PLAN.md) for the why and the architecture, and
 [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md) for decisions still pending.
 
@@ -48,14 +51,12 @@ address as a signed-in admin (builds and deployments ignore the variable).
 | `pnpm db:migrate --name <change>` | Create and apply a migration after editing the schema |
 | `pnpm db:deploy` | Apply pending migrations (production) |
 | `pnpm db:seed` | Run `prisma/seed.ts` (add-only: creates missing rows, never overwrites existing ones) |
-| `pnpm content:parse` | Parse the WordPress export into `content/generated/{pages,attachments,nav-menu-items,layouts}.json` (gitignored, for inspection) |
-| `pnpm content:images` | Download referenced `wp-content/uploads` images into `public/images` and rewrite `content/image-map.json` |
 
-The seed reads the WordPress export in `reference/` directly and needs the committed
-`content/image-map.json` for headshot and card image paths. Re-run `pnpm content:images`
-if the set of referenced images changes. The seed never modifies a row that already exists,
-so board edits made in `/admin` survive a re-run; to reload the export values from scratch,
-reset the database (`pnpm prisma migrate reset`, which re-runs the seed).
+The seed loads board members, homepage cards and Bike Kitchen events from
+`prisma/seed-data.json`, a snapshot of the old WordPress site's public content, and
+allowlists the addresses in `SEED_ADMIN_EMAILS` for `/admin`. It never modifies a row that
+already exists, so board edits made in `/admin` survive a re-run; to reload the snapshot
+values from scratch, reset the database (`pnpm prisma migrate reset`, which re-runs the seed).
 
 When poking at the database with `psql`, note that Prisma stores `timestamp` columns as UTC
 while Postgres.app sessions default to local time; run `PGTZ=UTC psql ...` to avoid
