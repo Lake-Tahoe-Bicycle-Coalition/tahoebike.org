@@ -154,3 +154,50 @@
     @apply bg-safety text-asphalt;
   }
 }
+
+/*
+  Page transitions (app/template.tsx): a quick crossfade. The outgoing page fades out,
+  the incoming page fades in right behind it. The header is anchored: it never animates,
+  so the eye has a fixed reference while the content changes.
+*/
+@keyframes page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+::view-transition-old(.page-exit) {
+  animation: 80ms ease-in both page-fade-out;
+}
+::view-transition-new(.page-enter) {
+  animation: 140ms ease-out 40ms both page-fade-in;
+}
+
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+/* Clicks during the short animation reach the live page instead of the overlay. */
+::view-transition {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

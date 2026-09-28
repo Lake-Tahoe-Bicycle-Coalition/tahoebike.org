@@ -12,7 +12,12 @@ const currentSectionClass = "group-has-[[aria-current=page]]:bg-safety";
 
 export function SiteHeader() {
   return (
-    <header className="border-b-4 border-safety bg-white">
+    // A named view transition with no animation keeps the header perfectly still while the
+    // page content changes (see ::view-transition-*(site-header) in app/globals.css).
+    <header
+      className="border-b-4 border-safety bg-white"
+      style={{ viewTransitionName: "site-header" }}
+    >
       <div className="relative mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 px-4 py-3 md:flex-nowrap">
         <Link href="/" className="flex items-center no-underline" aria-label="Lake Tahoe Bicycle Coalition home">
           <Image
