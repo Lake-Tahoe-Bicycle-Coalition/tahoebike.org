@@ -1,22 +1,12 @@
 import { SmartLink } from "@/components/smart-link";
-import { prisma } from "@/lib/db";
-import type { Announcement } from "@/lib/generated/prisma/client";
+import { getActiveAnnouncement } from "@/lib/content";
 
 /**
  * Site-wide banner shown while an Announcement row is active (startsAt <= now <= endsAt).
- * Renders nothing when there is no active announcement or the database is unreachable.
+ * Renders nothing when there is no active announcement.
  */
 export async function AnnouncementBanner() {
-  const now = new Date();
-  let announcement: Announcement | null = null;
-  try {
-    announcement = await prisma.announcement.findFirst({
-      where: { startsAt: { lte: now }, endsAt: { gte: now } },
-      orderBy: { startsAt: "desc" },
-    });
-  } catch (error) {
-    console.error("Could not load announcements.", error);
-  }
+  const announcement = await getActiveAnnouncement();
   if (!announcement) return null;
 
   const linkClass = "font-bold text-asphalt decoration-asphalt/50 hover:decoration-asphalt";

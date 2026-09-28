@@ -231,3 +231,7 @@ Images upload from the browser to Blob before the form is saved. If the editor t
 ### Q41. Public-page freshness after admin edits
 Public pages are static (`revalidate = 300` on the root layout). Admin actions call `revalidatePath` for the affected pages (`lib/admin/revalidate.ts`); announcements and settings purge the whole site because they render in the layout.
 **Assumed.** Good enough for a site this size. If the Vercel CDN still shows stale HTML for a moment after a save, that is the edge cache catching up, not a bug.
+
+### Q42. Database errors on public pages
+Every public read (settings, announcement banner, homepage cards, board, events) caught its own errors and returned code defaults or an empty list. Under the five-minute regeneration, one failed query cached a page with default prices, no board and no events, and a build that could not reach the database still deployed green with default content. The admin settings form used the same read, so a failed read showed defaults as the saved values and "Save settings" would write them over the real ones.
+**Decision (Sept 28 2026): Decided.** Keep serving the last good page. The public reads now live in `lib/content.ts` and go through `readOrFallback`, which rethrows in production and during `next build` (Next keeps the previous page when a regeneration throws, and the build fails) and falls back to defaults only under `next dev`. The admin settings page reads through the strict `loadSettings` in `lib/settings.ts` and never shows defaults in place of saved values.

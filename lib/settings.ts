@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { readOrFallback } from "@/lib/content";
 import { prisma } from "@/lib/db";
 
 /**
@@ -57,21 +58,28 @@ export function isSettingKey(key: string): key is SettingKey {
 }
 
 /**
- * All settings, database values layered over code defaults.
- * Wrapped in React's cache() so the layout and the page share one query per render.
+ * All settings, database values layered over code defaults. Throws if the database
+ * cannot be read. The admin settings form uses this directly: showing code defaults
+ * there after a failed read would let "Save settings" write them over the real values.
  */
-export const getSettings = cache(async (): Promise<Settings> => {
+export async function loadSettings(): Promise<Settings> {
   const settings: Settings = { ...SETTING_DEFAULTS };
-  try {
-    const rows = await prisma.siteSetting.findMany();
-    for (const row of rows) {
-      if (isSettingKey(row.key)) settings[row.key] = row.value;
-    }
-  } catch (error) {
-    console.error("Could not load site settings; using defaults.", error);
+  const rows = await prisma.siteSetting.findMany();
+  for (const row of rows) {
+    if (isSettingKey(row.key)) settings[row.key] = row.value;
   }
   return settings;
-});
+}
+
+/**
+ * Settings for rendering public pages and handling public forms. Follows the failure
+ * policy in lib/content.ts: throws in production and at build time (so a failed page
+ * regeneration keeps the last good page), falls back to code defaults under `next dev`.
+ * Wrapped in React's cache() so the layout and the page share one query per render.
+ */
+export const getSettings = cache(
+  (): Promise<Settings> => readOrFallback("site settings", loadSettings, { ...SETTING_DEFAULTS }),
+);
 
 export function settingIsTrue(value: string): boolean {
   return ["true", "1", "yes", "on"].includes(value.trim().toLowerCase());

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { EventList } from "@/components/event-list";
 import { SmartLink } from "@/components/smart-link";
 import { YouTubeEmbed } from "@/components/youtube-embed";
-import { getUpcomingEvents } from "@/lib/events";
+import { getUpcomingEvents } from "@/lib/content";
 import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/site-metadata";
 
