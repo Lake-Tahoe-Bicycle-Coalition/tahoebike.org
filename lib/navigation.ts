@@ -15,7 +15,7 @@ export const primaryNav: NavItem[] = [
   {
     label: "Programs",
     href: "/programs",
-    indexLabel: "All programs",
+    indexLabel: "All Programs",
     children: [
       { label: "Tahoe Bike Month", href: "https://www.tahoebikemonth.org/" },
       { label: "Interactive Bike Map", href: "https://map.tahoebike.org/" },
