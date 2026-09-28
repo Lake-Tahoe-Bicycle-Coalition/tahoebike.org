@@ -42,27 +42,30 @@ export function getActiveAnnouncement(): Promise<Announcement | null> {
   );
 }
 
-/** Active homepage cards in display order. */
+/**
+ * Active homepage cards in display order. `createdAt` breaks ties so two cards that
+ * share a sortOrder render in the same order as the admin list, not at random.
+ */
 export function getHomepageCards(): Promise<HomepageCard[]> {
   return readOrFallback(
     "homepage cards",
     () =>
       prisma.homepageCard.findMany({
         where: { isActive: true },
-        orderBy: { sortOrder: "asc" },
+        orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
       }),
     [],
   );
 }
 
-/** Active board members and advisors in display order. */
+/** Active board members and advisors in display order (same tiebreak as the cards). */
 export async function getBoard(): Promise<{ board: BoardMember[]; advisors: BoardMember[] }> {
   const members = await readOrFallback(
     "board members",
     () =>
       prisma.boardMember.findMany({
         where: { isActive: true },
-        orderBy: { sortOrder: "asc" },
+        orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
       }),
     [],
   );
