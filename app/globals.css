@@ -39,6 +39,14 @@
     }
   }
 
+  /* The header is sticky from md up (components/site-header.tsx): keep anchor targets such as
+     /join#newsletter from landing underneath it. Header is ~77px; 6rem leaves a little air. */
+  @media (width >= 48rem) {
+    html {
+      scroll-padding-top: 6rem;
+    }
+  }
+
   body {
     @apply bg-white font-sans text-asphalt antialiased;
     letter-spacing: 0.025em; /* body tracking 25 */

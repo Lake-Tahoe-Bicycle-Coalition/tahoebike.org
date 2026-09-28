@@ -14,11 +14,13 @@ export function SiteHeader() {
   return (
     // A named view transition with no animation keeps the header perfectly still while the
     // page content changes (see ::view-transition-*(site-header) in app/globals.css).
+    // Sticky on desktop only (md and up): on a phone the header is ~157px tall and would take a
+    // fifth of the screen. In-page anchors get a matching scroll-padding-top in app/globals.css.
     <header
-      className="border-b-4 border-safety bg-white"
+      className="border-b-4 border-safety bg-white md:sticky md:top-0 md:z-30"
       style={{ viewTransitionName: "site-header" }}
     >
-      <div className="relative mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 px-4 py-3 md:flex-nowrap">
+      <div className="relative mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 px-4 py-3 md:flex-nowrap md:py-1">
         <Link href="/" className="flex items-center no-underline" aria-label="Lake Tahoe Bicycle Coalition home">
           <Image
             src="/images/2024/01/LTBC-Logo-new-2024.png"
