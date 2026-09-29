@@ -223,7 +223,8 @@ The seed used to restore the WordPress export values over every board member, ca
 
 ### Q39. Events for programs other than Bike Kitchen
 `Event.program` has BIKE_KITCHEN, BIKE_VALET and OTHER, but only `/bike-kitchen` lists events. Bike Valet and Other events can be entered in `/admin/events` and are stored, but appear nowhere.
-**Open.** Add an events list to `/bike-valet` (and/or a general upcoming-events section on the home page), or trim the enum to what the site shows. The admin form says so in its help text.
+**Decision (Sept 28 2026): Decided.** Keep all three programs and show them on the site.
+**Done (Sept 29 2026).** `/bike-valet` lists upcoming Bike Valet events under the page header and the home page lists upcoming Other events after the highlight cards; both sections appear only while events are scheduled (no empty-state message, unlike `/bike-kitchen`). Event saves now also purge `/`, and the admin form's program help text says where each program appears.
 
 ### Q40. Orphaned uploads in Vercel Blob
 Images upload from the browser to Blob before the form is saved. If the editor then abandons the form, or replaces an image and later cancels, the uploaded file stays in the store. Deleting a row or replacing a saved image does remove the old blob (`deleteBlobIfOurs`).

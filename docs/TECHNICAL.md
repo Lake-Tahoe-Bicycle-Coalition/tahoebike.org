@@ -108,7 +108,7 @@ section per database model, plus a submissions inbox:
 
 | Section | Edits | Shows up on |
 |---|---|---|
-| Events | Bike Kitchen fix-ups and other dated events; hidden automatically once they end | `/bike-kitchen` |
+| Events | Bike Kitchen fix-ups, Bike Valet appearances and other dated events; hidden automatically once they end | `/bike-kitchen`, `/bike-valet`, `/` (by program) |
 | Board | Board members and advisors: name, role, bio, headshot, order, active flag | `/about` |
 | Homepage cards | The hero callout cards: title, blurb, button, image, order | `/` |
 | Announcements | The site-wide banner, with a start and end time | every page |

@@ -49,7 +49,7 @@ export function EventForm({
           placeholder={null}
           defaultValue={values.program}
           errors={errors.program}
-          help="Bike Kitchen events appear on the Bike Kitchen page. Other programs are stored for future pages."
+          help="Where it appears: Bike Kitchen events on the Bike Kitchen page, Bike Valet events on the Bike Valet page, Other events on the home page."
         />
       </div>
 

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { EventList } from "@/components/event-list";
 import { HeroCards } from "@/components/hero-cards";
 import { NewsletterSignupForm } from "@/components/newsletter-signup-form";
 import { PhotoGallery, type Photo } from "@/components/photo-gallery";
 import { SmartLink } from "@/components/smart-link";
-import { getHomepageCards } from "@/lib/content";
+import { getHomepageCards, getUpcomingEvents } from "@/lib/content";
 import { getSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
@@ -51,7 +52,11 @@ const galleryPhotos: Photo[] = [
 ];
 
 export default async function HomePage() {
-  const [settings, cards] = await Promise.all([getSettings(), getHomepageCards()]);
+  const [settings, cards, events] = await Promise.all([
+    getSettings(),
+    getHomepageCards(),
+    getUpcomingEvents("OTHER"),
+  ]);
 
   return (
     <>
@@ -74,6 +79,17 @@ export default async function HomePage() {
 
       <div className="mx-auto w-full max-w-6xl space-y-16 px-4 py-12">
         <HeroCards cards={cards} />
+
+        {/* Events filed under "Other" in /admin/events (rides, cleanups, meetings). Shown only
+            when some are scheduled; Bike Kitchen and Bike Valet events have their own pages. */}
+        {events.length > 0 ? (
+          <section aria-labelledby="home-events-heading">
+            <h2 id="home-events-heading">Upcoming Events</h2>
+            <div className="mt-6">
+              <EventList events={events} />
+            </div>
+          </section>
+        ) : null}
 
         <div className="grid gap-8 lg:grid-cols-2">
           <section aria-labelledby="bike-map-heading" className="flex flex-col gap-4">
