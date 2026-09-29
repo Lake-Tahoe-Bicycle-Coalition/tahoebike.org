@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import type { FormSubmission, Prisma } from "@/lib/generated/prisma/client";
 import type { FormType } from "@/lib/generated/prisma/enums";
 import { isFormType, isStatusFilter, type StatusFilter } from "./fields";
+import { appendNotice, type NoticeTone } from "@/lib/admin/notice";
 
 /**
  * The inbox list query and the search params that drive it. Server-side only (imports
@@ -36,12 +37,16 @@ export function parseSubmissionFilters(params: Record<string, ParamValue>): Subm
 }
 
 /** `/admin/submissions?…` for the given filters (defaults omitted) with an optional notice. */
-export function submissionsListUrl(filters: Partial<SubmissionFilters>, notice?: string): string {
+export function submissionsListUrl(
+  filters: Partial<SubmissionFilters>,
+  notice?: string,
+  tone: NoticeTone = "success",
+): string {
   const params = new URLSearchParams();
   if (filters.type && filters.type !== defaultFilters.type) params.set("type", filters.type);
   if (filters.status && filters.status !== defaultFilters.status) params.set("status", filters.status);
   if (filters.page && filters.page !== defaultFilters.page) params.set("page", String(filters.page));
-  if (notice) params.set("notice", notice);
+  if (notice) appendNotice(params, notice, tone);
   const query = params.toString();
   return query ? `/admin/submissions?${query}` : "/admin/submissions";
 }

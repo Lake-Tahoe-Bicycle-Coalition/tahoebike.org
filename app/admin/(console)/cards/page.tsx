@@ -11,7 +11,7 @@ import { isOptimizableImageUrl } from "@/lib/urls";
 
 export default async function HomepageCardsPage({ searchParams }: PageProps<"/admin/cards">) {
   await requireAdmin();
-  const { notice } = await searchParams;
+  const query = await searchParams;
 
   const cards = await prisma.homepageCard.findMany({
     orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
@@ -28,7 +28,7 @@ export default async function HomepageCardsPage({ searchParams }: PageProps<"/ad
           </Link>
         }
       />
-      <Notice notice={notice} />
+      <Notice params={query} />
 
       {cards.length === 0 ? (
         <p>No cards yet. Add one to show it on the home page.</p>

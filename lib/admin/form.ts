@@ -1,6 +1,7 @@
 import type { z } from "zod";
 import { fieldErrorsOf, pick, readStrings } from "@/lib/forms/parse";
 import type { FormState } from "@/lib/forms/state";
+import { appendNotice, type NoticeTone } from "@/lib/admin/notice";
 
 /**
  * Shared shape of every admin create/update action:
@@ -48,9 +49,12 @@ export function formFailure(message: string, values?: Record<string, string>): F
 }
 
 /**
- * URL of an admin list page carrying a one-line confirmation that the page renders
- * with <Notice /> (components/admin/notice.tsx).
+ * URL of an admin page carrying a signed one-line notice that the page renders with
+ * <Notice /> (components/admin/notice.tsx). `tone: "error"` styles it as a failure.
  */
-export function adminListUrl(path: string, notice: string): string {
-  return `${path}?notice=${encodeURIComponent(notice)}`;
+export function adminListUrl(path: string, notice: string, tone: NoticeTone = "success"): string {
+  const params = new URLSearchParams();
+  appendNotice(params, notice, tone);
+  const query = params.toString();
+  return query ? `${path}?${query}` : path;
 }

@@ -84,7 +84,7 @@ export default async function SubmissionsPage({ searchParams }: PageProps<"/admi
           ) : null
         }
       />
-      <Notice notice={params.notice} />
+      <Notice params={params} />
 
       <form method="get" className="flex flex-wrap items-end gap-4">
         <div className="w-full sm:w-56">

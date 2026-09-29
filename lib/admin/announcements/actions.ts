@@ -62,7 +62,7 @@ export async function deleteAnnouncement(formData: FormData): Promise<void> {
     message = shortMessage(row.message);
   } catch (error) {
     console.error(`[admin] could not delete announcement ${id}`, error);
-    redirect(adminListUrl(LIST, "That announcement could not be deleted; it may already be gone."));
+    redirect(adminListUrl(LIST, "That announcement could not be deleted; it may already be gone.", "error"));
   }
   revalidateWholeSite();
   redirect(adminListUrl(LIST, `Deleted “${message}”.`));

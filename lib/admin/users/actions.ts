@@ -58,17 +58,17 @@ export async function removeAdminUser(formData: FormData): Promise<void> {
     ]);
   } catch (error) {
     console.error(`[admin] could not look up admin user ${id}`, error);
-    redirect(adminListUrl(LIST, "The admin list could not be read. Please try again."));
+    redirect(adminListUrl(LIST, "The admin list could not be read. Please try again.", "error"));
   }
-  if (!row) redirect(adminListUrl(LIST, "That admin could not be removed; they may already be gone."));
-  if (row.email === me.email) redirect(adminListUrl(LIST, "You cannot remove yourself. Ask another admin to do it."));
-  if (total <= 1) redirect(adminListUrl(LIST, "You cannot remove the last admin. Add another one first."));
+  if (!row) redirect(adminListUrl(LIST, "That admin could not be removed; they may already be gone.", "error"));
+  if (row.email === me.email) redirect(adminListUrl(LIST, "You cannot remove yourself. Ask another admin to do it.", "error"));
+  if (total <= 1) redirect(adminListUrl(LIST, "You cannot remove the last admin. Add another one first.", "error"));
 
   try {
     await prisma.adminUser.delete({ where: { id } });
   } catch (error) {
     console.error(`[admin] could not remove admin user ${id}`, error);
-    redirect(adminListUrl(LIST, "That admin could not be removed; they may already be gone."));
+    redirect(adminListUrl(LIST, "That admin could not be removed; they may already be gone.", "error"));
   }
   redirect(adminListUrl(LIST, `Removed ${row.email}. They can no longer sign in.`));
 }

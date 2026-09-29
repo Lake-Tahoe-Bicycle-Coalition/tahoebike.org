@@ -11,7 +11,7 @@ import { prisma } from "@/lib/db";
 
 export default async function AdminUsersPage({ searchParams }: PageProps<"/admin/users">) {
   const me = await requireAdmin();
-  const { notice } = await searchParams;
+  const query = await searchParams;
 
   const admins = await prisma.adminUser.findMany({ orderBy: { createdAt: "asc" } });
   const hasPlaceholders = admins.some((admin) => isPlaceholderAdmin(admin.email));
@@ -22,7 +22,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps<"/admin
         title="Admins"
         description="Only these Google accounts can sign in here. Use the address the person signs in to Google with. Changes apply the next time someone signs in."
       />
-      <Notice notice={notice} />
+      <Notice params={query} />
 
       {hasPlaceholders ? (
         <p className="rounded border border-safety bg-safety/20 px-4 py-3 text-sm">

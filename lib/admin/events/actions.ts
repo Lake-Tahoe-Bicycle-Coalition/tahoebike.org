@@ -68,7 +68,7 @@ export async function deleteEvent(formData: FormData): Promise<void> {
     title = row.title;
   } catch (error) {
     console.error(`[admin] could not delete event ${id}`, error);
-    redirect(adminListUrl(LIST, "That event could not be deleted; it may already be gone."));
+    redirect(adminListUrl(LIST, "That event could not be deleted; it may already be gone.", "error"));
   }
   revalidateEvents();
   redirect(adminListUrl(LIST, `Deleted “${title}”.`));

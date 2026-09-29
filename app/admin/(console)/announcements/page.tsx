@@ -27,7 +27,7 @@ function preview(message: string): string {
 
 export default async function AnnouncementsPage({ searchParams }: PageProps<"/admin/announcements">) {
   await requireAdmin();
-  const { notice } = await searchParams;
+  const query = await searchParams;
   const now = new Date();
 
   const announcements = await prisma.announcement.findMany({ orderBy: { startsAt: "desc" } });
@@ -43,7 +43,7 @@ export default async function AnnouncementsPage({ searchParams }: PageProps<"/ad
           </Link>
         }
       />
-      <Notice notice={notice} />
+      <Notice params={query} />
 
       {announcements.length === 0 ? (
         <p>No announcements. Add one to show a banner on the site.</p>
