@@ -184,7 +184,7 @@ Newsletter signup continues to post to Constant Contact.
 ## Open items
 
 - [x] Admin allowlist seeded (Q24); further admins are added at `/admin/users`
-- [ ] Create the Vercel Blob store so admin image uploads work (README, Deploying)
+- [ ] Create the Vercel Blob store so admin image uploads work (TECHNICAL.md, Deploying)
 - [ ] Confirm where current WordPress contact-form and newsletter submissions go
 - [ ] Get owner access to the two Google Forms (to download past responses before retiring them)
 - [ ] Export the current DNS zone before cutover
