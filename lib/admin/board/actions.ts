@@ -28,7 +28,7 @@ export async function createBoardMember(_prev: FormState, formData: FormData): P
     return formFailure("The board member could not be saved. Please try again.", parsed.values);
   }
   revalidateBoard();
-  redirect(adminListUrl(LIST, `Added “${parsed.data.name}”.`));
+  redirect(adminListUrl(LIST, `Added “${parsed.data.name}”.`, "success", "/about"));
 }
 
 export async function updateBoardMember(id: string, _prev: FormState, formData: FormData): Promise<FormState> {
@@ -51,7 +51,7 @@ export async function updateBoardMember(id: string, _prev: FormState, formData: 
   }
   if (previousPhotoUrl !== parsed.data.photoUrl) await deleteBlobIfOurs(previousPhotoUrl);
   revalidateBoard();
-  redirect(adminListUrl(LIST, `Saved “${parsed.data.name}”.`));
+  redirect(adminListUrl(LIST, `Saved “${parsed.data.name}”.`, "success", "/about"));
 }
 
 /** Plain form action (hidden `id` field), used from a <ConfirmForm>. */

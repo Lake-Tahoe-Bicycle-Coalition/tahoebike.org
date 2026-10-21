@@ -1,6 +1,14 @@
 /** A responsive 16:9 YouTube player using the privacy-enhanced (no-cookie) domain. */
-export function YouTubeEmbed({ id, title }: { id: string; title: string }) {
-  return (
+export function YouTubeEmbed({
+  id,
+  title,
+  caption,
+}: {
+  id: string;
+  title: string;
+  caption?: string;
+}) {
+  const player = (
     <div className="aspect-video w-full overflow-hidden rounded-lg bg-asphalt">
       <iframe
         src={`https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}`}
@@ -11,5 +19,14 @@ export function YouTubeEmbed({ id, title }: { id: string; title: string }) {
         className="h-full w-full border-0"
       />
     </div>
+  );
+
+  if (!caption) return player;
+
+  return (
+    <figure>
+      {player}
+      <figcaption className="mt-2 text-sm text-asphalt/70">{caption}</figcaption>
+    </figure>
   );
 }

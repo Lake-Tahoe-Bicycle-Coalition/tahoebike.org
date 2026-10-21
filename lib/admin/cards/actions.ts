@@ -28,7 +28,7 @@ export async function createHomepageCard(_prev: FormState, formData: FormData): 
     return formFailure("The card could not be saved. Please try again.", parsed.values);
   }
   revalidateHomepageCards();
-  redirect(adminListUrl(LIST, `Added “${parsed.data.title}”.`));
+  redirect(adminListUrl(LIST, `Added “${parsed.data.title}”.`, "success", "/"));
 }
 
 export async function updateHomepageCard(id: string, _prev: FormState, formData: FormData): Promise<FormState> {
@@ -48,7 +48,7 @@ export async function updateHomepageCard(id: string, _prev: FormState, formData:
   }
   if (previousImageUrl !== parsed.data.imageUrl) await deleteBlobIfOurs(previousImageUrl);
   revalidateHomepageCards();
-  redirect(adminListUrl(LIST, `Saved “${parsed.data.title}”.`));
+  redirect(adminListUrl(LIST, `Saved “${parsed.data.title}”.`, "success", "/"));
 }
 
 /** Plain form action (hidden `id` field), used from a <ConfirmForm>. */

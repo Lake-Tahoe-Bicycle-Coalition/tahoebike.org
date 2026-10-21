@@ -70,6 +70,7 @@ export default async function JoinPage() {
             </li>
           ))}
         </ul>
+        <p className="mt-4 text-sm text-asphalt/70">Secure checkout on Memberful, opens in a new tab.</p>
       </section>
 
       <section id="donate" aria-labelledby="donate-heading" className="mt-16">
@@ -88,6 +89,7 @@ export default async function JoinPage() {
             plan={settings.memberful_recurring_donation_plan}
           />
         </div>
+        <p className="mt-4 text-sm text-asphalt/70">Secure checkout on Memberful, opens in a new tab.</p>
       </section>
 
       <section aria-labelledby="involved-heading" className="mt-16">
@@ -109,6 +111,7 @@ export default async function JoinPage() {
             <p>
               <Link href="/volunteer" className="btn btn-primary">
                 Sign up
+                <span className="sr-only"> to volunteer</span>
               </Link>
             </p>
           </li>
@@ -121,6 +124,7 @@ export default async function JoinPage() {
             <p>
               <a href="#newsletter" className="btn btn-primary">
                 Subscribe
+                <span className="sr-only"> to the newsletter</span>
               </a>
             </p>
           </li>
@@ -139,6 +143,7 @@ export default async function JoinPage() {
                 className="btn btn-primary"
               >
                 Email us
+                <span className="sr-only"> about joining the board</span>
               </a>
             </p>
           </li>
