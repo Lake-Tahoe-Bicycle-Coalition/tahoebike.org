@@ -17,6 +17,14 @@ How this was produced: the code was read page by page and component by component
 - Items that conflict with an existing decision in `docs/OPEN_QUESTIONS.md` say so and name the question.
 - Items that would add a database model or field are flagged, because the migration plan's conventions require a discussion first.
 
+## Status
+
+- **PR #12** (October 21 2026): the easy items from the observational notes at the end of this document; see "Done (PR #12)" there.
+- **PR #12** also covered CONT-9 (the Newsletter page leads with the signup) and A11Y-3 (the newsletter panel is no longer yellow).
+- **Shawn Hoffman's PRs #1 to #11** (merged October 22 2026, numbered against his own review, so the IDs differ): NAV-2 and A11Y-4 (#1, menus close after navigating), NAV-3 and A11Y-5 (#1, current page marked in the header), NAV-8 (#5, sticky compact header on desktop only; phones keep the scrolling header), A11Y-10 (#1), PERF-7 (#1, eager card images; no blur placeholders), PERF-5 (#2, and a build that cannot reach the database now fails; Q42), FORM-1 (#3, production refuses forms without Turnstile and fails each notification without Resend, with logged errors), A11Y-9 and A11Y-14 (#7; the map card's alt text is A11Y-17), EVT-4 (#8, Bike Valet and Other events shown; Q39), the "event already ended" refusal on create for ADMIN-2 (#6), and the Safari marker part of VIS-10 (#7).
+- **PR #13** (October 2026): the code-only, small-effort ideas below. Done: NAV-4, NAV-5, NAV-7 (except the EIN line), NAV-9, HOME-1 (photo hero and buttons; the one-line description still needs the board), HOME-3, HOME-4, CONT-12 (code parts), CONT-15, GIVE-3, GIVE-4, GIVE-5 (the "until then" helper text), FORM-1 (the admin warning is the ADMIN-4 panel), FORM-2, FORM-4 (except native forms), FORM-6 (except rate limiting), EVT-2, EVT-3 (PT and Google Calendar; no `.ics` yet), EVT-5, VIS-6, VIS-8 (button states), VIS-10 (chevron and menu icons; no SVG logo), VIS-12, VIS-15, A11Y-1, A11Y-2, A11Y-7, A11Y-8, A11Y-11, A11Y-12, A11Y-13, A11Y-15, A11Y-16, PERF-3, PERF-4, RESP-2, SEO-1 (Organization and Event; no breadcrumbs), SEO-3, SEO-4, OPS-1 ("now" headers; no CSP), ADMIN-2 (end time prefill and the past-event note when editing), ADMIN-3, ADMIN-4.
+- Everything else is open. The lists "Ideas that need board input" and "All ideas by value" at the end still describe the full set.
+
 ## Start here
 
 The fifteen ideas with the best value for the effort, roughly in order:
