@@ -37,13 +37,17 @@ export function SiteFooter({ settings }: { settings: Settings }) {
         ))}
         <div>
           <h2 className="mb-3 text-base text-safety">Lake Tahoe Bicycle Coalition</h2>
-          <p>Helping Tahoe become more bicycle friendly.</p>
-          <p className="mt-3">{settings.mailing_address}</p>
-          <p className="mt-3">
-            <a href={`mailto:${settings.contact_email}`} className="text-white">
-              {settings.contact_email}
-            </a>
+          <p className="font-heading text-lg font-extrabold uppercase leading-snug tracking-[0.06em]">
+            Helping Tahoe become more bicycle friendly
           </p>
+          <div className="mt-4 space-y-2 text-sm text-white/80">
+            <p>{settings.mailing_address}</p>
+            <p>
+              <a href={`mailto:${settings.contact_email}`} className="text-white/80 hover:text-white">
+                {settings.contact_email}
+              </a>
+            </p>
+          </div>
         </div>
       </div>
       <div className="border-t border-white/10 px-4 py-4 text-center text-sm text-white/70">

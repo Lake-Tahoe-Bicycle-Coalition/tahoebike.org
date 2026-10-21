@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { RackApplicationForm } from "@/components/forms/rack-application-form";
+import { SmartLink } from "@/components/smart-link";
 import { GoogleFormEmbed } from "@/components/google-form-embed";
 import { GOOGLE_FORM_URLS, nativeFormEnabled } from "@/lib/feature-flags";
 import { getSettings, settingIsTrue } from "@/lib/settings";
@@ -52,7 +53,17 @@ export default async function BikeRacksPage() {
 
       <div className="mt-10 grid gap-12 lg:grid-cols-2">
         <div className="prose-ltbc">
-          <h2 className="mt-0!">About The Regional Parking Program</h2>
+          <p className="text-lg">
+            Looking for somewhere to park your bike? Bike racks and fix-it stations are on the
+            interactive bike map.
+          </p>
+          <p>
+            <SmartLink href={settings.map_url} className="btn btn-primary">
+              Find bike parking
+            </SmartLink>
+          </p>
+
+          <h2>About The Regional Parking Program</h2>
           <p>
             The Lake Tahoe Bicycle Coalition launched the Regional Bicycle Parking Program in 2018.
             Since its inception, the program has resulted in 450 bike racks (900 bike parking
@@ -108,9 +119,6 @@ export default async function BikeRacksPage() {
               application period opens.
             </p>
           )}
-
-          <h2>Questions?</h2>
-          <p>Send an email to {contactLink}.</p>
 
           <ul className="grid grid-cols-2 gap-4" aria-label="Bike rack photos">
             {photos.map((photo) => (

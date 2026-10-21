@@ -45,6 +45,14 @@ export default async function BikeValetPage() {
         <div>
           <h1>Bike Valet</h1>
           <p className="mt-3 text-xl font-semibold">It’s like coat check for your bike!</p>
+          <p className="mt-6 flex flex-wrap gap-3">
+            <a href="#valet-request" className="btn btn-primary">
+              Request a valet
+            </a>
+            <Link href="/volunteer" className="btn btn-secondary">
+              Volunteer with us
+            </Link>
+          </p>
         </div>
         <Image
           src="/images/2022/05/Bike-Valet-Main-Image.png"
@@ -84,14 +92,13 @@ export default async function BikeValetPage() {
           <p>
             Our program is run by our volunteer board of directors and supported by amazing
             volunteers from the community. If you would like to help support a safe and fun biking
-            culture in Tahoe (and attend some fun events), please fill out our{" "}
-            <Link href="/volunteer">volunteer form</Link> to help the Bike Coalition park bikes.
+            culture in Tahoe (and attend some fun events), sign up for a bike valet shift on our
+            volunteer page.
           </p>
-
-          <h2>Questions or want to volunteer?</h2>
           <p>
-            Send an email to{" "}
-            <a href={`mailto:${settings.bike_valet_email}`}>{settings.bike_valet_email}</a>.
+            <Link href="/volunteer" className="btn btn-secondary">
+              Volunteer with us
+            </Link>
           </p>
 
           <ul className="grid grid-cols-2 gap-4" aria-label="Bike valet photos">
@@ -109,8 +116,14 @@ export default async function BikeValetPage() {
           </ul>
         </div>
 
-        <section aria-labelledby="valet-request-heading">
+        <section id="valet-request" aria-labelledby="valet-request-heading">
           <h2 id="valet-request-heading">Request for an Event</h2>
+          <p className="mt-4">
+            Questions?{" "}
+            <a href={`mailto:${settings.bike_valet_email}?subject=${encodeURIComponent("Bike valet question")}`}>
+              Email {settings.bike_valet_email}
+            </a>
+          </p>
           <div className="mt-6">
             {/* Q16: the Google Form from the old site unless NATIVE_FORMS enables the native form. */}
             {nativeFormEnabled("valet") ? (

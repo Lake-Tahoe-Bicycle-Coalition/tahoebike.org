@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { YouTubeEmbed } from "@/components/youtube-embed";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -107,6 +108,19 @@ export default function BikeSafetyPage() {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section className="mt-12 max-w-3xl">
+        <h2>Keep your bike safe to ride</h2>
+        <p className="mt-4 text-lg">
+          A well-maintained bike is a safe bike. At the Bike Kitchen’s monthly fix-up events, you can learn
+          basic bike maintenance from experienced volunteers.
+        </p>
+        <p className="mt-6">
+          <Link href="/bike-kitchen" className="btn btn-secondary">
+            Visit the Bike Kitchen
+          </Link>
+        </p>
       </section>
     </div>
   );

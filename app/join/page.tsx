@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { NewsletterArchive } from "@/components/newsletter-archive";
 import { NewsletterSignupForm } from "@/components/newsletter-signup-form";
 import { SmartLink } from "@/components/smart-link";
-import { fetchNewsletterArchive } from "@/lib/constant-contact";
 import { getSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
@@ -13,9 +11,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/join" },
 };
 
+function mailtoLink(email: string, subject: string, body: string) {
+  return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
 export default async function JoinPage() {
   const settings = await getSettings();
-  const newsletters = await fetchNewsletterArchive(settings.constant_contact_account_id, 6);
 
   const tiers = [
     {
@@ -55,12 +56,15 @@ export default async function JoinPage() {
               key={tier.name}
               className="flex flex-col rounded-lg border-2 border-asphalt/10 p-6"
             >
-              <h3>
-                {tier.name} – ${tier.price}
-              </h3>
+              <h3>{tier.name}</h3>
+              <p className="mt-3 flex items-baseline gap-2">
+                <span className="font-heading text-4xl font-extrabold">${tier.price}</span>
+                <span className="text-sm">per year</span>
+              </p>
               <p className="mt-auto pt-5">
                 <SmartLink href={tier.url} className="btn btn-primary">
-                  Join for ${tier.price} / Year
+                  Join
+                  <span className="sr-only"> as {tier.name}</span>
                 </SmartLink>
               </p>
             </li>
@@ -68,20 +72,18 @@ export default async function JoinPage() {
         </ul>
       </section>
 
-      <section aria-labelledby="donate-heading" className="mt-16">
+      <section id="donate" aria-labelledby="donate-heading" className="mt-16">
         <h2 id="donate-heading">Donate</h2>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           <DonationPanel
             id="one-time-donation"
-            title="One Time Donation"
-            buttonUrl={settings.memberful_one_time_donation_url}
+            title="One-Time Donation"
             checkoutUrl={settings.memberful_checkout_url}
             plan={settings.memberful_one_time_donation_plan}
           />
           <DonationPanel
             id="recurring-donation"
             title="Recurring Donation"
-            buttonUrl={settings.memberful_recurring_donation_url}
             checkoutUrl={settings.memberful_checkout_url}
             plan={settings.memberful_recurring_donation_plan}
           />
@@ -129,7 +131,13 @@ export default async function JoinPage() {
               Connect!
             </p>
             <p>
-              <a href={`mailto:${settings.contact_email}`} className="btn btn-primary">
+              <a href={mailtoLink(
+                  settings.contact_email,
+                  "Joining the LTBC board",
+                  "Hi LTBC,\n\nI'm interested in joining the board. A little about me:\n\n",
+                )}
+                className="btn btn-primary"
+              >
                 Email us
               </a>
             </p>
@@ -137,12 +145,11 @@ export default async function JoinPage() {
         </ul>
       </section>
 
-      <div className="mt-16 grid gap-8 lg:grid-cols-2">
-        <NewsletterSignupForm id="newsletter" signupUrl={settings.constant_contact_signup_url} />
-        <NewsletterArchive
-          heading="Newsletters"
-          items={newsletters}
+      <div className="mt-16 max-w-3xl">
+        <NewsletterSignupForm
+          id="newsletter"
           signupUrl={settings.constant_contact_signup_url}
+          archiveHref="/newsletter"
         />
       </div>
     </div>
@@ -150,32 +157,24 @@ export default async function JoinPage() {
 }
 
 /**
- * A donation option: the Memberful button from the WordPress page plus its
- * "choose what you pay" form, which sends `plan` and `price` to Memberful checkout.
+ * A donation option: a "choose what you pay" form, which sends `plan` and `price` to Memberful checkout.
  */
 function DonationPanel({
   id,
   title,
-  buttonUrl,
   checkoutUrl,
   plan,
 }: {
   id: string;
   title: string;
-  buttonUrl: string;
   checkoutUrl: string;
   plan: string;
 }) {
   const priceId = `${id}-price`;
   return (
-    <section aria-labelledby={`${id}-heading`} className="rounded-lg bg-tahoe/10 p-6">
+    <section aria-labelledby={`${id}-heading`} className="rounded-lg border border-asphalt/10 bg-neutral-100 p-6">
       <h3 id={`${id}-heading`}>{title}</h3>
-      <p className="mt-4">
-        <SmartLink href={buttonUrl} className="btn btn-blue">
-          {title}
-        </SmartLink>
-      </p>
-      <form action={checkoutUrl} method="get" className="mt-6">
+      <form action={checkoutUrl} method="get" className="mt-4">
         <input type="hidden" name="plan" value={plan} />
         <label htmlFor={priceId} className="field-label">
           Amount in USD
@@ -192,8 +191,8 @@ function DonationPanel({
             required
             className="field-input sm:max-w-xs"
           />
-          <button type="submit" className="btn btn-secondary shrink-0">
-            Contribute now
+          <button type="submit" className="btn btn-primary shrink-0">
+            Donate
           </button>
         </div>
       </form>

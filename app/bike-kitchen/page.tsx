@@ -40,6 +40,10 @@ const gallery = [
   },
 ];
 
+function mailtoLink(email: string, subject: string, body: string) {
+  return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
 export default async function BikeKitchenPage() {
   const [settings, events] = await Promise.all([getSettings(), getUpcomingEvents("BIKE_KITCHEN")]);
   const email = settings.bike_kitchen_email;
@@ -48,17 +52,28 @@ export default async function BikeKitchenPage() {
     {
       title: "Donate",
       body: "Unused bicycle taking up space? Give back to the community by donating it! Email us with a photo of the bike, general specs, and any needed repairs.",
-      cta: "Email us about a donation",
+      cta: "Donate a bike",
+      href: mailtoLink(
+        email,
+        "Bike donation",
+        "Hi LTBC,\n\nI'd like to donate a bike.\n\nBike (brand/size/type):\nCondition / needed repairs:\nPhoto: (attach)\n",
+      ),
     },
     {
       title: "Need a bike?",
       body: "If you work for a social service organization and know someone who needs a bike, let us know so we can get them on our waitlist! Email us with the person's height and type of bike needed.",
-      cta: "Email us about a bike request",
+      cta: "Request a bike",
+      href: mailtoLink(
+        email,
+        "Bike request",
+        "Hi LTBC,\n\nI'd like to request a bike for someone.\n\nOrganization:\nPerson's height:\nType of bike needed:\n",
+      ),
     },
     {
       title: "Join a fix-up!",
-      body: "To keep up with demand and service the bikes we plan to donate, we host community fix-up events about once per month! Sign up for our newsletter or email us to learn how to join.",
-      cta: "Email us to join a fix-up",
+      body: "To keep up with demand and service the bikes we plan to donate, we host community fix-up events about once per month! Sign up for a shift on POINT and come learn alongside us.",
+      cta: "Join a fix-up",
+      href: settings.point_org_url,
     },
   ];
 
@@ -78,13 +93,27 @@ export default async function BikeKitchenPage() {
         />
       </header>
 
+      <section className="mt-12">
+        <h2>Upcoming Bike Kitchen Events</h2>
+        <div className="mt-6">
+          <EventList events={events} />
+        </div>
+      </section>
+
       <section className="mt-12 grid gap-6 md:grid-cols-3">
         <h2 className="md:col-span-1">What is the Bike Kitchen?</h2>
-        <p className="text-lg md:col-span-2">
-          Through the Bike Kitchen, LTBC volunteers collect bikes from donors, perform needed repairs and
-          maintenance to the bikes, and then donate them to community members by working directly with local
-          social service organizations to identify individuals.
-        </p>
+        <div className="space-y-4 text-lg md:col-span-2">
+          <p>
+            The Bike Kitchen is a community bike shop run by LTBC volunteers. We collect donated bikes,
+            repair them, and give them to community members who need one, working directly with local
+            social service organizations to find the right people.
+          </p>
+          <p>
+            It is also a place to learn. At our monthly fix-up events, experienced volunteers will show you
+            how to fix and maintain your own bike, and you will join a community of people who take care of
+            bikes together and for each other.
+          </p>
+        </div>
       </section>
 
       <ul className="mt-12 grid gap-6 md:grid-cols-3">
@@ -93,33 +122,19 @@ export default async function BikeKitchenPage() {
             <h3>{card.title}</h3>
             <p className="flex-1">{card.body}</p>
             <p>
-              <a href={`mailto:${email}`} className="btn btn-primary">
+              <SmartLink href={card.href} className="btn btn-primary">
                 {card.cta}
-              </a>
+              </SmartLink>
             </p>
           </li>
         ))}
       </ul>
 
-      <section className="mt-12 text-center">
-        <h2>Email us</h2>
-        <p className="mt-4 text-xl">
-          <a href={`mailto:${email}`}>{email}</a>
-        </p>
-      </section>
-
-      <section className="mt-12">
-        <h2>Upcoming Bike Kitchen Events</h2>
+      <section className="mt-12" aria-labelledby="bike-kitchen-video-heading">
+        <h2 id="bike-kitchen-video-heading">See the Bike Kitchen in action</h2>
         <div className="mt-6">
-          <EventList events={events} />
+          <YouTubeEmbed id="P8cxjfCgRBw" title="Bike Kitchen program video" />
         </div>
-        <p className="mt-6">
-          <SmartLink href={settings.point_org_url}>See all volunteer shifts on POINT</SmartLink>
-        </p>
-      </section>
-
-      <section className="mt-12" aria-label="Bike Kitchen video">
-        <YouTubeEmbed id="P8cxjfCgRBw" title="Bike Kitchen video" />
       </section>
 
       <section className="mt-12" aria-label="Photo gallery">

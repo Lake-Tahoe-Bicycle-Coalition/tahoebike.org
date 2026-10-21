@@ -5,6 +5,8 @@ export type NavItem = NavLink & {
   children?: NavLink[];
   /** Label for a link to the parent page inside its dropdown, when the parent is a real index page. */
   indexLabel?: string;
+  /** Render as a call-to-action button in the desktop header. */
+  emphasis?: true;
 };
 
 export const primaryNav: NavItem[] = [
@@ -34,6 +36,7 @@ export const primaryNav: NavItem[] = [
       { label: "Contact", href: "/contact" },
     ],
   },
+  { label: "Donate", href: "/join#donate", emphasis: true },
 ];
 
 /** Footer link columns. Mirrors the WordPress footer layout. */
@@ -60,6 +63,7 @@ export const footerColumns: { heading: string; links: NavLink[] }[] = [
     links: [
       { label: "Join Us", href: "/join" },
       { label: "Volunteer", href: "/volunteer" },
+      { label: "Donate", href: "/join#donate" },
       { label: "Contact Us", href: "/contact" },
     ],
   },

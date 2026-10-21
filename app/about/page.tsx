@@ -58,12 +58,12 @@ export default async function AboutPage() {
           width={2510}
           height={1670}
           sizes="(min-width: 768px) 50vw, 100vw"
-          className="h-auto w-full rounded-lg"
+          className="hidden h-auto w-full rounded-lg md:block"
         />
         <div className="space-y-4">
           <h2>Lake Tahoe Bicycle Coalition</h2>
           <p>
-            The Lake Tahoe Bicycle Coalition is an all volunteer organization dedicated to promoting bicycling,
+            The Lake Tahoe Bicycle Coalition is an all-volunteer organization dedicated to promoting bicycling,
             bike events, and new bicycle infrastructure such as bike paths and bike lanes throughout the Tahoe
             region.
           </p>
@@ -92,7 +92,7 @@ export default async function AboutPage() {
               <li key={advisor.id}>
                 <h3>{advisor.name}</h3>
                 {advisor.role && advisor.role.toLowerCase() !== "advisor" ? (
-                  <p className="font-semibold text-tahoe-deep">{advisor.role}</p>
+                  <p className="font-semibold text-asphalt/70">{advisor.role}</p>
                 ) : null}
                 {advisor.bio.trim() ? (
                   <div className="mt-1 space-y-2">

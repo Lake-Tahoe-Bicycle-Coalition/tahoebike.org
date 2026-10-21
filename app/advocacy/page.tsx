@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { SmartLink } from "@/components/smart-link";
+import Link from "next/link";
 import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/site-metadata";
 
@@ -67,6 +67,15 @@ export default async function AdvocacyPage() {
           taking inventory of past comment letters and sharing them here for the public to see. Curious about a
           project that&apos;s not yet listed here? Please let us know!
         </p>
+        <p>
+          Want to know about projects while there&apos;s still time to comment? Subscribe to our newsletter and
+          we&apos;ll let you know what&apos;s open for public comment.
+        </p>
+        <p>
+          <Link href="/newsletter" className="btn btn-secondary">
+            Get the newsletter
+          </Link>
+        </p>
       </div>
 
       <section className="mt-8" aria-label="Comment letters">
@@ -76,11 +85,6 @@ export default async function AdvocacyPage() {
           loading="lazy"
           className="h-[600px] w-full border-0"
         />
-        <p className="mt-4">
-          <SmartLink href={`https://drive.google.com/drive/folders/${COMMENT_LETTERS_FOLDER_ID}`}>
-            Open the comment letters folder in Google Drive
-          </SmartLink>
-        </p>
       </section>
     </div>
   );
