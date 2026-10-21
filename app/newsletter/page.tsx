@@ -7,7 +7,7 @@ import { pageMetadata } from "@/lib/site-metadata";
 export const metadata = pageMetadata({
   title: "Newsletter",
   description:
-    "Read past Lake Tahoe Bicycle Coalition newsletters and subscribe to stay updated on all things cycling in Tahoe.",
+    "Subscribe to the Lake Tahoe Bicycle Coalition newsletter for Tahoe biking news, events and volunteer opportunities, or browse past issues.",
   path: "/newsletter",
 });
 
@@ -21,41 +21,24 @@ export default async function NewsletterPage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-12">
       <header className="max-w-3xl">
-        <p className="font-heading font-extrabold uppercase tracking-[0.1em]">
-          Discover Our Newsletter Archive
-        </p>
-        <h1 className="mt-2">Stay Informed with the Lake Tahoe Bicycle Coalition</h1>
+        <h1>Stay Informed</h1>
         <p className="mt-6 text-lg">
-          Explore our collection of past newsletters and stay updated on all things cycling in
-          Tahoe.
+          Our newsletter brings you Tahoe biking news, events and volunteer opportunities, about
+          once a month.
         </p>
       </header>
 
-      <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:max-w-3xl">
-        <section aria-labelledby="newsletter-highlights-heading">
-          <h2 id="newsletter-highlights-heading" className="text-lg">
-            Newsletter Highlights
-          </h2>
-          <p className="mt-2">Catch up on the latest cycling news and events in Lake Tahoe.</p>
-        </section>
-        <section aria-labelledby="newsletter-community-heading">
-          <h2 id="newsletter-community-heading" className="text-lg">
-            Join the Community
-          </h2>
-          <p className="mt-2">Be part of our mission to make Tahoe more bicycle-friendly.</p>
-        </section>
+      <div className="mt-10 max-w-3xl">
+        <NewsletterSignupForm heading="Sign up" signupUrl={settings.constant_contact_signup_url} />
       </div>
 
       <div className="mt-16 max-w-3xl">
         <NewsletterArchive
-          heading="Past Newsletters"
+          heading="Past issues"
+          intro="Not sure what to expect? Browse recent issues."
           items={newsletters}
           signupUrl={settings.constant_contact_signup_url}
         />
-      </div>
-
-      <div className="mt-16">
-        <NewsletterSignupForm heading="Sign up!" signupUrl={settings.constant_contact_signup_url} />
       </div>
     </div>
   );

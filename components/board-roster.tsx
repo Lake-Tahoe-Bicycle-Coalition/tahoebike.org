@@ -15,27 +15,27 @@ export function BoardRoster({ members }: { members: BoardMember[] }) {
     <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
       {members.map((member) => (
         <li key={member.id} className="flex flex-col gap-2">
-          <div className="relative mb-2 aspect-square w-36 overflow-hidden rounded-lg bg-bluebird/30">
+          <div className="relative mb-2 aspect-square w-full max-w-64 overflow-hidden rounded-lg bg-bluebird/30">
             {member.photoUrl ? (
               <Image
                 src={member.photoUrl}
                 alt={member.name}
                 fill
-                sizes="144px"
+                sizes="(min-width: 1024px) 256px, (min-width: 640px) 40vw, 80vw"
                 className="object-cover"
                 unoptimized={!isOptimizableImageUrl(member.photoUrl)}
               />
             ) : (
               <div
                 aria-hidden="true"
-                className="flex h-full w-full items-center justify-center text-4xl font-extrabold text-tahoe-deep"
+                className="flex h-full w-full items-center justify-center text-6xl font-extrabold text-tahoe-deep"
               >
                 {initials(member.name)}
               </div>
             )}
           </div>
           <h3>{member.name}</h3>
-          {member.role ? <p className="font-semibold text-tahoe-deep">{member.role}</p> : null}
+          {member.role ? <p className="font-semibold text-asphalt/70">{member.role}</p> : null}
           {member.bio.trim() ? (
             <div className="space-y-2">
               <Markdown source={member.bio} />

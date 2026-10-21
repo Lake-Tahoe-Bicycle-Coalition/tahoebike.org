@@ -17,6 +17,12 @@
     borders, decoration, and the focus ring, where 3:1 is enough.
   */
   --color-tahoe-deep: #0a739f;
+  /*
+    Not a brand colour either: a dark lake blue for full-bleed bands and panels that carry
+    white text (14.2:1 on white text). Prefer white, grey and asphalt backgrounds; use this
+    where a coloured background is wanted instead of the bright safety yellow.
+  */
+  --color-deepwater: #0c3d5c;
 
   --font-sans:
     "franklin-gothic-atf", "Franklin Gothic ATF", var(--font-libre-franklin), "Libre Franklin",

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { NewsletterSignupForm } from "@/components/newsletter-signup-form";
 import { ProgramCards, type ProgramCard } from "@/components/program-cards";
 import { getSettings } from "@/lib/settings";
 
@@ -20,30 +20,35 @@ export default async function ProgramsPage() {
       blurb:
         "Recycle your old or unwanted bicycle: LTBC volunteers collect bikes from donors, perform needed repairs and maintenance, and donate them to community members through local social service organizations. Community fix-up events happen about once per month.",
       href: "/bike-kitchen",
+      linkLabel: "Visit the Bike Kitchen",
     },
     {
       title: "Bike Valet",
       blurb:
         "Safe and convenient valet bicycle parking for Tahoe’s community events, at no cost to the bicyclists. A bike valet is like a coat check for bikes!",
       href: "/bike-valet",
+      linkLabel: "Book a bike valet",
     },
     {
       title: "Regional Bicycle Parking Program",
       blurb:
         "Launched in 2018, the program has resulted in 450 bike racks (900 bike parking spots) and eight fix-it stations on public lands and at businesses in the Tahoe Basin.",
       href: "/bike-racks",
+      linkLabel: "About bike racks",
     },
     {
       title: "Bike Safety",
       blurb:
         "If you’re biking roadways or bike paths in Lake Tahoe, we just want you to be safe. Watch our safety videos and brush up on ten tips for biking in Tahoe.",
       href: "/bike-safety",
+      linkLabel: "Read the safety tips",
     },
     {
       title: "Advocacy",
       blurb:
         "We advocate to jurisdictions around Lake Tahoe to make sure cyclists’ perspectives are accounted for in public infrastructure planning: invest in bike infrastructure, prioritize the important gaps, and get the details right.",
       href: "/advocacy",
+      linkLabel: "See our advocacy",
     },
     {
       title: "Interactive Bike Map",
@@ -88,7 +93,7 @@ export default async function ProgramsPage() {
             </dt>
             <dd className="mt-1">
               We write a newsletter and regularly post to social media. This website helps us keep
-              the Bike Community informed. <Link href="/join#newsletter">Stay in touch</Link>!
+              the Bike Community informed. <a href="#newsletter">Stay in touch</a>!
             </dd>
           </div>
           <div>
@@ -113,6 +118,14 @@ export default async function ProgramsPage() {
           </div>
         </dl>
       </section>
+
+      <div className="mt-16 max-w-3xl">
+        <NewsletterSignupForm
+          id="newsletter"
+          signupUrl={settings.constant_contact_signup_url}
+          archiveHref="/newsletter"
+        />
+      </div>
     </div>
   );
 }

@@ -24,7 +24,7 @@ export function NewsletterSignupForm({ signupUrl, id, heading = "Newsletter", ar
     <section
       id={id}
       aria-labelledby={headingId}
-      className="rounded-lg bg-safety p-6 text-asphalt sm:p-8"
+      className="rounded-lg border border-asphalt/10 bg-neutral-100 p-6 text-asphalt sm:p-8"
     >
       <h2 id={headingId}>{heading}</h2>
       <p className="mt-3">
@@ -33,7 +33,7 @@ export function NewsletterSignupForm({ signupUrl, id, heading = "Newsletter", ar
         {archiveHref ? (
           <>
             {" "}
-            <Link href={archiveHref} className="font-semibold underline">
+            <Link href={archiveHref} className="font-semibold">
               Read past newsletters here
             </Link>
             .
@@ -58,7 +58,7 @@ export function NewsletterSignupForm({ signupUrl, id, heading = "Newsletter", ar
           />
           <button
             type="submit"
-            className="btn btn-primary shrink-0 border-asphalt hover:bg-asphalt hover:text-white"
+            className="btn btn-primary shrink-0"
           >
             Subscribe
           </button>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { SmartLink } from "@/components/smart-link";
 import { nativeFormEnabled } from "@/lib/feature-flags";
-import { getSettings } from "@/lib/settings";
+import { getSettings, settingIsTrue } from "@/lib/settings";
 import { pageMetadata } from "@/lib/site-metadata";
 
 export const metadata = pageMetadata({
@@ -17,7 +17,7 @@ export const metadata = pageMetadata({
  * stops doing something (a new form, an analytics script, a new embed), update the text
  * and this date together.
  */
-const LAST_UPDATED = { iso: "2026-09-17", label: "September 17, 2026" };
+const LAST_UPDATED = { iso: "2026-10-21", label: "October 21, 2026" };
 
 /** Privacy policies of the services this site loads in the browser or hands visitors to. */
 const POLICY_URLS = {
@@ -37,12 +37,14 @@ export default async function PrivacyPolicyPage() {
   // Q16/Q17: each of these is either the site's own form or an embedded Google Form,
   // chosen by NATIVE_FORMS. Describe whichever is live so the policy stays accurate.
   const nativeValet = nativeFormEnabled("valet");
-  const nativeRacks = nativeFormEnabled("racks");
+  // The rack application (native or Google Form) only appears on /bike-racks while the program is open.
+  const racksOpen = settingIsTrue(settings.rack_program_open);
+  const nativeRacks = racksOpen && nativeFormEnabled("racks");
   const googleForms = [
     ...(nativeValet
       ? []
       : [{ label: "Bike Valet request form", href: "/bike-valet", page: "Bike Valet" }]),
-    ...(nativeRacks ? [] : [{ label: "bike rack application", href: "/bike-racks", page: "Bike Racks" }]),
+    ...(nativeRacks || !racksOpen ? [] : [{ label: "bike rack application", href: "/bike-racks", page: "Bike Racks" }]),
   ];
 
   return (
@@ -101,6 +103,16 @@ export default async function PrivacyPolicyPage() {
           what you send us to reply to you and to run the program you asked about, and for
           nothing else. Submitting a form does not sign you up for our newsletter.
         </p>
+        <p>
+          For this site&apos;s own forms, those notification emails are delivered by{" "}
+          <SmartLink href={POLICY_URLS.resend}>Resend</SmartLink>, an email service, so the
+          contents of your submission pass through Resend on the way to our inbox.
+        </p>
+        <p>
+          If you email the Coalition directly (the email links on this site open your own email
+          program), we keep your message and reply from our email account. We use it only to
+          reply to you.
+        </p>
         {googleForms.length > 0 ? (
           <p>
             The{" "}
@@ -117,11 +129,6 @@ export default async function PrivacyPolicyPage() {
             covers the form itself, and the Coalition uses your answers only to run that program.
           </p>
         ) : null}
-        <p>
-          Those notification emails are delivered by{" "}
-          <SmartLink href={POLICY_URLS.resend}>Resend</SmartLink>, an email service, so the
-          contents of your submission pass through Resend on the way to our inbox.
-        </p>
 
         <h2>Spam protection</h2>
         <p>
@@ -137,13 +144,12 @@ export default async function PrivacyPolicyPage() {
         <h2>Newsletter and email lists</h2>
         <p>
           Our newsletter and volunteer email list are run through Constant Contact. The
-          Subscribe box on the <Link href="/join#newsletter">Join</Link> and{" "}
-          <Link href="/newsletter">Newsletter</Link> pages sends you to Constant Contact&apos;s
+          newsletter Subscribe box, which appears on several pages of this site, sends you to Constant Contact&apos;s
           signup page, where you finish signing up. The email address you type into the box is
           passed along to that page; this website does not receive or keep it. The volunteer
           email list link works the same way. Constant Contact holds the lists, and you can
           leave at any time with the unsubscribe link at the bottom of any email we send. The
-          past issues on the Newsletter page are hosted by Constant Contact too.{" "}
+          past issues on the <Link href="/newsletter">Newsletter page</Link> are hosted by Constant Contact too.{" "}
           <SmartLink href={POLICY_URLS.constantContact}>
             Constant Contact&apos;s privacy notice
           </SmartLink>{" "}
@@ -153,7 +159,7 @@ export default async function PrivacyPolicyPage() {
         <h2>Membership and donations</h2>
         <p>
           Memberships and donations are handled by Memberful, a separate service. The Join and
-          Donate buttons on the <Link href="/join">Join page</Link> take you to
+          Donate buttons on this site take you to
           tahoebike.memberful.com, and the &ldquo;choose what you pay&rdquo; donation boxes send
           the amount you enter to Memberful&apos;s checkout page. Your name, email address, and
           payment details are entered on Memberful&apos;s pages and processed there; this website
@@ -210,17 +216,9 @@ export default async function PrivacyPolicyPage() {
         <p>
           This site does not use analytics, advertising, or tracking cookies, and it does not
           run any analytics service. tahoebike.org sets no cookies at all for ordinary visitors;
-          the only cookies it sets belong to the admin sign-in described below. Embedded content
-          from other services may set its own cookies, as described above.
-        </p>
-
-        <h2>Admin sign-in</h2>
-        <p>
-          Coalition board members and staff edit parts of this site through a private admin
-          console. They sign in with a Google account that is on a short list kept by the
-          Coalition. Google tells the site the account&apos;s name and email address, and the
-          site checks the address against that list. Signing in sets a session cookie that keeps
-          the administrator signed in. Visitors cannot create accounts on this site.
+          the only cookie it ever sets is a sign-in session cookie for the Coalition volunteers who
+          edit the site, and only on their own browsers. Embedded content from other services
+          may set its own cookies, as described above.
         </p>
 
         <h2>Hosting and server logs</h2>

@@ -7,6 +7,8 @@ type Props = {
   /** Hosted opt-in URL shown when there is nothing to list. */
   signupUrl: string;
   heading?: string;
+  /** Optional one-line introduction shown under the heading. */
+  intro?: string;
 };
 
 /**
@@ -14,12 +16,13 @@ type Props = {
  * prominently, the rest as a list. Falls back to a subscribe link when the archive is
  * empty or unreachable.
  */
-export function NewsletterArchive({ items, signupUrl, heading = "Newsletters" }: Props) {
+export function NewsletterArchive({ items, signupUrl, heading = "Newsletters", intro }: Props) {
   const [latest, ...past] = items;
 
   return (
     <section aria-labelledby="newsletter-archive-heading">
       <h2 id="newsletter-archive-heading">{heading}</h2>
+      {intro ? <p className="mt-2">{intro}</p> : null}
 
       {latest ? (
         <div className="mt-4 space-y-6">

@@ -68,12 +68,20 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="bg-safety">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
-          <p className="font-heading font-extrabold uppercase tracking-[0.1em]">
-            Lake Tahoe Bicycle Coalition
-          </p>
-          <h1 className="mt-2 max-w-3xl">Helping Tahoe become more bicycle friendly</h1>
+      <section className="relative isolate overflow-hidden bg-deepwater">
+        <Image
+          src="/images/2022/06/Baldwin-Beach.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="-z-20 object-cover"
+        />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-deepwater/90 to-deepwater/60" aria-hidden="true" />
+        <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:py-16">
+          <h1 className="max-w-3xl text-2xl text-white sm:text-4xl">
+            Helping Tahoe become more bicycle friendly
+          </h1>
         </div>
       </section>
 
@@ -101,7 +109,7 @@ export default async function HomePage() {
               most comprehensive bike trail map. Check out our new, interactive bike map!
             </p>
             <p>
-              <SmartLink href={settings.map_url} className="btn btn-blue">
+              <SmartLink href={settings.map_url} className="btn btn-primary">
                 Explore the map
               </SmartLink>
             </p>
