@@ -755,85 +755,122 @@ These can't move without content, numbers or a decision from LTBC:
 ---
 
 # Observational notes
-- menu should be a hamburger on the right side rather than a menu button below the logo
-- On mobile the banner "Helping Tahoe become more bicycle friendly" takes up too much vertical space
-- "Join the Lake Tahoe Bicycle Coalition" photo is old, we should replace it with a newer better one
-- Yellow is so bright for the topmost banner. Consider one of the blues or, even better, an image overlay (remember to provide appropriate contrast.)
-- Do you need to have the full LTBC name in both the logo and the header text? Seems... repetitive. 
-- Why are there two different primary button colors on the same background? On the homepage, most are yellow but one is blue. 
-- Newsletter area is also very bright with not great contrast between the paragraph text and the background, or the blue link and the background. 
-- Given the brand guidelines, I think you should be relying mainly on white, grey, and black as backgrounds and use the yellow and blues as accent colors. Consider adding another darker blue (high-contrast to white text) as an alternative background color. 
-- Bike Kitchen page:
-    - Bring upcoming events up to the top. People need to know about this before any of the other services. 
-    - It's just a lot of text. Intersperse some of the images shunted to the bottom of the page, or consider icons to visually distinguish between the different blocks/CTAs on the page. Consider "add to calendar" link?
-    - Some of these buttons are so long. Cut them down to very short CTAs-- no more than 3 words-- or make them a text link instead. 
-    - Why would people email you from this page? Email Us is big and in the middle, but seems like it should be in the footer, if anywhere. Or give a compelling reason for someone to use it. 
-    - Drive people to POINT to sign up for bike kitchen, not email. Remove POINT text link and redirect join a fix-up button. 
-    - Add title to bike kitchen video (learn more)
-    - Add starter text / subjects to the email links
-    - The description about what bike kitchen IS needs to be more robust-- it's not jsut about donating or fixing bikes, it's also learning about how to fix your own bike from experts / volunteers! Community bike maintenance, and joinin a community of people who take care of bikes together / for each other. 
-Join the Coalition
-    - Titles for the different tiers should be the titles of the boxes. Cost (- $20) should not be part of the title. 
-    - Look at some other websites for how to lay this section out. I doubt they add the price in the Join CTA. Price should be somewhere, but likely between the CTA and the title. 
-    - If there is no actual differece between the tiers, you are likely driving away higher donations by using these names (individual vs. business-- I am not a business os I have to donate $20?)
-    - "One-Time" has a hyphen
-    - Reorganize this page so that there are different levels of recurring donations-- 20, 40, 100, and "choose your own". There's no reason for these preset groups to be different from the "recurring donation" section below. 
-    - Why is there both a donation CTA and a "Contribute now" CTA for both of these one-time and recurring sections? 
-    - Add a separate donation link to the menu
-    - Other Ways to Get Involved 
-        - again consider icons or images to separate these visually.
-        - Make sure all of these lead ot the right places -- volunteer email list leads to constant contact, email update subscribe links to the newsletter anchor like 2 blocks down the page. Email us should have starter text/subject attached. 
-    - Why are there newsletters on this page? This seems unrelated / cluttered. You can instead link to the newsletter page if you want to give a sneak preview. 
-Bike Racks
-    - This page is just a lot of text. What are people supposed to get from this page / why would they visit it?
-    - It feels weird to have this in a list of pages about how to use LTBC services if there are no services active at the moment. 
-    - Swap out the "email" business CTA and add another collection method to gather / collect interest. 
-    - Individual CTA to bike map, which has bike parkign locations. 
-    - Consider getting rid of the QUestions? section-- you can just have this in the footer for all pages. 
-Larger comment about all of these Program pages: they all need to straddle two audiences, business and individual. I'm not sure that all of these pages successfully do that, and it's worth taking a look at how to get the *primary* audience to interact more easily with each page, while still having an accessible alternative route for the secondary audience. 
-Bike Valet
-    - Two audiences for this page: 1) getting businesses to sign up for valet at their events, and teaching people how and when to use it (ride your bike! we'll watch it!). Rather than embedding a giant form at the bottom of the page, add a small CTA up top where businesses who are already bought in can easily sign up. THEN have the additional information for those that need more info-- but make it less a wall of text, and more visually broken up / prioritized. 
-        Subsections like, "Safe, Convenient Bike Parking", "Attract More People to your event", "Small Investment, Big Returns"-- i.e. headers for the page to be more scannable, with supporting text for the sections where visitors need to learn more.  
-    - Volunteer CTA is so tiny! And says "form" but links to the overall volunteer page. Make this a button and have the CTA text match the actual experience. 
-    - "Questions or want to volunteer" --> Get rid of this! Add Questions as a text link within the business signup section. Volunteers should sign up via volunteer page. 
-Bike Safety
-    - Tie this into Safe Routes For Schools / other bike safety programming! 
-    - One video can be at the top of the page, if you need it to be, but videos aren't really scannable. 
-    - Plug the bike kitchen for bike maintenance
-    - Consider adding the information that you're putting together for the bike safety programs around the lake. 
-    - Materials for teachers?
-Advocacy
-    - Reverse-sort the letters
-    - Plug the newsletter in the Comment Letter section - get alerted of the thigns you care about so you can write a letter, too. 
-    - Why do you need both the embed and the Drive link?
-    - this page can also have a better visual hierarchy
-    - do you actually want the community to email you with ideas? Same vibe as the rest of the pages with the "Questions?" section you likely don't actually want. Consider a form embed instead? Thsi will help you get more complete / relevant info as well. 
-ABOUT
-    - Two hero images on mobile - adjust the layout to prevent this, or have better mobile rules. 
-    - "all-volunteer" has a hyphen. 
-    - consider bigger board pics. 
-    - titles are the same color blue as your text links, which is confusing. no underline but you have otehr colors :)
-Programs
-    - make this page more about the coalition and the programs you run rather than a menu of all the other pages. what does it mean to run a program, and why do you run all of these? how do they tie into your mission? etc. 
-    - Index page is so much text! Images?
-    - a zillion "learn more" ctas - can you mix this up?
-    - embed newsletter signup in the page rather than a text link buried in comms?
-Newsletter
-    - Not sure from teh jump what this page is-- am I supposed to read old newsletters or sign up for new ones here? "Discover our newsletter archive" is in contrast to "stay informed with the LTBC"
-    - Shorten main header - "with the LTBC" is likely understood, or can be relegated to subhead text. 
-    - Reformat this page to be 1) about joining the newsletter. You want to collect emails! Then 2) having a taste of past issues in case people want to see what they're signing up for. But the main priority of this page is #1. Its identity is currently split evenly between the two and the messaging is confusing. 
-    - Similarly... the side-by-side section up top isnt' doing you any favors. 
-Make sure that all of your old URLs from newsletters re-route correctly to the new site (e.g. /get-involved/join vs. /join) 
-VOLUNTEER
-    - Streamline signup so that signing up for an event also adds you to the volunteer email list. Ideally, people shouldn't have to sign up twice. 
-FOOTER
-    - tagline "helping tahoe..." is the same text styling as your address and email, as well as the footer links - it's not easy to scan & find what you're looking for in this similar-looking text. 
-PRIVACY POLICY
-    - Doesn't mention email-- does it need to?
-    - Mentions google forms that no longer exist-- e.g. bike rack application
-    - what notifications are delivered by resend? likely the embedded contact form but not google, right? might need to be reordered. 
-    - Subscribe box location might need to be made more agnostic, given that it's now on more pages. 
-    - Same with Join page location. in general you might want to make these precise locations more agnostic. 
-    - remove the admin login section as this is not relevant to the general public. 
-    - is sharing the privacy policy for the website host standard practice? this seems.... odd. 
-    - 
+
+Notes from a walkthrough of the site in October 2026. The easy, code-only items were done in PR #12 (`ux-easy-fixes`); the rest need a design pass, new content, or a board decision.
+
+## Done (PR #12)
+
+**Site-wide**
+- Menu is a hamburger on the right side rather than a menu button below the logo.
+- On mobile the banner "Helping Tahoe become more bicycle friendly" took too much vertical space: smaller type and padding.
+- Yellow was too bright for the topmost banner: it is now a photo with a dark blue overlay (white text, contrast checked). A `deepwater` dark blue token was added as the alternative background colour.
+- The full LTBC name was in both the logo and the hero text: the hero eyebrow is gone.
+- Two primary button colours on the homepage: "Explore the map" is yellow like the rest.
+- Newsletter area was very bright with poor contrast: it is a neutral grey panel with the yellow Subscribe button as the accent.
+- Added a Donate link to the menu (header button and footer link).
+- Footer tagline "helping tahoe..." was styled the same as the address and links: it is now heading-styled, with the address and email smaller and muted.
+- Old newsletter URLs re-route correctly (`/get-involved/join` and `/get-involved` both redirect to `/join`); verified, no change needed.
+
+**Bike Kitchen**
+- Upcoming events are at the top.
+- Buttons cut to three words or fewer.
+- The big "Email Us" section in the middle is gone.
+- "Join a fix-up" drives people to POINT, not email; the POINT text link is gone.
+- The video has a title ("See the Bike Kitchen in action").
+- Email links have starter subjects and body text.
+- The description of what the Bike Kitchen is covers learning to fix your own bike and the community side, not just donating and fixing.
+
+**Join the Coalition**
+- Tier titles are the box titles; the cost is its own line between the title and the CTA, and the CTA is just "Join".
+- "One-Time" has a hyphen.
+- Each donation section has one CTA instead of both a donation button and "Contribute now".
+- "Other ways to get involved" links checked (volunteer list goes to Constant Contact, Subscribe goes to the newsletter box on the page); "Email us" has a subject and starter text.
+- Newsletters are no longer listed on this page; the signup box links to the Newsletter page instead.
+
+**Bike Racks**
+- Individual CTA to the bike map, which has bike parking locations.
+- "Questions?" section removed.
+
+**Bike Valet**
+- Small CTA up top for businesses that are already bought in ("Request a valet"), plus a "Volunteer with us" button.
+- Volunteer CTA is a button whose text matches where it goes.
+- "Questions or want to volunteer?" removed; "Questions?" is a text link inside the business signup section.
+
+**Bike Safety**
+- Plugs the Bike Kitchen for bike maintenance.
+
+**Advocacy**
+- Newsletter plugged in the Comment Letters section.
+- Removed the duplicate Drive link under the embed.
+
+**About**
+- One hero image on mobile.
+- "all-volunteer" has a hyphen.
+- Bigger board pics.
+- Board roles are no longer the same blue as text links.
+
+**Programs**
+- The "learn more" CTAs are mixed up with specific labels.
+- Newsletter signup is embedded in the page rather than a text link buried in comms.
+
+**Newsletter**
+- Main header shortened ("Stay Informed"); the "Discover our newsletter archive" eyebrow and the side-by-side section are gone.
+- The page is first about joining the newsletter, then a taste of past issues.
+
+**Privacy policy**
+- Mentions email sent to us directly.
+- No longer mentions the bike rack Google Form while the program is closed.
+- The Resend paragraph sits with the site's own forms, not after the Google Forms one.
+- Subscribe box and Join page locations are described generically.
+- Admin login section removed.
+
+## Still to do
+
+These are open-ended, need new content or a photo, or need a board decision.
+
+**Site-wide**
+- "Join the Lake Tahoe Bicycle Coalition" homepage card photo is old; replace it with a newer better one (admin-managed image).
+- Broader brand pass: rely mainly on white, grey, and black backgrounds and use the yellow and blues as accents. The `deepwater` token exists; the remaining coloured panels have not been reviewed page by page.
+- Larger comment about all of the Program pages: they all need to straddle two audiences, business and individual. Look at how to get the *primary* audience to interact more easily with each page, while still having an accessible alternative route for the secondary audience.
+- Consider icons or images to visually separate card blocks (Bike Kitchen cards, "Other ways to get involved", program cards).
+
+**Bike Kitchen**
+- Still a lot of text. Intersperse some of the images shunted to the bottom of the page.
+- Consider an "add to calendar" link on events.
+
+**Join the Coalition**
+- Look at other websites for how to lay out the membership section.
+- If there is no actual difference between the tiers, the names (individual vs. business) may be driving away higher donations.
+- Reorganize so there are different levels of recurring donations: 20, 40, 100, and "choose your own", merged with the recurring donation section.
+
+**Bike Racks**
+- The page is a lot of text. What are people supposed to get from it / why would they visit it?
+- It feels weird to have this in a list of pages about how to use LTBC services if there are no services active at the moment.
+- Swap out the "email" business CTA and add another collection method to gather interest.
+
+**Bike Valet**
+- Rather than a giant form at the bottom, break the page into scannable subsections with headers like "Safe, Convenient Bike Parking", "Attract More People to your event", "Small Investment, Big Returns", with supporting text where visitors need to learn more.
+
+**Bike Safety**
+- Tie this into Safe Routes For Schools / other bike safety programming.
+- One video can be at the top if needed, but videos aren't scannable.
+- Add the information being put together for the bike safety programs around the lake.
+- Materials for teachers?
+
+**Advocacy**
+- Reverse-sort the letters (not possible with the Drive folder embed; needs a different listing).
+- Better visual hierarchy.
+- Do we actually want the community to email us with ideas? Consider a form embed instead, which would also gather more complete and relevant info.
+
+**About**
+- (nothing outstanding)
+
+**Programs**
+- Make this page more about the coalition and the programs we run rather than a menu of the other pages: what it means to run a program, why we run these, how they tie into the mission.
+- The index page is a lot of text. Images?
+
+**Volunteer**
+- Streamline signup so that signing up for an event also adds you to the volunteer email list. People shouldn't have to sign up twice.
+
+**Privacy policy**
+- Is sharing the privacy policy for the website host standard practice? (Naming the host and its policy is common practice for listing subprocessors; left in for now, revisit if it still reads oddly.)
