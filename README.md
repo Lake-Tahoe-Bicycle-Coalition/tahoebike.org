@@ -22,7 +22,7 @@ says you don't have access, ask an existing admin to add your email address.
 
 | In the admin area | What it changes |
 |---|---|
-| **Events** | Bike Kitchen fix-up sessions and other dated events. Past events disappear on their own. |
+| **Events** | Bike Kitchen fix-up sessions, Bike Valet appearances, and other dated events. Each shows on its own page (other events show on the homepage). Past events disappear on their own. |
 | **Board** | The board members and advisors shown on the About page: names, roles, bios, photos, and order. |
 | **Homepage cards** | The large featured cards at the top of the homepage. |
 | **Announcements** | A banner shown across the top of every page between a start and end time you choose. Useful for closures, sign-up deadlines, or big news. |

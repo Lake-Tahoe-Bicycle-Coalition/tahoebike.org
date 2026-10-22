@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { EventList } from "@/components/event-list";
 import { ValetRequestForm } from "@/components/forms/valet-request-form";
 import { GoogleFormEmbed } from "@/components/google-form-embed";
+import { getUpcomingEvents } from "@/lib/content";
 import { GOOGLE_FORM_URLS, nativeFormEnabled } from "@/lib/feature-flags";
 import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -37,7 +39,7 @@ const photos = [
 ];
 
 export default async function BikeValetPage() {
-  const settings = await getSettings();
+  const [settings, events] = await Promise.all([getSettings(), getUpcomingEvents("BIKE_VALET")]);
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -63,6 +65,18 @@ export default async function BikeValetPage() {
           className="h-auto w-[300px] max-w-full"
         />
       </header>
+
+      {/* Bike Valet events from /admin/events. Shown only when some are scheduled: the valet
+          works on request, so an empty "none scheduled" message would read as "not available". */}
+      {events.length > 0 ? (
+        <section aria-labelledby="valet-events-heading" className="mt-10">
+          <h2 id="valet-events-heading">Upcoming Bike Valet Events</h2>
+          <p className="mt-2">Find us at these events. Ride over and we will park your bike for free.</p>
+          <div className="mt-6">
+            <EventList events={events} />
+          </div>
+        </section>
+      ) : null}
 
       <div className="mt-10 grid gap-12 lg:grid-cols-2">
         <div className="prose-ltbc">
