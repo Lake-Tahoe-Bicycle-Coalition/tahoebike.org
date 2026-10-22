@@ -19,17 +19,39 @@ export const emptyAnnouncementFormValues: AnnouncementFormValues = {
   endTime: "",
 };
 
-export type AnnouncementStatus = "live" | "scheduled" | "expired";
+/** `hidden`: live by its dates, but a newer live announcement is the one the site shows. */
+export type AnnouncementStatus = "live" | "hidden" | "scheduled" | "expired";
 
-/** Where an announcement sits relative to `now`; the list page shows it as a badge. */
-export function announcementStatus(row: { startsAt: Date; endsAt: Date }, now: Date): AnnouncementStatus {
+type Timed = { id: string; startsAt: Date; endsAt: Date };
+
+/** Where one announcement sits relative to `now`, ignoring the others. */
+function timeStatus(row: Timed, now: Date): "live" | "scheduled" | "expired" {
   if (row.endsAt < now) return "expired";
   if (row.startsAt > now) return "scheduled";
   return "live";
 }
 
+/**
+ * Each announcement's status for the list page's badges. The site shows only one banner:
+ * the live announcement that started most recently (components/announcement-banner.tsx via
+ * getActiveAnnouncement), so any other live one is `hidden` rather than `live`.
+ */
+export function announcementStatuses(rows: Timed[], now: Date): Map<string, AnnouncementStatus> {
+  let shown: Timed | null = null;
+  for (const row of rows) {
+    if (timeStatus(row, now) === "live" && (!shown || row.startsAt > shown.startsAt)) shown = row;
+  }
+  return new Map(
+    rows.map((row) => {
+      const status = timeStatus(row, now);
+      return [row.id, status === "live" && row !== shown ? "hidden" : status];
+    }),
+  );
+}
+
 export const announcementStatusLabels: Record<AnnouncementStatus, string> = {
   live: "Live",
+  hidden: "Hidden",
   scheduled: "Scheduled",
   expired: "Expired",
 };

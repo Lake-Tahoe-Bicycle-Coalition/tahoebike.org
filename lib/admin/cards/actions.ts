@@ -65,7 +65,7 @@ export async function deleteHomepageCard(formData: FormData): Promise<void> {
     imageUrl = row.imageUrl;
   } catch (error) {
     console.error(`[admin] could not delete homepage card ${id}`, error);
-    redirect(adminListUrl(LIST, "That card could not be deleted; it may already be gone."));
+    redirect(adminListUrl(LIST, "That card could not be deleted; it may already be gone.", "error"));
   }
   await deleteBlobIfOurs(imageUrl);
   revalidateHomepageCards();
@@ -86,7 +86,7 @@ export async function toggleHomepageCardActive(formData: FormData): Promise<void
     console.error(`[admin] could not toggle homepage card ${id}`, error);
     row = null;
   }
-  if (!row) redirect(adminListUrl(LIST, "That card could not be updated; it may have been deleted."));
+  if (!row) redirect(adminListUrl(LIST, "That card could not be updated; it may have been deleted.", "error"));
   revalidateHomepageCards();
   redirect(adminListUrl(LIST, row.isActive ? `Deactivated “${row.title}”.` : `Activated “${row.title}”.`));
 }
@@ -109,7 +109,7 @@ export async function moveHomepageCard(formData: FormData): Promise<void> {
     );
   } catch (error) {
     console.error(`[admin] could not move homepage card ${id}`, error);
-    redirect(adminListUrl(LIST, "The order could not be changed. Please try again."));
+    redirect(adminListUrl(LIST, "The order could not be changed. Please try again.", "error"));
   }
   if (moved) revalidateHomepageCards();
   redirect(LIST);

@@ -14,7 +14,7 @@ import { isOptimizableImageUrl } from "@/lib/urls";
 
 export default async function BoardPage({ searchParams }: PageProps<"/admin/board">) {
   await requireAdmin();
-  const { notice } = await searchParams;
+  const query = await searchParams;
 
   const members = await prisma.boardMember.findMany({
     orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
@@ -31,7 +31,7 @@ export default async function BoardPage({ searchParams }: PageProps<"/admin/boar
           </Link>
         }
       />
-      <Notice notice={notice} />
+      <Notice params={query} />
 
       {members.length === 0 ? (
         <p>No board members yet. Add one to show the roster on the About page.</p>

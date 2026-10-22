@@ -5,7 +5,7 @@ import { Notice } from "@/components/admin/notice";
 import { PageHeader } from "@/components/admin/page-header";
 import { deleteAnnouncement } from "@/lib/admin/announcements/actions";
 import {
-  announcementStatus,
+  announcementStatuses,
   announcementStatusLabels,
   type AnnouncementStatus,
 } from "@/lib/admin/announcements/fields";
@@ -17,6 +17,7 @@ const MESSAGE_PREVIEW = 90;
 
 const statusClass: Record<AnnouncementStatus, string> = {
   live: "badge badge-active",
+  hidden: "badge badge-warn",
   scheduled: "badge",
   expired: "badge text-asphalt/60",
 };
@@ -27,10 +28,11 @@ function preview(message: string): string {
 
 export default async function AnnouncementsPage({ searchParams }: PageProps<"/admin/announcements">) {
   await requireAdmin();
-  const { notice } = await searchParams;
+  const query = await searchParams;
   const now = new Date();
 
   const announcements = await prisma.announcement.findMany({ orderBy: { startsAt: "desc" } });
+  const statuses = announcementStatuses(announcements, now);
 
   return (
     <div className="space-y-6">
@@ -43,7 +45,7 @@ export default async function AnnouncementsPage({ searchParams }: PageProps<"/ad
           </Link>
         }
       />
-      <Notice notice={notice} />
+      <Notice params={query} />
 
       {announcements.length === 0 ? (
         <p>No announcements. Add one to show a banner on the site.</p>
@@ -64,7 +66,7 @@ export default async function AnnouncementsPage({ searchParams }: PageProps<"/ad
             </thead>
             <tbody>
               {announcements.map((announcement) => {
-                const status = announcementStatus(announcement, now);
+                const status = statuses.get(announcement.id) ?? "expired";
                 return (
                   <tr key={announcement.id}>
                     <td className="font-semibold">
@@ -75,6 +77,11 @@ export default async function AnnouncementsPage({ searchParams }: PageProps<"/ad
                     <td className="whitespace-nowrap">{formatAdminDateTime(announcement.endsAt)}</td>
                     <td>
                       <span className={statusClass[status]}>{announcementStatusLabels[status]}</span>
+                      {status === "hidden" ? (
+                        <p className="mt-1 max-w-40 text-xs text-asphalt/70">
+                          A newer live announcement is showing instead.
+                        </p>
+                      ) : null}
                     </td>
                     <td>
                       <div className="admin-actions">

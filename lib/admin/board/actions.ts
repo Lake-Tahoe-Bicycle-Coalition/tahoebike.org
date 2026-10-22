@@ -68,7 +68,7 @@ export async function deleteBoardMember(formData: FormData): Promise<void> {
     photoUrl = row.photoUrl;
   } catch (error) {
     console.error(`[admin] could not delete board member ${id}`, error);
-    redirect(adminListUrl(LIST, "That board member could not be deleted; they may already be gone."));
+    redirect(adminListUrl(LIST, "That board member could not be deleted; they may already be gone.", "error"));
   }
   await deleteBlobIfOurs(photoUrl);
   revalidateBoard();
@@ -89,7 +89,7 @@ export async function toggleBoardMemberActive(formData: FormData): Promise<void>
     console.error(`[admin] could not toggle board member ${id}`, error);
     row = null;
   }
-  if (!row) redirect(adminListUrl(LIST, "That board member could not be updated; they may have been deleted."));
+  if (!row) redirect(adminListUrl(LIST, "That board member could not be updated; they may have been deleted.", "error"));
   revalidateBoard();
   redirect(adminListUrl(LIST, row.isActive ? `Deactivated “${row.name}”.` : `Activated “${row.name}”.`));
 }
@@ -112,7 +112,7 @@ export async function moveBoardMember(formData: FormData): Promise<void> {
     );
   } catch (error) {
     console.error(`[admin] could not move board member ${id}`, error);
-    redirect(adminListUrl(LIST, "The order could not be changed. Please try again."));
+    redirect(adminListUrl(LIST, "The order could not be changed. Please try again.", "error"));
   }
   if (moved) revalidateBoard();
   redirect(LIST);

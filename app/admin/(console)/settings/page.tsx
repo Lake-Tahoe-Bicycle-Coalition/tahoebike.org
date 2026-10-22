@@ -8,7 +8,7 @@ import { loadSettings, SETTING_DEFAULTS } from "@/lib/settings";
 
 export default async function SettingsPage({ searchParams }: PageProps<"/admin/settings">) {
   await requireAdmin();
-  const { notice } = await searchParams;
+  const query = await searchParams;
   // Strict read: never show code defaults as if they were the saved values (see loadSettings).
   const settings = await loadSettings();
 
@@ -18,7 +18,7 @@ export default async function SettingsPage({ searchParams }: PageProps<"/admin/s
         title="Site settings"
         description="Prices, contact addresses, and the links to Memberful, Constant Contact, POINT and our social accounts. Changes appear across the whole site as soon as you save, and links here open the same way as any other link on the site, so check them before saving."
       />
-      <Notice notice={notice} />
+      <Notice params={query} />
       <SettingsForm
         action={saveSettings}
         resetAction={resetSetting}

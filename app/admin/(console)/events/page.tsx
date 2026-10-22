@@ -11,7 +11,8 @@ import { prisma } from "@/lib/db";
 
 export default async function EventsPage({ searchParams }: PageProps<"/admin/events">) {
   await requireAdmin();
-  const { notice, past } = await searchParams;
+  const query = await searchParams;
+  const { past } = query;
   const showPast = past === "1";
   const now = new Date();
 
@@ -32,7 +33,7 @@ export default async function EventsPage({ searchParams }: PageProps<"/admin/eve
           </Link>
         }
       />
-      <Notice notice={notice} />
+      <Notice params={query} />
 
       <p className="flex gap-4 text-sm font-semibold">
         {showPast ? (

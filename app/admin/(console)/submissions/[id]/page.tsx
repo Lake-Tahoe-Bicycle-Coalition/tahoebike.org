@@ -36,7 +36,7 @@ function replyHref(email: string, subject: string): string {
 export default async function SubmissionPage({ params, searchParams }: PageProps<"/admin/submissions/[id]">) {
   await requireAdmin();
   const { id } = await params;
-  const { notice } = await searchParams;
+  const query = await searchParams;
   const row = await prisma.formSubmission.findUnique({ where: { id } });
   if (!row) notFound();
 
@@ -68,7 +68,7 @@ export default async function SubmissionPage({ params, searchParams }: PageProps
           </Link>
         }
       />
-      <Notice notice={notice} />
+      <Notice params={query} />
 
       <dl className="divide-y divide-asphalt/10 rounded-lg border border-asphalt/15">
         {fields.map((field) => (

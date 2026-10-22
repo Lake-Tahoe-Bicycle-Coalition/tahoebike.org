@@ -49,7 +49,7 @@ export async function resetSetting(key: string): Promise<void> {
     await prisma.siteSetting.deleteMany({ where: { key } });
   } catch (error) {
     console.error(`[admin] could not reset setting ${key}`, error);
-    redirect(adminListUrl(PAGE, "That setting could not be reset. Please try again."));
+    redirect(adminListUrl(PAGE, "That setting could not be reset. Please try again.", "error"));
   }
   revalidateWholeSite();
   redirect(adminListUrl(PAGE, `Reset “${SETTING_FIELDS[key].label}” to its default.`));
