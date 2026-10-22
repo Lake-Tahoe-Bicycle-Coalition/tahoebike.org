@@ -2,8 +2,8 @@
 
 import { upload } from "@vercel/blob/client";
 import Image from "next/image";
-import { useId, useRef, useState } from "react";
-import { isExternalUrl, isOptimizableImageUrl, isSitePath } from "@/lib/urls";
+import { useEffect, useId, useRef, useState } from "react";
+import { isAllowedImageUrl, isOptimizableImageUrl } from "@/lib/urls";
 
 /** Mirrors lib/admin/blob.ts (which is server-only because it imports the Blob SDK). */
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
@@ -43,13 +43,32 @@ export function ImageField({
   const errorId = `${inputId}-error`;
   const helpId = `${inputId}-help`;
   const fileInput = useRef<HTMLInputElement>(null);
+  const urlInput = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState(defaultValue ?? "");
   const [progress, setProgress] = useState<number | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
+  const uploading = progress !== null;
+
+  // While an upload runs, the text input still holds the previous address, so saving now
+  // would store the old image and orphan the new file. Hold the form's submit until the
+  // upload finishes. A capture listener on the form runs before React's action handler.
+  useEffect(() => {
+    const form = urlInput.current?.form;
+    if (!uploading || !form) return;
+    const holdSubmit = (event: SubmitEvent) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      setUploadError("The image is still uploading. Save again once the upload finishes.");
+    };
+    form.addEventListener("submit", holdSubmit, true);
+    return () => form.removeEventListener("submit", holdSubmit, true);
+  }, [uploading]);
+
   const fieldErrors = [...(errors ?? []), ...(uploadError ? [uploadError] : [])];
   const hasErrors = fieldErrors.length > 0;
-  const previewable = url !== "" && (isSitePath(url) || isExternalUrl(url));
+  // Only addresses the server will accept get a preview; anything else would show a broken image.
+  const previewable = url !== "" && isAllowedImageUrl(url);
 
   async function handleFile(file: File) {
     setUploadError(null);
@@ -70,6 +89,7 @@ export function ImageField({
         onUploadProgress: (event) => setProgress(event.percentage),
       });
       setUrl(blob.url);
+      setUploadError(null);
     } catch (error) {
       setUploadError(error instanceof Error ? error.message : "Upload failed. Please try again.");
     } finally {
@@ -106,12 +126,13 @@ export function ImageField({
         </div>
         <div className="min-w-0 flex-1 space-y-2">
           <input
+            ref={urlInput}
             id={inputId}
             name={name}
             type="text"
             inputMode="url"
             className="field-input"
-            placeholder="/images/… or https://…"
+            placeholder="/images/…"
             value={url}
             onChange={(event) => setUrl(event.target.value.trim())}
             aria-invalid={hasErrors ? true : undefined}
@@ -156,8 +177,8 @@ export function ImageField({
           <p id={helpId} className="text-sm text-asphalt/70">
             {help ??
               (uploadEnabled
-                ? "Upload a JPEG, PNG, or WebP up to 10 MB, or paste an image address."
-                : "Paste an image address. Uploads are unavailable until BLOB_READ_WRITE_TOKEN is set.")}
+                ? "Upload a JPEG, PNG, WebP, GIF, or AVIF up to 10 MB, or use an image path from the site (/images/…)."
+                : "Use an image path from the site (/images/…). Uploads are unavailable until BLOB_READ_WRITE_TOKEN is set.")}
           </p>
           {hasErrors ? (
             <p id={errorId} className="text-sm font-semibold text-red-700">

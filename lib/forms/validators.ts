@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isSitePath } from "@/lib/urls";
+import { isAllowedImageUrl, isHttpsUrl, isSitePath } from "@/lib/urls";
 
 /**
  * Zod building blocks shared by the public forms (./schemas.ts) and the admin forms
@@ -86,6 +86,23 @@ export function requiredLink(label: string, max = 2000) {
 export function optionalLink(label: string, max = 2000) {
   return optionalLine(label, max).refine((value) => value === "" || isRenderableLink(value), {
     error: LINK_MESSAGE,
+  });
+}
+
+const IMAGE_MESSAGE =
+  "Upload the image, or use an image path from the site that starts with /images/.";
+
+/** Optional image address (an upload or a site image; see isAllowedImageUrl). "" means none. */
+export function optionalImageUrl(label: string, max = 2000) {
+  return optionalLine(label, max).refine((value) => value === "" || isAllowedImageUrl(value), {
+    error: IMAGE_MESSAGE,
+  });
+}
+
+/** An address shown in an iframe: https only. */
+export function requiredEmbedUrl(label: string, max = 2000) {
+  return requiredLine(label, max).refine(isHttpsUrl, {
+    error: "Enter the full https:// address from the embed code.",
   });
 }
 

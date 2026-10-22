@@ -134,10 +134,16 @@ async function handleSubmission<T extends Payload & { website: string }>(
     await clientIp(),
   );
   if (!turnstile.ok) {
-    console.warn(`[forms] ${spec.formType}: ${turnstile.error}`);
+    if (turnstile.misconfigured) {
+      console.error(`[forms] ${spec.formType}: ${turnstile.error}`);
+    } else {
+      console.warn(`[forms] ${spec.formType}: ${turnstile.error}`);
+    }
     return {
       status: "error",
-      formError: "We could not verify that you are a person. Please try again.",
+      formError: turnstile.misconfigured
+        ? `This form is not available right now. Please email us at ${settings.contact_email}.`
+        : "We could not verify that you are a person. Please try again.",
       values: pick(raw, fieldNames),
     };
   }

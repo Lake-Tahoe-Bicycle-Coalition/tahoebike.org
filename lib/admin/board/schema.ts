@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { checkbox, emptyToNull, optionalLink, optionalText, requiredLine } from "@/lib/forms/validators";
+import { checkbox, emptyToNull, optionalImageUrl, optionalText, requiredLine } from "@/lib/forms/validators";
 import type { BoardMember } from "@/lib/generated/prisma/client";
 import type { BoardMemberFormValues } from "./fields";
 
@@ -9,7 +9,7 @@ export const boardMemberSchema = z
     name: requiredLine("Name", 100),
     role: requiredLine("Role", 100),
     bio: optionalText("Bio", 5000),
-    photoUrl: optionalLink("Photo"),
+    photoUrl: optionalImageUrl("Photo"),
     isAdvisor: checkbox,
     isActive: checkbox,
   })

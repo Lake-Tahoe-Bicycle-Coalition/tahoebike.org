@@ -2,7 +2,12 @@
  * Cloudflare Turnstile server-side verification.
  * https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
  */
-export type TurnstileResult = { ok: true; skipped: boolean } | { ok: false; error: string };
+import { isProductionDeployment } from "@/lib/deployment";
+
+/** `misconfigured`: the failure is the site's setup, not the visitor's token. */
+export type TurnstileResult =
+  | { ok: true; skipped: boolean }
+  | { ok: false; error: string; misconfigured?: boolean };
 
 const SITEVERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
@@ -29,8 +34,10 @@ function warnIfHalfConfigured(secret: string | undefined): void {
 }
 
 /**
- * Verifies a widget token. When TURNSTILE_SECRET_KEY is absent (local development)
- * verification is skipped and reported as `{ ok: true, skipped: true }`.
+ * Verifies a widget token. When TURNSTILE_SECRET_KEY is absent, verification is skipped
+ * and reported as `{ ok: true, skipped: true }`, except on the production deployment,
+ * where every submission is refused: accepting unverified posts there would open the
+ * forms (and the notification inbox) to spam without anyone noticing.
  */
 export async function verifyTurnstile(
   token: string | null,
@@ -38,7 +45,16 @@ export async function verifyTurnstile(
 ): Promise<TurnstileResult> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
   warnIfHalfConfigured(secret);
-  if (!secret) return { ok: true, skipped: true };
+  if (!secret) {
+    if (isProductionDeployment()) {
+      return {
+        ok: false,
+        misconfigured: true,
+        error: "TURNSTILE_SECRET_KEY is not set on the production deployment; submission refused.",
+      };
+    }
+    return { ok: true, skipped: true };
+  }
   if (!token) return { ok: false, error: "Missing Turnstile token." };
 
   const body = new URLSearchParams({ secret, response: token });

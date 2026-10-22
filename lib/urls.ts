@@ -19,6 +19,32 @@ export function isSitePath(href: string): boolean {
 }
 
 /**
+ * Whether an admin-entered image address is allowed: an image shipped with the site
+ * (`/images/…`) or an https upload in our Vercel Blob store. Everything else (a page
+ * path such as `/join`, `mailto:`, plain `http:`, another site's image) renders as a
+ * broken image, a mixed-content warning, or a hotlink that shares visitors' IP
+ * addresses with a third party.
+ */
+export function isAllowedImageUrl(url: string): boolean {
+  if (isSitePath(url)) return url.startsWith("/images/") && !(url.split(/[?#]/)[0] ?? "").includes("..");
+  try {
+    const { protocol, hostname } = new URL(url);
+    return protocol === "https:" && hostname.endsWith(VERCEL_BLOB_HOST_SUFFIX);
+  } catch {
+    return false;
+  }
+}
+
+/** Whether an embed (iframe) address is allowed: https only. */
+export function isHttpsUrl(url: string): boolean {
+  try {
+    return new URL(url).protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Whether next/image may optimize this `src`: a path under /public, or an https URL
  * on the Vercel Blob host allowed in next.config.ts. Anything else (an image an
  * admin pasted from elsewhere) must be rendered `unoptimized`, or next/image throws.

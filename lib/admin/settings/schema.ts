@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { checkbox, email, optionalText, requiredLine, requiredLink, wholeNumber } from "@/lib/forms/validators";
+import { checkbox, email, optionalText, requiredEmbedUrl, requiredLine, requiredLink, wholeNumber } from "@/lib/forms/validators";
 import type { SettingKey, Settings } from "@/lib/settings";
 import { SETTING_FIELDS, type SettingField, settingFieldNames } from "./fields";
 
@@ -14,6 +14,8 @@ function validatorFor(field: SettingField): z.ZodType<string> {
       return email;
     case "url":
       return requiredLink(field.label);
+    case "embed":
+      return requiredEmbedUrl(field.label);
     case "number":
       return wholeNumber(field.label, field.max ?? 1_000_000, 0).transform(String);
     case "boolean":

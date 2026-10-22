@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { checkbox, emptyToNull, optionalLink, requiredLine, requiredLink, requiredText } from "@/lib/forms/validators";
+import { checkbox, emptyToNull, optionalImageUrl, requiredLine, requiredLink, requiredText } from "@/lib/forms/validators";
 import type { HomepageCard } from "@/lib/generated/prisma/client";
 import type { HomepageCardFormValues } from "./fields";
 
@@ -10,7 +10,7 @@ export const homepageCardSchema = z
     blurb: requiredText("Blurb", 600),
     ctaLabel: requiredLine("Button label", 60),
     ctaUrl: requiredLink("Button link"),
-    imageUrl: optionalLink("Image"),
+    imageUrl: optionalImageUrl("Image"),
     isActive: checkbox,
   })
   .transform((data) => ({ ...data, imageUrl: emptyToNull(data.imageUrl) }));

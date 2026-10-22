@@ -17,7 +17,8 @@ export const SETTING_GROUPS = [
 
 export type SettingGroup = (typeof SETTING_GROUPS)[number];
 
-export type SettingFieldKind = "text" | "email" | "url" | "number" | "boolean" | "textarea";
+/** "embed": an address shown in an iframe, so https only (a "url" may also be a site path). */
+export type SettingFieldKind = "text" | "email" | "url" | "embed" | "number" | "boolean" | "textarea";
 
 export type SettingField = {
   label: string;
@@ -156,7 +157,7 @@ export const SETTING_FIELDS = {
   point_embed_url: {
     label: "POINT widget address",
     group: "Newsletter and volunteers",
-    kind: "url",
+    kind: "embed",
     help: "The embed address of the POINT shift widget shown on the Volunteer page. Copy it from POINT’s embed code.",
   },
 

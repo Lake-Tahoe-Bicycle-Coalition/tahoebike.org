@@ -133,7 +133,7 @@ function SettingControl({
           name={name}
           required
           type={field.kind === "email" ? "email" : "text"}
-          inputMode={field.kind === "url" ? "url" : field.kind === "number" ? "numeric" : undefined}
+          inputMode={field.kind === "url" || field.kind === "embed" ? "url" : field.kind === "number" ? "numeric" : undefined}
           maxLength={field.kind === "number" ? 12 : field.kind === "text" ? 500 : 2000}
           defaultValue={value}
           errors={errors}
