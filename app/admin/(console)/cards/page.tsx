@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ActionButton } from "@/components/admin/action-button";
 import { ConfirmForm } from "@/components/admin/confirm-form";
 import { Notice } from "@/components/admin/notice";
 import { PageHeader } from "@/components/admin/page-header";
@@ -86,36 +87,34 @@ export default async function HomepageCardsPage({ searchParams }: PageProps<"/ad
                       <form action={moveHomepageCard}>
                         <input type="hidden" name="id" value={card.id} />
                         <input type="hidden" name="direction" value="up" />
-                        <button
-                          type="submit"
+                        <ActionButton
                           disabled={index === 0}
-                          className="disabled:opacity-40"
                           aria-label={`Move “${card.title}” up`}
+                          pendingLabel="Moving…"
                         >
                           Move up
-                        </button>
+                        </ActionButton>
                       </form>
                       <form action={moveHomepageCard}>
                         <input type="hidden" name="id" value={card.id} />
                         <input type="hidden" name="direction" value="down" />
-                        <button
-                          type="submit"
+                        <ActionButton
                           disabled={index === cards.length - 1}
-                          className="disabled:opacity-40"
                           aria-label={`Move “${card.title}” down`}
+                          pendingLabel="Moving…"
                         >
                           Move down
-                        </button>
+                        </ActionButton>
                       </form>
                       <form action={toggleHomepageCardActive}>
                         <input type="hidden" name="id" value={card.id} />
-                        <button type="submit">{card.isActive ? "Deactivate" : "Activate"}</button>
+                        <ActionButton pendingLabel="Saving…">{card.isActive ? "Deactivate" : "Activate"}</ActionButton>
                       </form>
                       <ConfirmForm action={deleteHomepageCard} message={`Delete “${card.title}”? This cannot be undone.`}>
                         <input type="hidden" name="id" value={card.id} />
-                        <button type="submit" className="danger">
+                        <ActionButton className="danger" pendingLabel="Deleting…">
                           Delete
-                        </button>
+                        </ActionButton>
                       </ConfirmForm>
                     </div>
                   </td>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ActionButton } from "@/components/admin/action-button";
 import { AnnouncementForm } from "@/components/admin/announcement-form";
 import { ConfirmForm } from "@/components/admin/confirm-form";
 import { PageHeader } from "@/components/admin/page-header";
@@ -37,9 +38,9 @@ export default async function EditAnnouncementPage({ params }: PageProps<"/admin
         </p>
         <ConfirmForm action={deleteAnnouncement} message="Delete this announcement? This cannot be undone." className="mt-3">
           <input type="hidden" name="id" value={announcement.id} />
-          <button type="submit" className="btn btn-secondary border-red-700 text-red-700 hover:bg-red-700 hover:text-white">
+          <ActionButton className="btn btn-secondary border-red-700 text-red-700 hover:bg-red-700 hover:text-white" pendingLabel="Deleting…">
             Delete announcement
-          </button>
+          </ActionButton>
         </ConfirmForm>
       </section>
     </div>

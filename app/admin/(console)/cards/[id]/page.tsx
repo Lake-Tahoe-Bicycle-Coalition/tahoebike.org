@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ActionButton } from "@/components/admin/action-button";
 import { ConfirmForm } from "@/components/admin/confirm-form";
 import { HomepageCardForm } from "@/components/admin/homepage-card-form";
 import { PageHeader } from "@/components/admin/page-header";
@@ -45,9 +46,9 @@ export default async function EditHomepageCardPage({ params }: PageProps<"/admin
           className="mt-3"
         >
           <input type="hidden" name="id" value={card.id} />
-          <button type="submit" className="btn btn-secondary border-red-700 text-red-700 hover:bg-red-700 hover:text-white">
+          <ActionButton className="btn btn-secondary border-red-700 text-red-700 hover:bg-red-700 hover:text-white" pendingLabel="Deleting…">
             Delete card
-          </button>
+          </ActionButton>
         </ConfirmForm>
       </section>
     </div>

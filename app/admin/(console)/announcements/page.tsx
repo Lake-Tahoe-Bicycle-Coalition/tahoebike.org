@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ActionButton } from "@/components/admin/action-button";
 import { ConfirmForm } from "@/components/admin/confirm-form";
 import { Notice } from "@/components/admin/notice";
 import { PageHeader } from "@/components/admin/page-header";
@@ -83,9 +84,9 @@ export default async function AnnouncementsPage({ searchParams }: PageProps<"/ad
                           message={`Delete “${preview(announcement.message)}”? This cannot be undone.`}
                         >
                           <input type="hidden" name="id" value={announcement.id} />
-                          <button type="submit" className="danger">
+                          <ActionButton className="danger" pendingLabel="Deleting…">
                             Delete
-                          </button>
+                          </ActionButton>
                         </ConfirmForm>
                       </div>
                     </td>

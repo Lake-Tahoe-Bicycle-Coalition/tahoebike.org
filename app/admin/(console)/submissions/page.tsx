@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ActionButton } from "@/components/admin/action-button";
 import { ConfirmForm } from "@/components/admin/confirm-form";
 import { Notice } from "@/components/admin/notice";
 import { PageHeader } from "@/components/admin/page-header";
@@ -76,9 +77,9 @@ export default async function SubmissionsPage({ searchParams }: PageProps<"/admi
             <ConfirmForm action={markAllRead} message={markAllMessage}>
               <input type="hidden" name="type" value={filters.type} />
               <FilterFields filters={view} />
-              <button type="submit" className="btn btn-secondary">
+              <ActionButton className="btn btn-secondary" pendingLabel="Marking…">
                 Mark all as read
-              </button>
+              </ActionButton>
             </ConfirmForm>
           ) : null
         }
@@ -153,7 +154,7 @@ export default async function SubmissionsPage({ searchParams }: PageProps<"/admi
                             <input type="hidden" name="id" value={row.id} />
                             <input type="hidden" name="status" value={next.status} />
                             <FilterFields filters={view} />
-                            <button type="submit">{next.label}</button>
+                            <ActionButton pendingLabel="Saving…">{next.label}</ActionButton>
                           </form>
                         </div>
                       </td>

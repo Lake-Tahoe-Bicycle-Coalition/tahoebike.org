@@ -7,21 +7,34 @@ import { emptyEventFormValues, type EventFormValues } from "@/lib/admin/events/f
 import { eventToFormValues } from "@/lib/admin/events/schema";
 import { prisma } from "@/lib/db";
 
-/** `?from=<id>` prefills the form from an existing event (monthly fix-ups repeat). */
+/**
+ * `?from=<id>` prefills the form from an existing event (monthly fix-ups repeat). The copy
+ * keeps the times but not the dates: a duplicate saved with the old dates would already be
+ * over and never appear on the site.
+ */
 export default async function NewEventPage({ searchParams }: PageProps<"/admin/events/new">) {
   await requireAdmin();
   const { from } = await searchParams;
 
   let defaults: EventFormValues = emptyEventFormValues;
+  let copiedFrom: string | null = null;
   if (typeof from === "string" && from) {
     const source = await prisma.event.findUnique({ where: { id: from } });
-    if (source) defaults = eventToFormValues(source);
+    if (source) {
+      defaults = { ...eventToFormValues(source), startDate: "", endDate: "" };
+      copiedFrom = source.title;
+    }
   }
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="New event"
+        description={
+          copiedFrom
+            ? `A copy of “${copiedFrom}”. Pick the new dates; the times, place and details were copied.`
+            : undefined
+        }
         action={
           <Link href="/admin/events" className="btn btn-secondary">
             Cancel

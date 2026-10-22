@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ActionButton } from "@/components/admin/action-button";
 import { BoardMemberForm } from "@/components/admin/board-member-form";
 import { ConfirmForm } from "@/components/admin/confirm-form";
 import { PageHeader } from "@/components/admin/page-header";
@@ -45,9 +46,9 @@ export default async function EditBoardMemberPage({ params }: PageProps<"/admin/
           className="mt-3"
         >
           <input type="hidden" name="id" value={member.id} />
-          <button type="submit" className="btn btn-secondary border-red-700 text-red-700 hover:bg-red-700 hover:text-white">
+          <ActionButton className="btn btn-secondary border-red-700 text-red-700 hover:bg-red-700 hover:text-white" pendingLabel="Deleting…">
             Delete board member
-          </button>
+          </ActionButton>
         </ConfirmForm>
       </section>
     </div>

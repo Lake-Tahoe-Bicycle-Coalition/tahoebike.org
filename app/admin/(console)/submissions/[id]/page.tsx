@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ActionButton } from "@/components/admin/action-button";
 import { ConfirmForm } from "@/components/admin/confirm-form";
 import { Notice } from "@/components/admin/notice";
 import { PageHeader } from "@/components/admin/page-header";
@@ -97,9 +98,9 @@ export default async function SubmissionPage({ params, searchParams }: PageProps
               <input type="hidden" name="id" value={row.id} />
               <input type="hidden" name="status" value={status} />
               <input type="hidden" name="view" value="detail" />
-              <button type="submit" className="btn btn-secondary">
+              <ActionButton className="btn btn-secondary" pendingLabel="Saving…">
                 {statusButtonLabels[status]}
-              </button>
+              </ActionButton>
             </form>
           ))}
       </div>
@@ -119,9 +120,9 @@ export default async function SubmissionPage({ params, searchParams }: PageProps
           className="mt-3"
         >
           <input type="hidden" name="id" value={row.id} />
-          <button type="submit" className="btn btn-secondary border-red-700 text-red-700 hover:bg-red-700 hover:text-white">
+          <ActionButton className="btn btn-secondary border-red-700 text-red-700 hover:bg-red-700 hover:text-white" pendingLabel="Deleting…">
             Delete submission
-          </button>
+          </ActionButton>
         </ConfirmForm>
       </section>
     </div>

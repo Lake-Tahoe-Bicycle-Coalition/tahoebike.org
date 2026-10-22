@@ -17,6 +17,20 @@ export async function createEvent(_prev: FormState, formData: FormData): Promise
   const parsed = parseAdminForm(formData, eventSchema, eventFieldNames);
   if (!parsed.ok) return parsed.state;
 
+  // Ended events are hidden from the site, so a new one that is already over would vanish on
+  // save (the usual cause: a duplicated event with last month's dates). Editing an old event
+  // is still allowed.
+  if (parsed.data.endsAt <= new Date()) {
+    return {
+      status: "error",
+      formError: "Please correct the highlighted fields.",
+      fieldErrors: {
+        endDate: ["This event has already ended, so it would never appear on the site. Check the dates."],
+      },
+      values: parsed.values,
+    };
+  }
+
   try {
     await prisma.event.create({ data: parsed.data });
   } catch (error) {

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ActionButton } from "@/components/admin/action-button";
 import { ConfirmForm } from "@/components/admin/confirm-form";
 import { Notice } from "@/components/admin/notice";
 import { PageHeader } from "@/components/admin/page-header";
@@ -90,39 +91,37 @@ export default async function BoardPage({ searchParams }: PageProps<"/admin/boar
                       <form action={moveBoardMember}>
                         <input type="hidden" name="id" value={member.id} />
                         <input type="hidden" name="direction" value="up" />
-                        <button
-                          type="submit"
+                        <ActionButton
                           disabled={index === 0}
-                          className="disabled:opacity-40"
                           aria-label={`Move ${member.name} up`}
+                          pendingLabel="Moving…"
                         >
                           Move up
-                        </button>
+                        </ActionButton>
                       </form>
                       <form action={moveBoardMember}>
                         <input type="hidden" name="id" value={member.id} />
                         <input type="hidden" name="direction" value="down" />
-                        <button
-                          type="submit"
+                        <ActionButton
                           disabled={index === members.length - 1}
-                          className="disabled:opacity-40"
                           aria-label={`Move ${member.name} down`}
+                          pendingLabel="Moving…"
                         >
                           Move down
-                        </button>
+                        </ActionButton>
                       </form>
                       <form action={toggleBoardMemberActive}>
                         <input type="hidden" name="id" value={member.id} />
-                        <button type="submit">{member.isActive ? "Deactivate" : "Activate"}</button>
+                        <ActionButton pendingLabel="Saving…">{member.isActive ? "Deactivate" : "Activate"}</ActionButton>
                       </form>
                       <ConfirmForm
                         action={deleteBoardMember}
                         message={`Delete “${member.name}”? This cannot be undone.`}
                       >
                         <input type="hidden" name="id" value={member.id} />
-                        <button type="submit" className="danger">
+                        <ActionButton className="danger" pendingLabel="Deleting…">
                           Delete
-                        </button>
+                        </ActionButton>
                       </ConfirmForm>
                     </div>
                   </td>

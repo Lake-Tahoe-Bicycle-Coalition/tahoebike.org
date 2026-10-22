@@ -1,3 +1,4 @@
+import { ActionButton } from "@/components/admin/action-button";
 import { AdminUserForm } from "@/components/admin/admin-user-form";
 import { ConfirmForm } from "@/components/admin/confirm-form";
 import { Notice } from "@/components/admin/notice";
@@ -71,9 +72,9 @@ export default async function AdminUsersPage({ searchParams }: PageProps<"/admin
                             message={`Remove ${admin.email}? They will not be able to sign in to the admin console.`}
                           >
                             <input type="hidden" name="id" value={admin.id} />
-                            <button type="submit" className="danger">
+                            <ActionButton className="danger" pendingLabel="Removing…">
                               Remove
-                            </button>
+                            </ActionButton>
                           </ConfirmForm>
                         )}
                       </div>
