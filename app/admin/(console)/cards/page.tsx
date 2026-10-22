@@ -72,7 +72,7 @@ export default async function HomepageCardsPage({ searchParams }: PageProps<"/ad
                   <td className="font-semibold">
                     <Link href={`/admin/cards/${card.id}`}>{card.title}</Link>
                   </td>
-                  <td>
+                  <td data-label="Button">
                     {card.ctaLabel} <span aria-hidden="true">→</span>{" "}
                     <span className="break-all text-asphalt/70">{card.ctaUrl}</span>
                   </td>

@@ -167,6 +167,40 @@
   .badge-warn {
     @apply bg-safety text-asphalt;
   }
+
+  /*
+    Phones: each admin table row becomes a stacked card, so every row's actions are on
+    screen instead of behind a sideways scroll. Cells whose value needs its column name
+    (dates, the card button) carry data-label, shown as a small caption; the header row is
+    kept for screen readers only.
+  */
+  @media (width < 40rem) {
+    .admin-table thead {
+      @apply sr-only;
+    }
+    .admin-table,
+    .admin-table tbody,
+    .admin-table tr,
+    .admin-table td {
+      @apply block w-full;
+    }
+    .admin-table tr {
+      @apply mb-3 rounded-lg border border-asphalt/15 p-3;
+    }
+    .admin-table tbody tr:hover {
+      @apply bg-transparent;
+    }
+    .admin-table td {
+      @apply border-0 px-0 py-1;
+    }
+    .admin-table td[data-label]::before {
+      content: attr(data-label);
+      @apply mr-2 text-xs font-bold uppercase tracking-wider text-asphalt/60;
+    }
+    .admin-actions {
+      @apply gap-x-5 gap-y-2 whitespace-normal pt-2;
+    }
+  }
 }
 
 /*

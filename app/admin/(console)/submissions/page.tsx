@@ -139,7 +139,7 @@ export default async function SubmissionsPage({ searchParams }: PageProps<"/admi
                   const next = rowAction[row.status];
                   return (
                     <tr key={row.id} className={row.status === "NEW" ? "font-semibold" : undefined}>
-                      <td className="whitespace-nowrap">{formatAdminDateTime(row.submittedAt)}</td>
+                      <td data-label="Received" className="whitespace-nowrap">{formatAdminDateTime(row.submittedAt)}</td>
                       <td>{formTypeLabels[row.formType]}</td>
                       <td>
                         <Link href={`/admin/submissions/${row.id}`}>{summarize(row.payload, row.formType)}</Link>

@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { ImageField } from "@/components/admin/image-field";
 import { MarkdownField } from "@/components/admin/markdown-field";
+import { UnsavedChangesGuard } from "@/components/admin/unsaved-changes-guard";
 import { CheckboxField, FormAlert, RequiredNote, SubmitButton, TextField } from "@/components/forms/fields";
 import type { BoardMemberFormValues } from "@/lib/admin/board/fields";
 import { initialFormState, type FormState } from "@/lib/forms/state";
@@ -32,6 +33,7 @@ export function BoardMemberForm({
 
   return (
     <form action={formAction} className="space-y-6">
+      <UnsavedChangesGuard />
       <RequiredNote />
       <FormAlert message={state.formError} />
 

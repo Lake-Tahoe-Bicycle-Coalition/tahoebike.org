@@ -59,7 +59,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps<"/admin
                       ) : null}
                     </td>
                     <td>{admin.name ?? "—"}</td>
-                    <td className="whitespace-nowrap">{formatAdminDateTime(admin.createdAt)}</td>
+                    <td data-label="Added" className="whitespace-nowrap">{formatAdminDateTime(admin.createdAt)}</td>
                     <td>
                       <div className="admin-actions">
                         {isMe || admins.length <= 1 ? (

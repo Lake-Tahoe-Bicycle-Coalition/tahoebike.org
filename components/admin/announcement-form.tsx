@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { DateTimeField } from "@/components/admin/date-time-field";
+import { UnsavedChangesGuard } from "@/components/admin/unsaved-changes-guard";
 import { FormAlert, RequiredNote, SubmitButton, TextareaField, TextField } from "@/components/forms/fields";
 import type { AnnouncementFormValues } from "@/lib/admin/announcements/fields";
 import { initialFormState, type FormState } from "@/lib/forms/state";
@@ -29,6 +30,7 @@ export function AnnouncementForm({
 
   return (
     <form action={formAction} className="space-y-6">
+      <UnsavedChangesGuard />
       <RequiredNote />
       <FormAlert message={state.formError} />
 

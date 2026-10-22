@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { ImageField } from "@/components/admin/image-field";
+import { UnsavedChangesGuard } from "@/components/admin/unsaved-changes-guard";
 import {
   CheckboxField,
   FormAlert,
@@ -38,6 +39,7 @@ export function HomepageCardForm({
 
   return (
     <form action={formAction} className="space-y-6">
+      <UnsavedChangesGuard />
       <RequiredNote />
       <FormAlert message={state.formError} />
 

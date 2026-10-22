@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { DateTimeField } from "@/components/admin/date-time-field";
 import { MarkdownField } from "@/components/admin/markdown-field";
+import { UnsavedChangesGuard } from "@/components/admin/unsaved-changes-guard";
 import { FormAlert, RequiredNote, SelectField, SubmitButton, TextField } from "@/components/forms/fields";
 import type { EventFormValues } from "@/lib/admin/events/fields";
 import { programOptions } from "@/lib/admin/events/fields";
@@ -28,6 +29,7 @@ export function EventForm({
 
   return (
     <form action={formAction} className="space-y-6">
+      <UnsavedChangesGuard />
       <RequiredNote />
       <FormAlert message={state.formError} />
 

@@ -12,6 +12,7 @@ import {
 import { SETTING_FIELDS, type SettingField, settingGroups } from "@/lib/admin/settings/fields";
 import { initialFormState, type FormState } from "@/lib/forms/state";
 import type { SettingKey } from "@/lib/settings";
+import { UnsavedChangesGuard } from "@/components/admin/unsaved-changes-guard";
 
 type SettingValues = Record<SettingKey, string>;
 
@@ -55,6 +56,7 @@ export function SettingsForm({
 
   return (
     <form action={formAction} className="space-y-10">
+      <UnsavedChangesGuard />
       <div className="sticky top-0 z-10 -mx-4 flex flex-wrap items-center justify-between gap-4 border-b border-asphalt/15 bg-white px-4 py-3">
         <RequiredNote />
         <SubmitButton pending={pending} label="Save settings" pendingLabel="Saving…" />

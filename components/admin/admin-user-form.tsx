@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { UnsavedChangesGuard } from "@/components/admin/unsaved-changes-guard";
 import { FormAlert, RequiredNote, SubmitButton, TextField } from "@/components/forms/fields";
 import { emptyAdminUserFormValues, type AdminUserFormValues } from "@/lib/admin/users/fields";
 import { initialFormState, type FormState } from "@/lib/forms/state";
@@ -17,6 +18,7 @@ export function AdminUserForm({ action }: { action: (prev: FormState, formData: 
 
   return (
     <form action={formAction} className="space-y-5">
+      <UnsavedChangesGuard />
       <RequiredNote />
       <FormAlert message={state.formError} />
 

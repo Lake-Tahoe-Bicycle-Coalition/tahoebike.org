@@ -73,8 +73,8 @@ export default async function EventsPage({ searchParams }: PageProps<"/admin/eve
                     <Link href={`/admin/events/${event.id}`}>{event.title}</Link>
                   </td>
                   <td>{programLabels[event.program]}</td>
-                  <td className="whitespace-nowrap">{formatAdminDateTime(event.startsAt)}</td>
-                  <td className="whitespace-nowrap">{formatAdminDateTime(event.endsAt)}</td>
+                  <td data-label="Starts" className="whitespace-nowrap">{formatAdminDateTime(event.startsAt)}</td>
+                  <td data-label="Ends" className="whitespace-nowrap">{formatAdminDateTime(event.endsAt)}</td>
                   <td>{event.locationName ?? event.address ?? "—"}</td>
                   <td>
                     <div className="admin-actions">

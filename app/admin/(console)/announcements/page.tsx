@@ -72,9 +72,9 @@ export default async function AnnouncementsPage({ searchParams }: PageProps<"/ad
                     <td className="font-semibold">
                       <Link href={`/admin/announcements/${announcement.id}`}>{preview(announcement.message)}</Link>
                     </td>
-                    <td className="max-w-xs break-all">{announcement.linkUrl ?? "—"}</td>
-                    <td className="whitespace-nowrap">{formatAdminDateTime(announcement.startsAt)}</td>
-                    <td className="whitespace-nowrap">{formatAdminDateTime(announcement.endsAt)}</td>
+                    <td data-label="Link" className="max-w-xs break-all">{announcement.linkUrl ?? "—"}</td>
+                    <td data-label="Starts" className="whitespace-nowrap">{formatAdminDateTime(announcement.startsAt)}</td>
+                    <td data-label="Ends" className="whitespace-nowrap">{formatAdminDateTime(announcement.endsAt)}</td>
                     <td>
                       <span className={statusClass[status]}>{announcementStatusLabels[status]}</span>
                       {status === "hidden" ? (
