@@ -90,7 +90,7 @@ export function SiteHeader() {
                 </li>
               ) : item.emphasis ? (
                 <li key={item.label} className="ml-2">
-                  <NavAnchor link={item} className="btn btn-primary px-4 py-1.5" />
+                  <NavLink link={item} className="btn btn-primary px-4 py-1.5" />
                 </li>
               ) : (
                 <li key={item.label}>
