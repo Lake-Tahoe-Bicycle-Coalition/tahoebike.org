@@ -4,8 +4,7 @@ import { HeroCards } from "@/components/hero-cards";
 import { NewsletterSignupForm } from "@/components/newsletter-signup-form";
 import { PhotoGallery, type Photo } from "@/components/photo-gallery";
 import { SmartLink } from "@/components/smart-link";
-import { prisma } from "@/lib/db";
-import type { HomepageCard } from "@/lib/generated/prisma/client";
+import { getHomepageCards } from "@/lib/content";
 import { getSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
@@ -50,18 +49,6 @@ const galleryPhotos: Photo[] = [
     alt: "Rows of bicycles parked inside the fenced bike valet at an event",
   },
 ];
-
-async function getHomepageCards(): Promise<HomepageCard[]> {
-  try {
-    return await prisma.homepageCard.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: "asc" },
-    });
-  } catch (error) {
-    console.error("Could not load homepage cards.", error);
-    return [];
-  }
-}
 
 export default async function HomePage() {
   const [settings, cards] = await Promise.all([getSettings(), getHomepageCards()]);

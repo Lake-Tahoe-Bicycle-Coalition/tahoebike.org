@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { BoardRoster } from "@/components/board-roster";
-import { prisma } from "@/lib/db";
+import { getBoard } from "@/lib/content";
 import { Markdown } from "@/lib/markdown";
-import type { BoardMember } from "@/lib/generated/prisma/client";
 import { pageMetadata } from "@/lib/site-metadata";
 
 export const metadata = pageMetadata({
@@ -15,22 +14,6 @@ export const metadata = pageMetadata({
     alt: "A child pushes an adult riding a tiny kids' bike along the Lake Tahoe shore",
   },
 });
-
-async function getBoard(): Promise<{ board: BoardMember[]; advisors: BoardMember[] }> {
-  try {
-    const members = await prisma.boardMember.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: "asc" },
-    });
-    return {
-      board: members.filter((member) => !member.isAdvisor),
-      advisors: members.filter((member) => member.isAdvisor),
-    };
-  } catch (error) {
-    console.error("Could not load board members.", error);
-    return { board: [], advisors: [] };
-  }
-}
 
 export default async function AboutPage() {
   const { board, advisors } = await getBoard();

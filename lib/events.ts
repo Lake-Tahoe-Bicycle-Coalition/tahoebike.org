@@ -1,21 +1,9 @@
-import { prisma } from "@/lib/db";
-import type { Event, Program } from "@/lib/generated/prisma/client";
+import type { Event } from "@/lib/generated/prisma/client";
 import { SITE_TIME_ZONE } from "@/lib/time";
 
 export type { Event };
 
-/** Events that have not ended yet, soonest first. Optionally limited to one program. */
-export async function getUpcomingEvents(program?: Program): Promise<Event[]> {
-  try {
-    return await prisma.event.findMany({
-      where: { endsAt: { gte: new Date() }, ...(program ? { program } : {}) },
-      orderBy: { startsAt: "asc" },
-    });
-  } catch (error) {
-    console.error("Could not load events.", error);
-    return [];
-  }
-}
+// The query for upcoming events lives with the other public reads: getUpcomingEvents in lib/content.ts.
 
 /** Event times are entered and displayed in Pacific time, whatever the server's zone. */
 const TIME_ZONE = SITE_TIME_ZONE;

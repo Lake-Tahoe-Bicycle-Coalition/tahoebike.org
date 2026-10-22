@@ -4,12 +4,13 @@ import { SettingsForm } from "@/components/admin/settings-form";
 import { requireAdmin } from "@/lib/admin/auth";
 import { resetSetting, saveSettings } from "@/lib/admin/settings/actions";
 import { settingsToFormValues } from "@/lib/admin/settings/schema";
-import { getSettings, SETTING_DEFAULTS } from "@/lib/settings";
+import { loadSettings, SETTING_DEFAULTS } from "@/lib/settings";
 
 export default async function SettingsPage({ searchParams }: PageProps<"/admin/settings">) {
   await requireAdmin();
   const { notice } = await searchParams;
-  const settings = await getSettings();
+  // Strict read: never show code defaults as if they were the saved values (see loadSettings).
+  const settings = await loadSettings();
 
   return (
     <div className="space-y-6">
