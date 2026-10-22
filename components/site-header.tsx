@@ -1,18 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import { NavLink } from "@/components/nav-link";
 import { NavMenus } from "@/components/nav-menus";
-import { SmartLink } from "@/components/smart-link";
-import { primaryNav, type NavLink } from "@/lib/navigation";
+import { primaryNav } from "@/lib/navigation";
 
-function NavAnchor({ link, className }: { link: NavLink; className?: string }) {
-  return (
-    <SmartLink href={link.href} className={className}>
-      {link.label}
-    </SmartLink>
-  );
-}
-
-const linkClass = "block rounded px-3 py-2 text-asphalt no-underline hover:bg-safety/40";
+/** The link to the page being viewed gets a solid yellow background (NavLink sets aria-current). */
+const linkClass =
+  "block rounded px-3 py-2 text-asphalt no-underline hover:bg-safety/40 aria-[current=page]:bg-safety";
+/** A desktop menu heading whose dropdown holds the current page is marked the same way. */
+const currentSectionClass = "group-has-[[aria-current=page]]:bg-safety";
 
 export function SiteHeader() {
   return (
@@ -54,12 +50,12 @@ export function SiteHeader() {
             <ul className="mt-2 space-y-1 border-t border-asphalt/10 pt-2">
               {primaryNav.map((item) => (
                 <li key={item.label}>
-                  <NavAnchor link={item} className={`${linkClass} font-bold`} />
+                  <NavLink link={item} className={`${linkClass} font-bold`} />
                   {item.children ? (
                     <ul className="ml-4">
                       {item.children.map((child) => (
                         <li key={child.label}>
-                          <NavAnchor link={child} className={linkClass} />
+                          <NavLink link={child} className={linkClass} />
                         </li>
                       ))}
                     </ul>
@@ -74,19 +70,19 @@ export function SiteHeader() {
               item.children ? (
                 <li key={item.label} className="relative">
                   <details className="group">
-                    <summary className={`${linkClass} cursor-pointer list-none font-bold`}>
+                    <summary className={`${linkClass} ${currentSectionClass} cursor-pointer list-none font-bold`}>
                       {item.label}
                       <span aria-hidden="true"> ▾</span>
                     </summary>
                     <ul className="absolute right-0 z-20 mt-1 min-w-56 rounded border border-asphalt/10 bg-white p-2 shadow-lg">
                       {item.indexLabel ? (
                         <li>
-                          <NavAnchor link={{ label: item.indexLabel, href: item.href }} className={linkClass} />
+                          <NavLink link={{ label: item.indexLabel, href: item.href }} className={linkClass} />
                         </li>
                       ) : null}
                       {item.children.map((child) => (
                         <li key={child.label}>
-                          <NavAnchor link={child} className={linkClass} />
+                          <NavLink link={child} className={linkClass} />
                         </li>
                       ))}
                     </ul>
@@ -98,7 +94,7 @@ export function SiteHeader() {
                 </li>
               ) : (
                 <li key={item.label}>
-                  <NavAnchor link={item} className={`${linkClass} font-bold`} />
+                  <NavLink link={item} className={`${linkClass} font-bold`} />
                 </li>
               ),
             )}

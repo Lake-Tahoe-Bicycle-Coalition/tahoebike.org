@@ -15,7 +15,7 @@ export function HeroCards({ cards }: { cards: Card[] }) {
   return (
     <section aria-label="Highlights">
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(15rem,1fr))]">
-        {cards.map((card) => (
+        {cards.map((card, index) => (
           <li
             key={card.id}
             className="flex flex-col overflow-hidden rounded-lg border border-asphalt/10 bg-white"
@@ -28,6 +28,10 @@ export function HeroCards({ cards }: { cards: Card[] }) {
                   fill
                   sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                   className="object-cover"
+                  // The cards sit at the top of the home page: all four are above the fold
+                  // on desktop, the first on a phone. Lazy loading left an empty box there.
+                  loading="eager"
+                  fetchPriority={index === 0 ? "high" : "auto"}
                   unoptimized={!isOptimizableImageUrl(card.imageUrl)}
                 />
               </div>

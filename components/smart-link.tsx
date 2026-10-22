@@ -5,6 +5,8 @@ import { isExternalUrl, isSitePath } from "@/lib/urls";
 type Props = {
   href: string;
   className?: string;
+  /** Set on the link to the page being viewed (site paths only). */
+  ariaCurrent?: "page";
   children: ReactNode;
 };
 
@@ -19,7 +21,7 @@ type Props = {
  *
  * Static links whose kind is known can keep using `<Link>` or `<a>` directly.
  */
-export function SmartLink({ href, className, children }: Props) {
+export function SmartLink({ href, className, ariaCurrent, children }: Props) {
   if (isExternalUrl(href)) {
     return (
       <a href={href} className={className} target="_blank" rel="noopener">
@@ -30,7 +32,7 @@ export function SmartLink({ href, className, children }: Props) {
   }
   if (isSitePath(href)) {
     return (
-      <Link href={href} className={className}>
+      <Link href={href} className={className} aria-current={ariaCurrent}>
         {children}
       </Link>
     );

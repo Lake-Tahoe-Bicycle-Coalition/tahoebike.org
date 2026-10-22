@@ -33,7 +33,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const settings = await getSettings();
 
   return (
-    <html lang="en" className={`${libreFranklin.variable} h-full`}>
+    // data-scroll-behavior: Next 16 no longer disables smooth scrolling during route changes
+    // on its own; this attribute restores that, so only in-page anchor links glide.
+    <html lang="en" data-scroll-behavior="smooth" className={`${libreFranklin.variable} h-full`}>
       <body className="flex min-h-full flex-col">
         <a href="#main" className="skip-link">
           Skip to content

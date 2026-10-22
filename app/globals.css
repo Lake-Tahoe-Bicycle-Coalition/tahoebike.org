@@ -31,8 +31,12 @@
 }
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
+  /* In-page anchor links only (see data-scroll-behavior in app/layout.tsx), and never
+     for visitors who ask for reduced motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   body {

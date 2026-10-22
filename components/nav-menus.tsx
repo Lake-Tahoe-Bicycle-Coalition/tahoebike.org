@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, type ReactNode } from "react";
 
 /**
@@ -8,11 +9,21 @@ import { useEffect, useRef, type ReactNode } from "react";
  * Native `<details>` only toggles from its own `<summary>`, so without this an
  * open dropdown stays open until the visitor clicks the same heading again.
  * With JavaScript, open menus also close on a click or tap outside them, on
- * Escape, when focus leaves them, and when a sibling menu is opened. Without
- * JavaScript the menus still work as plain `<details>`.
+ * Escape, when focus leaves them, when a sibling menu is opened, and after a
+ * client-side navigation (otherwise the menu stays open over the new page; on a
+ * phone it covers the whole screen). Without JavaScript the menus still work as
+ * plain `<details>`, and every link is a full page load that resets them anyway.
  */
 export function NavMenus({ className, children }: { className?: string; children: ReactNode }) {
   const ref = useRef<HTMLElement>(null);
+  const pathname = usePathname();
+
+  // Close every open menu once the new page is showing.
+  useEffect(() => {
+    for (const menu of ref.current?.querySelectorAll<HTMLDetailsElement>("details[open]") ?? []) {
+      menu.open = false;
+    }
+  }, [pathname]);
 
   useEffect(() => {
     const nav = ref.current;
@@ -50,6 +61,12 @@ export function NavMenus({ className, children }: { className?: string; children
       closeAll(inside);
     };
 
+    // Following a link closes the menus even when the path does not change (the link to
+    // the current page, or an external link that opens in a new tab).
+    const onClick = (event: MouseEvent) => {
+      if (event.target instanceof Element && event.target.closest("a[href]")) closeAll();
+    };
+
     // Opening one menu closes the others (fires after the click has toggled it).
     const onToggle = (event: Event) => {
       const menu = event.target;
@@ -60,7 +77,9 @@ export function NavMenus({ className, children }: { className?: string; children
     document.addEventListener("keydown", onKeyDown);
     document.addEventListener("focusin", onFocusIn);
     nav.addEventListener("toggle", onToggle, true);
+    nav.addEventListener("click", onClick);
     return () => {
+      nav.removeEventListener("click", onClick);
       document.removeEventListener("pointerdown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
       document.removeEventListener("focusin", onFocusIn);
