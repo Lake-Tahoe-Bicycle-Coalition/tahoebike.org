@@ -9,7 +9,7 @@ export function EventList({ events }: { events: Event[] }) {
     return (
       <p>
         No upcoming events are scheduled. Check back soon or{" "}
-        <Link href="/join">subscribe to our newsletter</Link> for announcements.
+        <Link href="/newsletter">subscribe to our newsletter</Link> for announcements.
       </p>
     );
   }

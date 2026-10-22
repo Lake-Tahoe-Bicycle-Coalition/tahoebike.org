@@ -56,7 +56,7 @@ export default async function BikeValetPage() {
         </div>
         <Image
           src="/images/2022/05/Bike-Valet-Main-Image.png"
-          alt="Bike Valet: bicycles parked in a fenced valet corral"
+          alt="Lots and lots of bike parking"
           width={300}
           height={250}
           priority

@@ -575,7 +575,7 @@ async function main(): Promise<void> {
   out.push(
     "- Homepage cards and board headshots come from the database (seeded from prisma/seed-data.json by prisma/seed.ts). " +
       "Their alt text is derived in the rendering component: cards are decorative (`alt=\"\"`, the card title sits next to " +
-      "the image), headshots use the member's name. Change the derivation in the component; change the image or the " +
+      "the image), and so are headshots (the member's name is the heading beside the photo). Change the derivation in the component; change the image or the " +
       "name in `/admin` (or in prisma/seed-data.json before re-seeding). The rows listed here are the seed snapshot; " +
       "rows added or edited in `/admin` since are not visible to the generator.",
   );

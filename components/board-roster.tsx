@@ -19,7 +19,7 @@ export function BoardRoster({ members }: { members: BoardMember[] }) {
             {member.photoUrl ? (
               <Image
                 src={member.photoUrl}
-                alt={member.name}
+                alt=""
                 fill
                 sizes="(min-width: 1024px) 256px, (min-width: 640px) 40vw, 80vw"
                 className="object-cover"

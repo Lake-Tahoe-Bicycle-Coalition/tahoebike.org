@@ -26,7 +26,7 @@ const galleryPhotos: Photo[] = [
   },
   {
     src: "/images/2022/06/Baldwin-Beach.jpg",
-    alt: "Cyclists on the bike path near Baldwin Beach on Lake Tahoe’s south shore",
+    alt: "Bicycles parked at bike racks on the sand at Baldwin Beach, with Lake Tahoe behind",
   },
   {
     src: "/images/2022/09/IMG_2848.jpg",
@@ -42,7 +42,7 @@ const galleryPhotos: Photo[] = [
   },
   {
     src: "/images/2022/04/June-3-bike-path-cleanup.jpg",
-    alt: "Volunteers with rakes and bags cleaning up a Tahoe bike path",
+    alt: "Volunteers with their bikes, trash bags and litter grabbers gathered on a Tahoe bike path for a cleanup",
   },
   {
     src: "/images/2024/04/bike_valet2.jpg",

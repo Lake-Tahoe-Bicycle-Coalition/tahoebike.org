@@ -20,7 +20,7 @@ export const metadata = pageMetadata({
 const photos = [
   {
     src: "/images/2022/06/Patriotic-Tandem.jpg",
-    alt: "A red, white and blue tandem bicycle locked to an inverted-U bike rack",
+    alt: "A tandem bicycle with a front basket and a small US flag, locked to an inverted-U bike rack on the beach",
   },
   {
     src: "/images/2022/06/Cove-East-Rack-2.jpg",
