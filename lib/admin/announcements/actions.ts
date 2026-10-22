@@ -52,7 +52,7 @@ export async function createAnnouncement(_prev: FormState, formData: FormData): 
     return formFailure("The announcement could not be saved. Please try again.", parsed.values);
   }
   revalidateWholeSite();
-  redirect(adminListUrl(LIST, await savedNotice("Added", id, parsed.data)));
+  redirect(adminListUrl(LIST, await savedNotice("Added", id, parsed.data), "success", "/"));
 }
 
 export async function updateAnnouncement(id: string, _prev: FormState, formData: FormData): Promise<FormState> {
@@ -70,7 +70,7 @@ export async function updateAnnouncement(id: string, _prev: FormState, formData:
     );
   }
   revalidateWholeSite();
-  redirect(adminListUrl(LIST, await savedNotice("Saved", id, parsed.data)));
+  redirect(adminListUrl(LIST, await savedNotice("Saved", id, parsed.data), "success", "/"));
 }
 
 /** Plain form action (hidden `id` field), used from a <ConfirmForm>. */

@@ -15,6 +15,7 @@ export function DateTimeField({
   defaultTime,
   errors,
   className,
+  help,
 }: {
   label: string;
   name: string;
@@ -24,10 +25,13 @@ export function DateTimeField({
   /** Errors keyed by field name, as returned by the action; both halves are looked up. */
   errors?: Record<string, string[]>;
   className?: string;
+  /** Optional hint shown under the legend. */
+  help?: string;
 }) {
   return (
     <fieldset className={className}>
       <legend className="field-label">{label}</legend>
+      {help ? <p className="mb-2 text-sm text-asphalt/70">{help}</p> : null}
       <div className="grid gap-4 sm:grid-cols-2">
         <TextField
           label="Date"

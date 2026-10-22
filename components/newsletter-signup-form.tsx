@@ -54,6 +54,7 @@ export function NewsletterSignupForm({ signupUrl, id, heading = "Newsletter", ar
             name="email"
             autoComplete="email"
             required
+            aria-describedby={`${emailId}-help`}
             className="field-input border-asphalt/60"
           />
           <button
@@ -63,6 +64,9 @@ export function NewsletterSignupForm({ signupUrl, id, heading = "Newsletter", ar
             Subscribe
           </button>
         </div>
+        <p id={`${emailId}-help`} className="mt-2 text-sm text-asphalt/70">
+          You&rsquo;ll finish signing up on our email provider&rsquo;s page (Constant Contact).
+        </p>
       </form>
     </section>
   );

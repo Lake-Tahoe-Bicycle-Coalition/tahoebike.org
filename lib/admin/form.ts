@@ -51,10 +51,11 @@ export function formFailure(message: string, values?: Record<string, string>): F
 /**
  * URL of an admin page carrying a signed one-line notice that the page renders with
  * <Notice /> (components/admin/notice.tsx). `tone: "error"` styles it as a failure.
+ * `view` is the public path that changed; the notice links to it ("View on site").
  */
-export function adminListUrl(path: string, notice: string, tone: NoticeTone = "success"): string {
+export function adminListUrl(path: string, notice: string, tone: NoticeTone = "success", view?: string): string {
   const params = new URLSearchParams();
-  appendNotice(params, notice, tone);
+  appendNotice(params, notice, tone, view);
   const query = params.toString();
   return query ? `${path}?${query}` : path;
 }

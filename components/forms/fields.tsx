@@ -34,6 +34,11 @@ function errorAttributes(errors: string[] | undefined, ids: FieldIds, help?: str
   };
 }
 
+function controlClass(errors: string[] | undefined, extra = ""): string {
+  const base = errors && errors.length > 0 ? "field-input border-red-700" : "field-input";
+  return extra ? `${base} ${extra}` : base;
+}
+
 function FieldShell({
   label,
   required,
@@ -95,7 +100,7 @@ export function TextField({ label, name, errors, required, className, help, ...i
         id={ids.inputId}
         name={name}
         required={required}
-        className="field-input"
+        className={controlClass(errors)}
         type="text"
         {...input}
         {...errorAttributes(errors, ids, help)}
@@ -117,7 +122,7 @@ export function TextareaField({ label, name, errors, required, className, help, 
         id={ids.inputId}
         name={name}
         required={required}
-        className="field-input"
+        className={controlClass(errors)}
         rows={5}
         {...textarea}
         {...errorAttributes(errors, ids, help)}
@@ -149,7 +154,7 @@ export function SelectField({
         id={ids.inputId}
         name={name}
         required={required}
-        className="field-input"
+        className={controlClass(errors)}
         defaultValue={defaultValue ?? ""}
         {...errorAttributes(errors, ids, help)}
       >
@@ -228,19 +233,41 @@ export function FormAlert({ message }: { message?: string }) {
   );
 }
 
+/**
+ * Uses aria-disabled plus a click guard rather than `disabled`, so the button keeps
+ * keyboard focus while the form is sending. `waiting` holds the button back until the
+ * spam check has produced a token ("Verifying…").
+ */
 export function SubmitButton({
   pending,
   label,
   pendingLabel = "Sending…",
+  waiting = false,
+  waitingLabel = "Verifying…",
 }: {
   pending: boolean;
   label: string;
   pendingLabel?: string;
+  waiting?: boolean;
+  waitingLabel?: string;
 }) {
+  const inactive = pending || waiting;
   return (
-    <button type="submit" className="btn btn-primary disabled:opacity-60" disabled={pending}>
-      {pending ? pendingLabel : label}
-    </button>
+    <>
+      <button
+        type="submit"
+        className="btn btn-primary aria-disabled:opacity-60"
+        aria-disabled={inactive || undefined}
+        onClick={(event) => {
+          if (inactive) event.preventDefault();
+        }}
+      >
+        {pending ? pendingLabel : waiting ? waitingLabel : label}
+      </button>
+      <span className="sr-only" role="status" aria-live="polite">
+        {pending ? pendingLabel : ""}
+      </span>
+    </>
   );
 }
 

@@ -26,6 +26,11 @@ export default async function EditEventPage({ params }: PageProps<"/admin/events
           </Link>
         }
       />
+      {event.endsAt < new Date() ? (
+        <p role="status" className="rounded border border-safety bg-safety/20 px-4 py-3 font-semibold">
+          This event’s end is in the past, so it does not appear on the public site.
+        </p>
+      ) : null}
       <EventForm action={updateEvent.bind(null, event.id)} defaults={eventToFormValues(event)} submitLabel="Save event" />
 
       <section className="border-t border-asphalt/15 pt-6">

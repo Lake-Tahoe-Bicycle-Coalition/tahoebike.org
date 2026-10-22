@@ -46,6 +46,7 @@ export default async function PrintBikeMapPage() {
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-12">
+      <style>{`@page { size: landscape }`}</style>
       <h1>Printable Bike Map</h1>
       <div className="prose-ltbc mt-4">
         <p>
@@ -76,7 +77,7 @@ export default async function PrintBikeMapPage() {
             />
           </a>
           <p className="mt-4">
-            <SmartLink href={map.pdfUrl} className="btn btn-secondary">
+            <SmartLink href={map.pdfUrl} className="btn btn-secondary" data-print-url>
               Download the PDF
               <span className="sr-only">: {map.heading}</span>
             </SmartLink>

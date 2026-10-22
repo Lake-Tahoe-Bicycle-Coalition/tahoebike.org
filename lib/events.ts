@@ -36,6 +36,23 @@ const dayKey = new Intl.DateTimeFormat("en-CA", {
   day: "2-digit",
 });
 
+/** UTC "YYYYMMDDTHHmmssZ", the date format Google Calendar's template links expect. */
+function calendarStamp(date: Date): string {
+  return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+}
+
+/** A link that opens Google Calendar's "new event" screen prefilled from the event row. */
+export function googleCalendarUrl(event: Event): string {
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: event.title,
+    dates: `${calendarStamp(event.startsAt)}/${calendarStamp(event.endsAt)}`,
+    details: event.description,
+    location: [event.locationName, event.address].filter(Boolean).join(", "),
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
 /** e.g. "Wednesday, September 16, 2026" */
 export function formatEventDate(startsAt: Date): string {
   return longDate.format(startsAt);

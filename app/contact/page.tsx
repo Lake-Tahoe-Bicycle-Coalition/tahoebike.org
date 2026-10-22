@@ -22,7 +22,7 @@ export default async function ContactPage() {
         <section aria-labelledby="contact-form-heading">
           <h2 id="contact-form-heading">Send us a Message</h2>
           <div className="mt-6">
-            <ContactForm />
+            <ContactForm contactEmail={settings.contact_email} />
           </div>
         </section>
 

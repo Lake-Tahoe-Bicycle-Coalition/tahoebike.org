@@ -72,7 +72,7 @@ export function HomepageCardForm({
           maxLength={60}
           defaultValue={values.ctaLabel}
           errors={errors.ctaLabel}
-          help="The button text, e.g. “Join today”."
+          help="Use a specific verb, like “Donate a bike” or “Visit Tahoe Bike Month”, rather than “Learn more”."
         />
         <TextField
           label="Button link"

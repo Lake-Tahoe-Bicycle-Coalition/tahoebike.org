@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { submitContact } from "@/lib/forms/actions";
 import { contactFieldLabels as labels } from "@/lib/forms/fields";
 import { initialFormState } from "@/lib/forms/state";
@@ -13,9 +13,10 @@ import {
   TextField,
   TextareaField,
 } from "./fields";
-import { TurnstileWidget } from "./turnstile-widget";
+import { TurnstileWidget, turnstileEnabled } from "./turnstile-widget";
 
-export function ContactForm() {
+export function ContactForm({ contactEmail }: { contactEmail?: string }) {
+  const [verified, setVerified] = useState(false);
   const [state, formAction, pending] = useActionState(submitContact, initialFormState);
 
   if (state.status === "success") {
@@ -80,8 +81,8 @@ export function ContactForm() {
         />
       </div>
       <HoneypotField />
-      <TurnstileWidget resetKey={state} />
-      <SubmitButton pending={pending} label="Send Message" />
+      <TurnstileWidget resetKey={state} contactEmail={contactEmail} onReadyChange={setVerified} />
+      <SubmitButton pending={pending} waiting={turnstileEnabled && !verified} label="Send Message" />
     </form>
   );
 }

@@ -132,6 +132,24 @@ How it fits together:
 - **Freshness**: public pages are static and revalidate every five minutes; every admin save
   also purges the affected pages (`lib/admin/revalidate.ts`), so edits show at once.
 
+## Turnstile (spam check)
+
+The contact, bike valet and bike rack forms use Cloudflare Turnstile. The two variables work
+as a pair:
+
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY` is inlined into the client bundle **at build time**, so
+  changing or adding it needs a redeploy, not just a restart.
+- If `TURNSTILE_SECRET_KEY` is set without the site key, the widget never renders and
+  **every submission is rejected**. If the site key is set without the secret, tokens are
+  never verified, except on the production deployment (below).
+- Without `TURNSTILE_SECRET_KEY`, development and preview deployments accept the forms
+  without the check, but the production deployment (`VERCEL_ENV=production`) refuses every
+  submission and tells the visitor to email us (`lib/turnstile.ts`).
+- When the site key is configured, the submit button reads "Verifying…" and stays
+  `aria-disabled` until the widget produces a token.
+- If the token expires or the widget fails to load, the widget resets and shows an alert
+  with the contact email.
+
 ## Deploying
 
 1. Import the GitHub repository into Vercel (framework preset: Next.js, package manager: pnpm).

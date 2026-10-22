@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Libre_Franklin } from "next/font/google";
 import { AnnouncementBanner } from "@/components/announcement-banner";
+import { SupportBand } from "@/components/support-band";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { getSettings } from "@/lib/settings";
@@ -26,6 +27,8 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
+export const viewport: Viewport = { themeColor: "#ffdf00", colorScheme: "light" };
+
 /** Re-render at most every 5 minutes so admin edits show up without a deploy. */
 export const revalidate = 300;
 
@@ -45,6 +48,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <main id="main" className="flex-1">
           {children}
         </main>
+        <SupportBand />
         <SiteFooter settings={settings} />
       </body>
     </html>

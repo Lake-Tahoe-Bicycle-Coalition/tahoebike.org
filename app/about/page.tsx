@@ -46,7 +46,7 @@ export default async function AboutPage() {
         <div className="space-y-4">
           <h2>Lake Tahoe Bicycle Coalition</h2>
           <p>
-            The Lake Tahoe Bicycle Coalition is an all-volunteer organization dedicated to promoting bicycling,
+            The Lake Tahoe Bicycle Coalition (LTBC) is an all-volunteer organization dedicated to promoting bicycling,
             bike events, and new bicycle infrastructure such as bike paths and bike lanes throughout the Tahoe
             region.
           </p>

@@ -33,7 +33,7 @@ export async function saveSettings(_prev: FormState, formData: FormData): Promis
     return formFailure("The settings could not be saved. Please try again.", parsed.values);
   }
   revalidateWholeSite();
-  redirect(adminListUrl(PAGE, "Saved settings."));
+  redirect(adminListUrl(PAGE, "Saved settings.", "success", "/"));
 }
 
 /**

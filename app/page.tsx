@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { EventList } from "@/components/event-list";
 import { HeroCards } from "@/components/hero-cards";
+import { JsonLd } from "@/components/json-ld";
 import { NewsletterSignupForm } from "@/components/newsletter-signup-form";
 import { PhotoGallery, type Photo } from "@/components/photo-gallery";
 import { SmartLink } from "@/components/smart-link";
 import { getHomepageCards, getUpcomingEvents } from "@/lib/content";
 import { getSettings } from "@/lib/settings";
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tahoebike.org";
 
 export const metadata: Metadata = {
   title: { absolute: "Lake Tahoe Bicycle Coalition" },
@@ -14,6 +17,9 @@ export const metadata: Metadata = {
     "Helping Tahoe become more bicycle friendly: the Lake Tahoe Bicycle Coalition produces Tahoe’s most comprehensive bike trail map and runs bike programs, events, and advocacy around the lake.",
   alternates: { canonical: "/" },
 };
+
+const secondaryOnDark =
+  "btn border-2 border-white bg-transparent text-white no-underline hover:bg-white hover:text-deepwater";
 
 /** The two Divi galleries on the WordPress home page, in their original order. */
 const galleryPhotos: Photo[] = [
@@ -58,8 +64,29 @@ export default async function HomePage() {
     getUpcomingEvents("OTHER"),
   ]);
 
+  // SEO-1: Organization structured data for the homepage.
+  const organization = {
+    "@context": "https://schema.org",
+    "@type": "NGO",
+    name: "Lake Tahoe Bicycle Coalition",
+    alternateName: "LTBC",
+    url: siteUrl,
+    logo: `${siteUrl}/images/2024/01/LTBC-Logo-new-2024.png`,
+    email: settings.contact_email,
+    address: {
+      "@type": "PostalAddress",
+      postOfficeBoxNumber: "1147",
+      addressLocality: "Zephyr Cove",
+      addressRegion: "NV",
+      postalCode: "89448",
+      addressCountry: "US",
+    },
+    sameAs: [settings.facebook_url, settings.instagram_url],
+  };
+
   return (
     <>
+      <JsonLd data={organization} />
       <section className="relative isolate overflow-hidden bg-deepwater">
         <Image
           src="/images/2022/06/Baldwin-Beach.jpg"
@@ -74,6 +101,17 @@ export default async function HomePage() {
           <h1 className="max-w-3xl text-2xl text-white sm:text-4xl">
             Helping Tahoe become more bicycle friendly
           </h1>
+          <p className="mt-6 flex flex-wrap gap-3">
+            <SmartLink href={settings.map_url} className="btn btn-primary">
+              Explore the bike map
+            </SmartLink>
+            <SmartLink href="/join" className={secondaryOnDark}>
+              Join or donate
+            </SmartLink>
+            <SmartLink href="/volunteer" className={secondaryOnDark}>
+              Volunteer
+            </SmartLink>
+          </p>
         </div>
       </section>
 
@@ -91,33 +129,39 @@ export default async function HomePage() {
           </section>
         ) : null}
 
-        <div className="grid gap-8 lg:grid-cols-2">
-          <section aria-labelledby="bike-map-heading" className="flex flex-col gap-4">
-            <SmartLink
-              href={settings.map_url}
-              className="block overflow-hidden rounded-lg border border-asphalt/10"
-            >
-              <Image
-                src="/images/2022/05/Bike-Map-screen.jpg"
-                alt="Screenshot of the interactive Lake Tahoe Bikeways Map"
-                width={1467}
-                height={792}
-                sizes="(min-width: 1024px) 560px, 100vw"
-                className="h-auto w-full"
-              />
+        <section aria-labelledby="bike-map-heading" className="flex flex-col gap-4">
+          <SmartLink
+            href={settings.map_url}
+            iconless
+            tabIndex={-1}
+            aria-hidden="true"
+            className="block overflow-hidden rounded-lg border border-asphalt/10"
+          >
+            <Image
+              src="/images/2022/05/Bike-Map-screen.jpg"
+              alt=""
+              width={1467}
+              height={792}
+              sizes="(min-width: 1152px) 1120px, 100vw"
+              className="h-auto w-full"
+            />
+          </SmartLink>
+          <h2 id="bike-map-heading">Online Bike Map</h2>
+          <p className="max-w-3xl">
+            Produced by the Lake Tahoe Bicycle Coalition, the Lake Tahoe Bikeways Map is Tahoe’s
+            most comprehensive bike trail map. Check out our interactive bike map!
+          </p>
+          <p className="flex flex-wrap gap-3">
+            <SmartLink href={settings.map_url} className="btn btn-primary">
+              Explore the map
             </SmartLink>
-            <h2 id="bike-map-heading">Online Bike Map</h2>
-            <p>
-              Produced by the Lake Tahoe Bicycle Coalition, the Lake Tahoe Bikeways Map is Tahoe’s
-              most comprehensive bike trail map. Check out our new, interactive bike map!
-            </p>
-            <p>
-              <SmartLink href={settings.map_url} className="btn btn-primary">
-                Explore the map
-              </SmartLink>
-            </p>
-          </section>
+            <SmartLink href="/print-bike-map" className="btn btn-secondary">
+              Get the printable map
+            </SmartLink>
+          </p>
+        </section>
 
+        <div className="max-w-3xl">
           <NewsletterSignupForm
             signupUrl={settings.constant_contact_signup_url}
             archiveHref="/newsletter"
@@ -125,22 +169,6 @@ export default async function HomePage() {
         </div>
 
         <PhotoGallery photos={galleryPhotos} />
-
-        <section aria-labelledby="follow-heading">
-          <h2 id="follow-heading">Follow us</h2>
-          <ul className="mt-4 flex flex-wrap gap-4">
-            <li>
-              <SmartLink href={settings.facebook_url} className="btn btn-secondary">
-                Facebook
-              </SmartLink>
-            </li>
-            <li>
-              <SmartLink href={settings.instagram_url} className="btn btn-secondary">
-                Instagram
-              </SmartLink>
-            </li>
-          </ul>
-        </section>
       </div>
     </>
   );

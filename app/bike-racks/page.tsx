@@ -65,7 +65,7 @@ export default async function BikeRacksPage() {
 
           <h2>About The Regional Parking Program</h2>
           <p>
-            The Lake Tahoe Bicycle Coalition launched the Regional Bicycle Parking Program in 2018.
+            The Lake Tahoe Bicycle Coalition (LTBC) launched the Regional Bicycle Parking Program in 2018.
             Since its inception, the program has resulted in 450 bike racks (900 bike parking
             spots), and eight fix-it stations located on public lands and businesses in the Tahoe
             Basin.
@@ -143,7 +143,7 @@ export default async function BikeRacksPage() {
               {/* Q17: the Google Form from the old site unless NATIVE_FORMS enables the native form.
                   Either way the form only appears while rack_program_open is true. */}
               {nativeFormEnabled("racks") ? (
-                <RackApplicationForm />
+                <RackApplicationForm contactEmail={settings.contact_email} />
               ) : (
                 <GoogleFormEmbed url={GOOGLE_FORM_URLS.racks} title="Bike rack application form" />
               )}

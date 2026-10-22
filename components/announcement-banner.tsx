@@ -11,6 +11,8 @@ export async function AnnouncementBanner() {
 
   const linkClass = "font-bold text-asphalt decoration-asphalt/50 hover:decoration-asphalt";
   const { linkUrl } = announcement;
+  const srMessage =
+    announcement.message.length > 80 ? `${announcement.message.slice(0, 79).trimEnd()}…` : announcement.message;
 
   return (
     <aside role="note" aria-label="Announcement" className="bg-safety text-asphalt">
@@ -21,6 +23,7 @@ export async function AnnouncementBanner() {
             {" "}
             <SmartLink href={linkUrl} className={linkClass}>
               Learn more
+              <span className="sr-only"> about: {srMessage}</span>
             </SmartLink>
           </>
         ) : null}
