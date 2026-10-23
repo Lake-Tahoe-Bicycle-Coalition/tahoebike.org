@@ -160,8 +160,10 @@ query fails the build rather than deploying default content, and in production a
 regeneration keeps serving the last good page (`readOrFallback` in `lib/content.ts`).
 Only `next dev` falls back to code defaults when the database is unreachable.
 
-DNS cutover (apex and `www` only; never touch the `map` subdomain or MX records) is described
-in the [migration plan](MIGRATION_PLAN.md).
+The site is served at `tahoebike.org` (the canonical host); `www` redirects to it through the
+redirect rules in `lib/redirects.ts`, so the apex domain in Vercel must not itself redirect to
+`www`, or the two will loop. DNS is managed outside Vercel. Only the apex and `www` records
+point at Vercel; leave the `map` subdomain and the MX records alone.
 
 ## Continuous integration
 
