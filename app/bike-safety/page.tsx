@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { YouTubeEmbed } from "@/components/youtube-embed";
+import { SmartLink } from "@/components/smart-link";
+import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/site-metadata";
 
 export const metadata = pageMetadata({
@@ -67,7 +69,9 @@ const tips: { tip: ReactNode; explanation?: string }[] = [
   { tip: "Walk your bike when using a crosswalk." },
 ];
 
-export default function BikeSafetyPage() {
+export default async function BikeSafetyPage() {
+  const settings = await getSettings();
+
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-12">
       <header>
@@ -93,13 +97,21 @@ export default function BikeSafetyPage() {
           </p>
         </div>
         <div className="space-y-6">
-          <YouTubeEmbed id="KBi3v6qOXUM" title="Bike Safe Lake Tahoe: spot 2" />
-          <YouTubeEmbed id="uZgpssR-SzA" title="Bike Safe Lake Tahoe: spot 1" />
+          <YouTubeEmbed
+            id="uZgpssR-SzA"
+            title="Bike Safe Lake Tahoe PSA (part 1)"
+            caption="Public service announcement from the Bike Safe Lake Tahoe campaign"
+          />
+          <YouTubeEmbed
+            id="KBi3v6qOXUM"
+            title="Bike Safe Lake Tahoe PSA (part 2)"
+            caption="Public service announcement from the Bike Safe Lake Tahoe campaign"
+          />
         </div>
       </section>
 
       <section className="mt-12 max-w-3xl">
-        <h2>Ten more tips for biking in Tahoe</h2>
+        <h2>Ten tips for riding in Tahoe</h2>
         <ol className="mt-6 list-decimal space-y-4 pl-6 text-lg">
           {tips.map((item, i) => (
             <li key={i}>
@@ -119,6 +131,22 @@ export default function BikeSafetyPage() {
         <p className="mt-6">
           <Link href="/bike-kitchen" className="btn btn-secondary">
             Visit the Bike Kitchen
+          </Link>
+        </p>
+      </section>
+
+      <section className="mt-12 max-w-3xl">
+        <h2>Know where to ride</h2>
+        <p className="mt-4 text-lg">
+          Plan your route before you go: explore bike paths, lanes and routes on the interactive map, or
+          pick up a printable copy.
+        </p>
+        <p className="mt-6 flex flex-wrap gap-4">
+          <SmartLink href={settings.map_url} className="btn btn-primary">
+            Explore the interactive map
+          </SmartLink>
+          <Link href="/print-bike-map" className="btn btn-secondary">
+            Get the printable map
           </Link>
         </p>
       </section>

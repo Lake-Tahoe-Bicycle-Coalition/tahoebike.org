@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { EventList } from "@/components/event-list";
 import { SmartLink } from "@/components/smart-link";
 import { YouTubeEmbed } from "@/components/youtube-embed";
@@ -61,7 +62,7 @@ export default async function BikeKitchenPage() {
     },
     {
       title: "Need a bike?",
-      body: "If you work for a social service organization and know someone who needs a bike, let us know so we can get them on our waitlist! Email us with the person's height and type of bike needed.",
+      body: "If you work for a social service organization and know someone who needs a bike, let us know so we can get them on our waitlist! Email us with the person’s height and type of bike needed.",
       cta: "Request a bike",
       href: mailtoLink(
         email,
@@ -96,7 +97,26 @@ export default async function BikeKitchenPage() {
       <section className="mt-12">
         <h2>Upcoming Bike Kitchen Events</h2>
         <div className="mt-6">
-          <EventList events={events} />
+          <EventList
+            events={events}
+            emptyState={
+              <>
+                <p>
+                  No fix-ups are scheduled right now. They run roughly monthly from spring through
+                  fall, and we announce each one in the newsletter.
+                </p>
+                <p className="mt-2">
+                  In the meantime you can still{" "}
+                  <a href={mailtoLink(email, "Bike donation", "Hi LTBC,\n\nI’d like to donate a bike.\n")}>
+                    donate a bike
+                  </a>{" "}
+                  or <a href={mailtoLink(email, "Bike request", "Hi LTBC,\n\nI’d like to request a bike.\n")}>request one</a> by email, or{" "}
+                  <Link href="/newsletter">subscribe to the newsletter</Link> to hear about the next
+                  event.
+                </p>
+              </>
+            }
+          />
         </div>
       </section>
 
@@ -104,7 +124,7 @@ export default async function BikeKitchenPage() {
         <h2 className="md:col-span-1">What is the Bike Kitchen?</h2>
         <div className="space-y-4 text-lg md:col-span-2">
           <p>
-            The Bike Kitchen is a community bike shop run by LTBC volunteers. We collect donated bikes,
+            The Bike Kitchen is a community bike shop run by volunteers of the Lake Tahoe Bicycle Coalition (LTBC). We collect donated bikes,
             repair them, and give them to community members who need one, working directly with local
             social service organizations to find the right people.
           </p>

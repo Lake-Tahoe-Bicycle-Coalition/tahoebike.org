@@ -41,19 +41,31 @@ export default async function VolunteerPage() {
           <SmartLink href={settings.constant_contact_volunteer_url}>volunteer email list</SmartLink>{" "}
           to receive the latest updates and upcoming opportunities.
         </p>
+        <p>
+          If no shifts are listed, join our{" "}
+          <SmartLink href={settings.constant_contact_volunteer_url}>volunteer email list</SmartLink> and
+          we&rsquo;ll tell you when the next ones open.
+        </p>
       </div>
 
       <section className="mt-10" aria-label="Volunteer shifts">
+        <p>
+          <SmartLink href={settings.point_org_url} className="btn btn-secondary">
+            Open the volunteer calendar on POINT
+          </SmartLink>{" "}
+          <a href="#after-point-calendar" className="ml-2 text-sm">
+            Skip the calendar
+          </a>
+        </p>
         <iframe
           src={settings.point_embed_url}
           title="Volunteer shifts on POINT"
           width="100%"
-          height={1650}
           loading="lazy"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           id="point_iframe"
-          className="w-full border-0"
+          className="mt-4 h-[2000px] w-full border-0 sm:h-[1650px]"
         />
         {/* Optional helper from POINT: resizes #point_iframe to fit its content. The embed works without it. */}
         <Script
@@ -61,7 +73,7 @@ export default async function VolunteerPage() {
           strategy="lazyOnload"
           data-frame-id={widgetId}
         />
-        <p className="mt-4">
+        <p id="after-point-calendar" className="mt-4">
           <SmartLink href={settings.point_org_url}>Open the volunteer calendar on POINT</SmartLink>
         </p>
       </section>

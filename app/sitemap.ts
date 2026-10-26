@@ -22,10 +22,8 @@ const priorities: Partial<Record<PublicPath, number>> = {
 };
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
   return publicPaths.map((path) => ({
     url: new URL(path, siteUrl).toString(),
-    lastModified,
     changeFrequency: weekly.has(path) ? "weekly" : "monthly",
     priority: priorities[path] ?? 0.6,
   }));

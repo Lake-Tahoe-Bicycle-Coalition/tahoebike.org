@@ -8,6 +8,9 @@ type Props = {
   /** Set on the link to the page being viewed (site paths only). */
   ariaCurrent?: "page";
   children: ReactNode;
+  "aria-label"?: string;
+  "aria-hidden"?: boolean | "true" | "false";
+  tabIndex?: number;
 };
 
 /**
@@ -21,10 +24,10 @@ type Props = {
  *
  * Static links whose kind is known can keep using `<Link>` or `<a>` directly.
  */
-export function SmartLink({ href, className, ariaCurrent, children }: Props) {
+export function SmartLink({ href, className, ariaCurrent, children, ...rest }: Props) {
   if (isExternalUrl(href)) {
     return (
-      <a href={href} className={className} target="_blank" rel="noopener">
+      <a href={href} className={className} target="_blank" rel="noopener" {...rest}>
         {children}
         <span className="sr-only"> (opens in a new tab)</span>
       </a>
@@ -32,13 +35,13 @@ export function SmartLink({ href, className, ariaCurrent, children }: Props) {
   }
   if (isSitePath(href)) {
     return (
-      <Link href={href} className={className} aria-current={ariaCurrent}>
+      <Link href={href} className={className} aria-current={ariaCurrent} {...rest}>
         {children}
       </Link>
     );
   }
   return (
-    <a href={href} className={className}>
+    <a href={href} className={className} {...rest}>
       {children}
     </a>
   );

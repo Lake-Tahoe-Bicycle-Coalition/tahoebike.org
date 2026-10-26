@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { submitRackApplication } from "@/lib/forms/actions";
 import {
   matchingFundsOptions,
@@ -18,9 +18,10 @@ import {
   TextField,
   TextareaField,
 } from "./fields";
-import { TurnstileWidget } from "./turnstile-widget";
+import { TurnstileWidget, turnstileEnabled } from "./turnstile-widget";
 
-export function RackApplicationForm() {
+export function RackApplicationForm({ contactEmail }: { contactEmail?: string }) {
+  const [verified, setVerified] = useState(false);
   const [state, formAction, pending] = useActionState(submitRackApplication, initialFormState);
 
   if (state.status === "success") {
@@ -136,8 +137,8 @@ export function RackApplicationForm() {
         />
       </div>
       <HoneypotField />
-      <TurnstileWidget resetKey={state} />
-      <SubmitButton pending={pending} label="Submit Application" />
+      <TurnstileWidget resetKey={state} contactEmail={contactEmail} onReadyChange={setVerified} />
+      <SubmitButton pending={pending} waiting={turnstileEnabled && !verified} label="Submit Application" />
     </form>
   );
 }

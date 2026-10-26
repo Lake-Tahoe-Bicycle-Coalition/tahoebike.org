@@ -17,6 +17,15 @@ How this was produced: the code was read page by page and component by component
 - Items that conflict with an existing decision in `docs/OPEN_QUESTIONS.md` say so and name the question.
 - Items that would add a database model or field are flagged, because the migration plan's conventions require a discussion first.
 
+## Status
+
+- **PR #12** (October 21 2026): the easy items from the observational notes at the end of this document; see "Done (PR #12)" there.
+- **PR #12** also covered CONT-9 (the Newsletter page leads with the signup) and A11Y-3 (the newsletter panel is no longer yellow).
+- **Shawn Hoffman's PRs #1 to #11** (merged October 22 2026, numbered against his own review, so the IDs differ): NAV-2 and A11Y-4 (#1, menus close after navigating), NAV-3 and A11Y-5 (#1, current page marked in the header), NAV-8 (#5, sticky compact header on desktop only; phones keep the scrolling header), A11Y-10 (#1), PERF-7 (#1, eager card images; no blur placeholders), PERF-5 (#2, and a build that cannot reach the database now fails; Q42), FORM-1 (#3, production refuses forms without Turnstile and fails each notification without Resend, with logged errors), A11Y-9 and A11Y-14 (#7; the map card's alt text is A11Y-17), EVT-4 (#8, Bike Valet and Other events shown; Q39), the "event already ended" refusal on create for ADMIN-2 (#6), and the Safari marker part of VIS-10 (#7).
+- **PR #13** (October 2026): the code-only, small-effort ideas below. The visible external-link icon from NAV-4 was declined (off-site links keep only the screen-reader note; see NAV-4). Done: NAV-7 (except the EIN line), NAV-9, HOME-1 (photo hero and buttons; the one-line description still needs the board), HOME-3, HOME-4, CONT-12 (code parts), CONT-15, GIVE-3 (the visible line; no icon), GIVE-4, GIVE-5 (the "until then" helper text), FORM-1 (the admin warning is the ADMIN-4 panel), FORM-2, FORM-4 (except native forms), FORM-6 (except rate limiting), EVT-2, EVT-3 (PT and Google Calendar; no `.ics` yet), EVT-5, VIS-6, VIS-8 (button states), VIS-12, VIS-15, A11Y-1, A11Y-2, A11Y-7, A11Y-8, A11Y-11, A11Y-12, A11Y-13, A11Y-15, A11Y-16 (footer links; the header is in the navigation PR), PERF-3, PERF-4, RESP-2, SEO-1 (Organization and Event; no breadcrumbs), SEO-3, SEO-4, OPS-1 ("now" headers; no CSP), ADMIN-2 (end time prefill and the past-event note when editing), ADMIN-3, ADMIN-4.
+- **Navigation PR** (`claude/pr-changes-review-a1o1bc`, October 2026): NAV-5 in part (the menu is renamed "About"; Contact stays under it), VIS-10 (chevron and menu icons; no SVG logo) and the header part of A11Y-16. NAV-4 is deferred until analytics show how much the map is used.
+- Everything else is open. The lists "Ideas that need board input" and "All ideas by value" at the end still describe the full set.
+
 ## Start here
 
 The fifteen ideas with the best value for the effort, roughly in order:
@@ -72,9 +81,15 @@ No link anywhere sets `aria-current`, and there is no visual active state. Add a
 **Value: High · Effort: S · Needs: Code**
 The interactive map is LTBC's flagship product and probably the most common visitor task, but it is the second of nine items inside the Programs dropdown. Two of those nine items ("Tahoe Bike Month" and "Interactive Bike Map") leave the site in a new tab, with nothing visible to say so (`SmartLink` adds only a screen-reader note). Add "Bike Map" as a top-level nav item. Add a small external-link icon to every link that opens a new tab, across the site, keeping the existing sr-only text.
 
+*Status (October 2026):* deferred. The map stays in the Programs dropdown as "Interactive Bike Map" until analytics show how much it is used.
+
+*Decision (October 2026):* the external-link icon was declined. The interactive map and Tahoe Bike Month sites are meant to feel like one identity with tahoebike.org, so marking them as "elsewhere" works against that. `SmartLink` keeps the sr-only "(opens in a new tab)" note only.
+
 ### NAV-5. Rename "Learn More" and surface Contact
 **Value: Medium · Effort: S · Needs: Code**
 "Learn More" (`lib/navigation.ts`) is a vague parent for About, Newsletter and Contact, and Contact is a high-intent link hidden two clicks deep. Rename the group to "About" and make Contact a top-level item. Alternatively, group Join, Volunteer and Donate under a "Get Involved" parent so the top level reads Bike Map · Programs · Get Involved · About · Contact · [Donate].
+
+*Status (October 2026):* partly done in the navigation PR. The group is now "About" (About stays its index link). Contact stays under About with Newsletter rather than at the top level; it is also in the footer.
 
 ### NAV-6. Use one name per thing
 **Value: Medium · Effort: S · Needs: Both (pick names)**
@@ -273,7 +288,7 @@ Check what Memberful's checkout URL parameters allow before designing the preset
 
 ### GIVE-3. Prepare people for the Memberful hand-off
 **Value: Medium · Effort: S · Needs: Code**
-The join and donate buttons open `tahoebike.memberful.com` in a new tab, and only screen-reader users are told so. Add a visible line under the buttons ("Secure checkout on Memberful, opens in a new tab") and the external-link icon from NAV-4.
+The join and donate buttons open `tahoebike.memberful.com` in a new tab, and only screen-reader users are told so. Add a visible line under the buttons ("Secure checkout on Memberful, opens in a new tab") and the external-link icon from NAV-4. (The icon was declined; see NAV-4. The visible line shipped.)
 
 ### GIVE-4. "Support the Coalition" band above the footer
 **Value: High · Effort: S–M · Needs: Code**
@@ -448,6 +463,8 @@ Ask the board for recent event photos. Most of the library dates from 2022.
 - Export the logo from `reference/logos/Primary Logo/LTBC-Logo.ai` or `.pdf` as an SVG, so it is sharp at any size and skips the image optimizer.
 - Keep the brand's clear space around the logo (the guide specifies it; the header uses `gap-4 px-4 py-3`).
 
+*Status (October 2026):* the SVG chevron (rotates on open) and the hamburger and close icons are done in the navigation PR. No slide-down panel or SVG logo yet.
+
 ### VIS-11. About page styling
 **Value: Low–Medium · Effort: S · Needs: Code**
 - Make the About banner full-bleed.
@@ -562,6 +579,8 @@ See FORM-6.
 ### A11Y-16. Larger touch targets
 **Value: Low–Medium · Effort: S · Needs: Code**
 Footer links are exactly 24 px tall, the WCAG 2.2 minimum, so any reduction would fail. Nav links are about 40 px. Raise nav links, footer links and the checkbox to about 44 px (`min-h-11`, `py-2.5`, `h-6 w-6`).
+
+*Status (October 2026):* header links and the Donate button are at least 44 px tall (`min-h-11`) in the navigation PR, and footer links in PR #13. The checkbox is still open.
 
 ### A11Y-17. Alt text for meaningful homepage card images
 **Value: Low · Effort: M · Needs: Code (schema change)**

@@ -42,6 +42,7 @@ export function HeroCards({ cards }: { cards: Card[] }) {
               <p>
                 <SmartLink href={card.ctaUrl} className="btn btn-primary">
                   {card.ctaLabel}
+                  <span className="sr-only">: {card.title}</span>
                 </SmartLink>
               </p>
             </div>

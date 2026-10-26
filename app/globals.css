@@ -31,6 +31,10 @@
 }
 
 @layer base {
+  html {
+    color-scheme: light;
+  }
+
   /* In-page anchor links only (see data-scroll-behavior in app/layout.tsx), and never
      for visitors who ask for reduced motion. */
   @media (prefers-reduced-motion: no-preference) {
@@ -78,14 +82,17 @@
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-tahoe;
+    /* Two-tone ring: dark outline plus white halo, visible on yellow, white and dark. */
+    outline: 2px solid var(--color-asphalt);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px #fff;
   }
 
   code {
     @apply rounded bg-neutral-100 px-1 py-0.5 text-sm;
   }
 
-  /* The header menus draw their own ▾; older Safari adds its own disclosure triangle to
+  /* The header menus draw their own chevron; older Safari adds its own disclosure triangle to
      every <summary> unless the WebKit marker is hidden too (list-style alone is not enough). */
   summary::-webkit-details-marker {
     display: none;
@@ -94,6 +101,10 @@
 
 @layer components {
   /* Vertical rhythm for long-form page copy. */
+  .prose-ltbc {
+    @apply leading-relaxed;
+    max-width: 65ch;
+  }
   .prose-ltbc > * + * {
     @apply mt-4;
   }
@@ -111,10 +122,10 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center rounded-md border-2 px-5 py-2.5 font-heading font-extrabold uppercase tracking-widest no-underline transition-colors;
+    @apply inline-flex items-center justify-center rounded-md border-2 px-5 py-2.5 font-heading font-extrabold uppercase tracking-widest no-underline transition-colors active:translate-y-px motion-reduce:transition-none;
   }
   .btn-primary {
-    @apply border-safety bg-safety text-asphalt hover:border-asphalt;
+    @apply border-safety bg-safety text-asphalt hover:border-asphalt hover:bg-[#f0d000];
   }
   .btn-secondary {
     @apply border-asphalt bg-white text-asphalt hover:bg-asphalt hover:text-white;
@@ -131,7 +142,7 @@
     @apply mb-1 block font-semibold;
   }
   .field-input {
-    @apply w-full rounded border border-asphalt/40 bg-white px-3 py-2 focus:border-tahoe;
+    @apply w-full rounded border border-asphalt/60 bg-white px-3 py-2 focus:border-tahoe;
   }
 }
 
@@ -247,5 +258,36 @@
   ::view-transition-group(*) {
     animation-duration: 0s !important;
     animation-delay: 0s !important;
+  }
+}
+
+/* Print: strip site chrome, show link targets. */
+@media print {
+  @page {
+    margin: 1.5cm;
+  }
+  body > header,
+  body > footer,
+  nav,
+  aside[role="note"],
+  .skip-link,
+  .btn:not([data-print-url]),
+  [data-print-hide],
+  iframe {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .prose-ltbc a[href^="http"]::after,
+  a[data-print-url]::after {
+    content: " (" attr(href) ")";
+    font-size: smaller;
+    word-break: break-all;
+  }
+  img {
+    break-inside: avoid;
+    max-width: 100%;
   }
 }

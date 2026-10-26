@@ -7,10 +7,16 @@ import { revalidateEvents } from "@/lib/admin/revalidate";
 import { prisma } from "@/lib/db";
 import { readString } from "@/lib/forms/parse";
 import type { FormState } from "@/lib/forms/state";
+import type { Program } from "@/lib/generated/prisma/client";
 import { eventFieldNames } from "./fields";
 import { eventSchema } from "./schema";
 
 const LIST = "/admin/events";
+
+/** The public page that lists events of this program (see revalidateEvents). */
+function programPage(program: Program): string {
+  return program === "BIKE_KITCHEN" ? "/bike-kitchen" : program === "BIKE_VALET" ? "/bike-valet" : "/";
+}
 
 export async function createEvent(_prev: FormState, formData: FormData): Promise<FormState> {
   await requireAdmin();
@@ -38,7 +44,7 @@ export async function createEvent(_prev: FormState, formData: FormData): Promise
     return formFailure("The event could not be saved. Please try again.", parsed.values);
   }
   revalidateEvents();
-  redirect(adminListUrl(LIST, `Added “${parsed.data.title}”.`));
+  redirect(adminListUrl(LIST, `Added “${parsed.data.title}”.`, "success", programPage(parsed.data.program)));
 }
 
 export async function updateEvent(id: string, _prev: FormState, formData: FormData): Promise<FormState> {
@@ -53,7 +59,10 @@ export async function updateEvent(id: string, _prev: FormState, formData: FormDa
     return formFailure("The event could not be saved. It may have been deleted by someone else.", parsed.values);
   }
   revalidateEvents();
-  redirect(adminListUrl(LIST, `Saved “${parsed.data.title}”.`));
+  // Editing a past event is allowed (createEvent refuses one), but say that it is not on the site.
+  const past =
+    parsed.data.endsAt <= new Date() ? " Its end is in the past, so it does not appear on the public site." : "";
+  redirect(adminListUrl(LIST, `Saved “${parsed.data.title}”.${past}`, "success", programPage(parsed.data.program)));
 }
 
 /** Plain form action (hidden `id` field), used from a <ConfirmForm>. */

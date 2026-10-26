@@ -83,7 +83,7 @@ export default async function BikeValetPage() {
           <h2 className="mt-0!">About Valet Bike Parking</h2>
           <p>
             As part of our mission to help make Tahoe more bike friendly, the Lake Tahoe Bicycle
-            Coalition is happy to provide safe and convenient valet bicycle parking for Tahoe’s
+            Coalition (LTBC) is happy to provide safe and convenient valet bicycle parking for Tahoe’s
             community events, at no cost to the bicyclists. A bike valet is like a coat check for
             bikes!
           </p>
@@ -141,7 +141,7 @@ export default async function BikeValetPage() {
           <div className="mt-6">
             {/* Q16: the Google Form from the old site unless NATIVE_FORMS enables the native form. */}
             {nativeFormEnabled("valet") ? (
-              <ValetRequestForm />
+              <ValetRequestForm contactEmail={settings.bike_valet_email} />
             ) : (
               <GoogleFormEmbed url={GOOGLE_FORM_URLS.valet} title="Bike valet request form" />
             )}

@@ -28,10 +28,10 @@ export const primaryNav: NavItem[] = [
     ],
   },
   {
-    label: "Learn More",
+    label: "About",
     href: "/about",
     // About is the index page here, so it is the indexLabel rather than a child: the phone
-    // menu already links "Learn More" to /about, and a child would list About twice.
+    // menu already links the "About" heading to /about, and a child would list it twice.
     indexLabel: "About",
     children: [
       { label: "Newsletter", href: "/newsletter" },
@@ -41,32 +41,35 @@ export const primaryNav: NavItem[] = [
   { label: "Donate", href: "/join#donate", emphasis: true },
 ];
 
-/** Footer link columns. Mirrors the WordPress footer layout. */
+/** Footer link columns (the organization column is built in SiteFooter). */
 export const footerColumns: { heading: string; links: NavLink[] }[] = [
   {
-    heading: "About",
+    heading: "Programs",
     links: [
-      { label: "Home", href: "/" },
-      { label: "Board of Directors", href: "/about" },
-      { label: "Programs", href: "/programs" },
+      { label: "Bike Kitchen", href: "/bike-kitchen" },
+      { label: "Bike Valet", href: "/bike-valet" },
+      { label: "Bike Racks", href: "/bike-racks" },
+      { label: "Bike Safety", href: "/bike-safety" },
+      { label: "Advocacy", href: "/advocacy" },
+      { label: "Tahoe Bike Month", href: "https://www.tahoebikemonth.org/" },
+    ],
+  },
+  {
+    heading: "Get Involved",
+    links: [
+      { label: "Join", href: "/join" },
+      { label: "Donate", href: "/join#donate" },
+      { label: "Volunteer", href: "/volunteer" },
+      { label: "Newsletter", href: "/newsletter" },
+      { label: "Contact", href: "/contact" },
     ],
   },
   {
     heading: "Resources",
     links: [
       { label: "Interactive Bike Map", href: "https://map.tahoebike.org/" },
-      { label: "Bike Month", href: "https://www.tahoebikemonth.org/" },
-      { label: "Bike Safety", href: "/bike-safety" },
-      { label: "Bike Valet", href: "/bike-valet" },
-    ],
-  },
-  {
-    heading: "Get Involved",
-    links: [
-      { label: "Join Us", href: "/join" },
-      { label: "Volunteer", href: "/volunteer" },
-      { label: "Donate", href: "/join#donate" },
-      { label: "Contact Us", href: "/contact" },
+      { label: "Printable Bike Map", href: "/print-bike-map" },
+      { label: "About / Board of Directors", href: "/about" },
     ],
   },
 ];

@@ -61,6 +61,7 @@ export default async function EventsPage({ searchParams }: PageProps<"/admin/eve
                 <th scope="col">Starts</th>
                 <th scope="col">Ends</th>
                 <th scope="col">Location</th>
+                <th scope="col">Status</th>
                 <th scope="col">
                   <span className="sr-only">Actions</span>
                 </th>
@@ -76,6 +77,11 @@ export default async function EventsPage({ searchParams }: PageProps<"/admin/eve
                   <td data-label="Starts" className="whitespace-nowrap">{formatAdminDateTime(event.startsAt)}</td>
                   <td data-label="Ends" className="whitespace-nowrap">{formatAdminDateTime(event.endsAt)}</td>
                   <td>{event.locationName ?? event.address ?? "—"}</td>
+                  <td>
+                    <span className={event.endsAt < now ? "badge" : "badge badge-active"}>
+                      {event.endsAt < now ? "Past" : "Upcoming"}
+                    </span>
+                  </td>
                   <td>
                     <div className="admin-actions">
                       <Link href={`/admin/events/${event.id}`}>Edit</Link>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { submitValetRequest } from "@/lib/forms/actions";
 import { organizationTypeOptions, valetRequestFieldLabels as labels } from "@/lib/forms/fields";
 import { initialFormState } from "@/lib/forms/state";
@@ -14,9 +14,10 @@ import {
   TextField,
   TextareaField,
 } from "./fields";
-import { TurnstileWidget } from "./turnstile-widget";
+import { TurnstileWidget, turnstileEnabled } from "./turnstile-widget";
 
-export function ValetRequestForm() {
+export function ValetRequestForm({ contactEmail }: { contactEmail?: string }) {
+  const [verified, setVerified] = useState(false);
   const [state, formAction, pending] = useActionState(submitValetRequest, initialFormState);
 
   if (state.status === "success") {
@@ -158,8 +159,8 @@ export function ValetRequestForm() {
         />
       </div>
       <HoneypotField />
-      <TurnstileWidget resetKey={state} />
-      <SubmitButton pending={pending} label="Send Request" />
+      <TurnstileWidget resetKey={state} contactEmail={contactEmail} onReadyChange={setVerified} />
+      <SubmitButton pending={pending} waiting={turnstileEnabled && !verified} label="Send Request" />
     </form>
   );
 }

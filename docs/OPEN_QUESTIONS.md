@@ -156,6 +156,7 @@ The Divi signup module posted to Constant Contact through the WordPress plugin (
 ### Q28. "Support the Coalition" call-to-action layout
 The Divi library contains a saved "Support the Coalition" header (Donate / Learn More buttons over a photo) that was probably shown above the footer on some pages. The export does not record where it was placed.
 **Assumed.** Not ported. Easy to add as a shared component under the footer if wanted.
+**Done (PR #13, UX review GIVE-4).** `components/support-band.tsx`: a "Support the Coalition" band with a Bike Kitchen photo and Donate / Join / Volunteer buttons above the footer on every public page except `/join` and the admin.
 
 ### Q29. Photo credits and alt text
 The export has no alt text for most images (only sponsor logos). Alt text on the new site was written by the migration agents from the image content and file names.
