@@ -22,7 +22,7 @@ How this was produced: the code was read page by page and component by component
 - **PR #12** (October 21 2026): the easy items from the observational notes at the end of this document; see "Done (PR #12)" there.
 - **PR #12** also covered CONT-9 (the Newsletter page leads with the signup) and A11Y-3 (the newsletter panel is no longer yellow).
 - **Shawn Hoffman's PRs #1 to #11** (merged October 22 2026, numbered against his own review, so the IDs differ): NAV-2 and A11Y-4 (#1, menus close after navigating), NAV-3 and A11Y-5 (#1, current page marked in the header), NAV-8 (#5, sticky compact header on desktop only; phones keep the scrolling header), A11Y-10 (#1), PERF-7 (#1, eager card images; no blur placeholders), PERF-5 (#2, and a build that cannot reach the database now fails; Q42), FORM-1 (#3, production refuses forms without Turnstile and fails each notification without Resend, with logged errors), A11Y-9 and A11Y-14 (#7; the map card's alt text is A11Y-17), EVT-4 (#8, Bike Valet and Other events shown; Q39), the "event already ended" refusal on create for ADMIN-2 (#6), and the Safari marker part of VIS-10 (#7).
-- **PR #13** (October 2026): the code-only, small-effort ideas below. Done: NAV-4, NAV-5, NAV-7 (except the EIN line), NAV-9, HOME-1 (photo hero and buttons; the one-line description still needs the board), HOME-3, HOME-4, CONT-12 (code parts), CONT-15, GIVE-3, GIVE-4, GIVE-5 (the "until then" helper text), FORM-1 (the admin warning is the ADMIN-4 panel), FORM-2, FORM-4 (except native forms), FORM-6 (except rate limiting), EVT-2, EVT-3 (PT and Google Calendar; no `.ics` yet), EVT-5, VIS-6, VIS-8 (button states), VIS-10 (chevron and menu icons; no SVG logo), VIS-12, VIS-15, A11Y-1, A11Y-2, A11Y-7, A11Y-8, A11Y-11, A11Y-12, A11Y-13, A11Y-15, A11Y-16, PERF-3, PERF-4, RESP-2, SEO-1 (Organization and Event; no breadcrumbs), SEO-3, SEO-4, OPS-1 ("now" headers; no CSP), ADMIN-2 (end time prefill and the past-event note when editing), ADMIN-3, ADMIN-4.
+- **PR #13** (October 2026): the code-only, small-effort ideas below. Done: NAV-4 (top-level Bike Map; the visible external-link icon was declined: the map and Tahoe Bike Month sites are meant to feel like one identity with this site, so off-site links keep only the screen-reader note), NAV-5, NAV-7 (except the EIN line), NAV-9, HOME-1 (photo hero and buttons; the one-line description still needs the board), HOME-3, HOME-4, CONT-12 (code parts), CONT-15, GIVE-3 (the visible line; no icon), GIVE-4, GIVE-5 (the "until then" helper text), FORM-1 (the admin warning is the ADMIN-4 panel), FORM-2, FORM-4 (except native forms), FORM-6 (except rate limiting), EVT-2, EVT-3 (PT and Google Calendar; no `.ics` yet), EVT-5, VIS-6, VIS-8 (button states), VIS-10 (chevron and menu icons; no SVG logo), VIS-12, VIS-15, A11Y-1, A11Y-2, A11Y-7, A11Y-8, A11Y-11, A11Y-12, A11Y-13, A11Y-15, A11Y-16, PERF-3, PERF-4, RESP-2, SEO-1 (Organization and Event; no breadcrumbs), SEO-3, SEO-4, OPS-1 ("now" headers; no CSP), ADMIN-2 (end time prefill and the past-event note when editing), ADMIN-3, ADMIN-4.
 - Everything else is open. The lists "Ideas that need board input" and "All ideas by value" at the end still describe the full set.
 
 ## Start here
@@ -79,6 +79,8 @@ No link anywhere sets `aria-current`, and there is no visual active state. Add a
 ### NAV-4. Promote the bike map; mark off-site links visibly
 **Value: High · Effort: S · Needs: Code**
 The interactive map is LTBC's flagship product and probably the most common visitor task, but it is the second of nine items inside the Programs dropdown. Two of those nine items ("Tahoe Bike Month" and "Interactive Bike Map") leave the site in a new tab, with nothing visible to say so (`SmartLink` adds only a screen-reader note). Add "Bike Map" as a top-level nav item. Add a small external-link icon to every link that opens a new tab, across the site, keeping the existing sr-only text.
+
+*Decision (October 2026):* the external-link icon was declined. The interactive map and Tahoe Bike Month sites are meant to feel like one identity with tahoebike.org, so marking them as "elsewhere" works against that. `SmartLink` keeps the sr-only "(opens in a new tab)" note only.
 
 ### NAV-5. Rename "Learn More" and surface Contact
 **Value: Medium · Effort: S · Needs: Code**
@@ -281,7 +283,7 @@ Check what Memberful's checkout URL parameters allow before designing the preset
 
 ### GIVE-3. Prepare people for the Memberful hand-off
 **Value: Medium · Effort: S · Needs: Code**
-The join and donate buttons open `tahoebike.memberful.com` in a new tab, and only screen-reader users are told so. Add a visible line under the buttons ("Secure checkout on Memberful, opens in a new tab") and the external-link icon from NAV-4.
+The join and donate buttons open `tahoebike.memberful.com` in a new tab, and only screen-reader users are told so. Add a visible line under the buttons ("Secure checkout on Memberful, opens in a new tab") and the external-link icon from NAV-4. (The icon was declined; see NAV-4. The visible line shipped.)
 
 ### GIVE-4. "Support the Coalition" band above the footer
 **Value: High · Effort: S–M · Needs: Code**

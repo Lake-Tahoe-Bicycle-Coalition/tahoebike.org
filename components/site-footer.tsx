@@ -55,7 +55,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
           <ul className="mt-4 flex gap-3">
             {social.map(({ label, href, Icon }) => (
               <li key={label}>
-                <SmartLink href={href} iconless aria-label={label} className={socialClass}>
+                <SmartLink href={href} aria-label={label} className={socialClass}>
                   <Icon className="h-5 w-5" />
                 </SmartLink>
               </li>

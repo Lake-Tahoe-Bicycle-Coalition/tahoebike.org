@@ -7,23 +7,6 @@ function base(props: IconProps): IconProps {
   return { "aria-hidden": true, focusable: false, ...props } as IconProps;
 }
 
-export function ExternalLinkIcon(props: IconProps) {
-  return (
-    <svg
-      viewBox="0 0 16 16"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...base(props)}
-    >
-      <path d="M12.5 9v3.5a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1H7" />
-      <path d="M10 2.5h3.5V6M13.5 2.5 7.5 8.5" />
-    </svg>
-  );
-}
-
 export function ChevronIcon(props: IconProps) {
   return (
     <svg

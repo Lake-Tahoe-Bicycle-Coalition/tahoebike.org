@@ -132,7 +132,6 @@ export default async function HomePage() {
         <section aria-labelledby="bike-map-heading" className="flex flex-col gap-4">
           <SmartLink
             href={settings.map_url}
-            iconless
             tabIndex={-1}
             aria-hidden="true"
             className="block overflow-hidden rounded-lg border border-asphalt/10"
