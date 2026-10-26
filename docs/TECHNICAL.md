@@ -29,8 +29,11 @@ pnpm dev                     # http://localhost:3000
 ```
 
 Every variable is documented in [.env.example](../.env.example). All external services
-(email, Turnstile, Vercel Blob, Google sign-in) no-op cleanly when their variables are absent,
-so only `DATABASE_URL` is required to run the public site. To open `/admin` locally without
+(email, Turnstile, Vercel Blob, Google sign-in, Constant Contact) no-op cleanly when their
+variables are absent, so only `DATABASE_URL` is required to run the public site. The
+exception is the Vercel production deployment: there a missing Turnstile key makes every
+form refuse submissions (the newsletter box falls back to Constant Contact's hosted page),
+and a missing `RESEND_API_KEY` means no notification emails. To open `/admin` locally without
 setting up Google OAuth, set `ADMIN_DEV_EMAIL=you@example.com`; `next dev` then treats that
 address as a signed-in admin (builds and deployments ignore the variable).
 
@@ -152,7 +155,9 @@ How it fits together:
 5. Add the remaining variables from `.env.example` in the Vercel project settings:
    `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL`,
    `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`, `EMAIL_FROM`.
-   Set `AUTH_TRUST_HOST=true` for preview deployments.
+   Set `AUTH_TRUST_HOST=true` for preview deployments. Variables take effect on the next
+   deployment (`NEXT_PUBLIC_` ones are compiled into the build), so redeploy after adding
+   them. Values marked Sensitive cannot be read back, not even with `vercel env pull`.
 6. Production deployments apply pending migrations themselves (`scripts/vercel-build.sh`,
    the `buildCommand` in `vercel.json`); preview deployments share the production database
    and never migrate. The database URL is a Sensitive variable, so it cannot be pulled to
@@ -162,8 +167,10 @@ How it fits together:
 7. For newsletter signups, sign in to Constant Contact **as the LTBC account** and create an
    app at https://app.constantcontact.com/pages/dma/portal (New Application; OAuth flow
    "Authorization Code Flow and Implicit Flow"; "Long Lived Refresh Tokens"; redirect URI
-   `https://tahoebike.org/api/constant-contact/callback`). New apps are private to the login
-   that created them, which is why it must be the LTBC login. Set
+   `https://tahoebike.org/api/constant-contact/callback`; save the app after adding it, or
+   Connect fails with "The 'redirect_uri' parameter must be a Login redirect URI"). New
+   apps are private to the login that created them, which is why it must be the LTBC
+   login. Set
    `CONSTANT_CONTACT_CLIENT_ID` (the API key), `CONSTANT_CONTACT_CLIENT_SECRET` and
    `CRON_SECRET`, deploy (which also creates the `ApiConnection` table), then click
    **Connect Constant Contact** in `/admin/settings` while still signed in to Constant

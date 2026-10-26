@@ -22,7 +22,7 @@ AI coding agents are now good enough that maintaining a small site as a source c
 ## Non-goals (for the initial migration)
 
 - **Matching the current visual design.** The first milestone is content and structure. Design will be iterated on afterward, guided by the brand guidelines file in this repo.
-- **Rebuilding membership, payments, or email marketing.** Memberful and Constant Contact stay as external services; we link to them exactly as the current site does.
+- **Rebuilding membership, payments, or email marketing.** Memberful and Constant Contact stay as external services; we link to them as the current site does (the newsletter box now subscribes through Constant Contact's API, Q27).
 - **A general-purpose CMS.** If someone wants a new page or a new kind of content, that's a code change. The admin is intentionally minimal.
 - **Moving `map.tahoebike.org` or `tahoebikemonth.org`.** These are separate properties and are only linked to.
 
@@ -148,7 +148,7 @@ Phases 1–5 (scaffold, content and structure, admin, redirects and SEO, and the
 ## Open items
 
 - [ ] Create the Vercel Blob store so admin image uploads work (TECHNICAL.md, Deploying)
-- [ ] Add the Turnstile and Resend keys so the native forms work end to end
+- [x] Add the Turnstile and Resend keys so the native forms work end to end (Oct 26 2026; until then production refused every contact-form submission)
 - [ ] Confirm where the old WordPress contact-form and newsletter submissions went
 - [ ] Get owner access to the two Google Forms (to download past responses before retiring them)
 - [ ] Decide whether Volunteer signup should also become a native form or stay on Constant Contact

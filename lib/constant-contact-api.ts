@@ -22,7 +22,9 @@ import type { ApiConnection } from "@/lib/generated/prisma/client";
  *   address and adds it to the given lists. It needs `contact_data`. It also re-opts-in
  *   a contact who had unsubscribed, which is right here because the visitor asked to
  *   subscribe. With Confirmed Opt-in enabled on the account, a new contact gets a
- *   confirmation email and stays `pending_confirmation` until they click it.
+ *   confirmation email and stays `pending_confirmation` until they click it. It is off on
+ *   the LTBC account (checked 2026-10-26), so signups are subscribed at once and the
+ *   form's thank-you message does not mention confirming.
  * - The WordPress site knew the newsletter list only by its V2 id (docs/OPEN_QUESTIONS.md
  *   Q25). `GET /v3/contact_lists/list_id_xrefs` maps it to the V3 UUID once, at connect
  *   time; Constant Contact says that endpoint will be removed eventually, so the admin

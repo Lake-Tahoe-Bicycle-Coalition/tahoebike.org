@@ -46,7 +46,7 @@ These are defects or deadlines, not enhancements. Each one also appears in its c
 | NAV-2 | Nav menus probably stay open after a client-side navigation | Every mobile visitor who uses the menu |
 | EVT-1 | `/bike-kitchen` has one upcoming event (Oct 21); after that it shows the bare empty state | Eight days from the date of this review |
 | HOME-2 | Homepage card "June is Tahoe Bike Month … Sign Up" is live in October | Visible on the homepage today |
-| FORM-1 | A contact submission shows "success" even when no notification email is sent | `TASKS.md` lists "Figure out what is set up with Turnstile and Resend" as unknown |
+| FORM-1 | A contact submission shows "success" even when no notification email is sent | `TASKS.md` lists "Figure out what is set up with Turnstile and Resend" as unknown. **Update (Oct 26 2026):** neither was set, so production refused every submission; both are set now and a test message reached info@tahoebike.org |
 | A11Y-1 | Form input borders are 2.52:1 against white (WCAG needs 3:1) | Every form |
 | A11Y-2 | The focus ring is 2.48:1 on the yellow panels | The skip link, the announcement banner, the newsletter panel |
 | PERF-5 | A transient database error during revalidation caches a page with no cards or banner for five minutes | Homepage and every page with a banner |
@@ -283,6 +283,7 @@ Q28 left the old Divi "Support the Coalition" section unported. Today most pages
 **Value: High · Effort: M · Needs: Both (Constant Contact access)**
 The newsletter form sends visitors to Constant Contact's hosted page, which ignores the email they typed, so they type it again on a page that doesn't match the site (Q27). A server action calling Constant Contact's `sign_up_form` API (Q26 option a) fixes the newsletter and the volunteer list together, and lets the site show its own "Check your inbox to confirm" message.
 **Until then:** add helper text under the field ("You'll confirm on our email provider's page"), and consider pointing `constant_contact_signup_url` at the newer landing page recorded in Q27.
+**Done (Oct 26 2026)** for the newsletter (Q27); the volunteer list is still a link (Q26). Confirmed Opt-in is off on the account, so the site says "Thanks for subscribing!" rather than "Check your inbox".
 
 ---
 
@@ -291,7 +292,7 @@ The newsletter form sends visitors to Constant Contact's hosted page, which igno
 ### FORM-1. Make sure contact messages reach a person
 **Value: High · Effort: S · Needs: Code (plus checking production settings)**
 `handleSubmission` in `lib/forms/actions.ts` stores the submission, then tries to send the notification. If the send fails it logs the error and still returns success. Without `RESEND_API_KEY` the provider is the console logger, so on Vercel the "notification" is a log line, and the visitor still reads "We will get back to you soon." The same happens if Resend rejects an unverified sender domain. The admin inbox keeps everything, but nobody is prompted to look at it.
-- Confirm Resend and the sender domain are configured in production (this is already an inbox item in `TASKS.md`).
+- Confirm Resend and the sender domain are configured in production (this is already an inbox item in `TASKS.md`). **Done (Oct 26 2026).**
 - Log at error level in production when the key is missing.
 - Show a "Email delivery is not configured" or "N notifications failed" warning on the admin dashboard (ADMIN-4).
 
@@ -737,7 +738,7 @@ These can't move without content, numbers or a decision from LTBC:
 - **NAV-6:** canonical names.
 - **GIVE-1:** membership benefits.
 - **GIVE-2:** donation amounts and impact framing.
-- **GIVE-5:** Constant Contact API access.
+- **GIVE-5:** Constant Contact API access (done, Oct 26 2026).
 - **EVT-1:** the winter fix-up schedule.
 - **PERF-1:** approval to change the privacy policy.
 - **VIS-5:** Adobe Fonts access.
