@@ -119,7 +119,6 @@ export default async function HomePage() {
           </section>
 
           <NewsletterSignupForm
-            signupUrl={settings.constant_contact_signup_url}
             archiveHref="/newsletter"
           />
         </div>

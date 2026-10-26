@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { signupFormTarget } from "@/lib/constant-contact";
+import { NewsletterForm } from "@/components/forms/newsletter-form";
 
 type Props = {
-  /** The hosted Constant Contact opt-in URL (settings.constant_contact_signup_url). */
-  signupUrl: string;
   /** Optional id for the wrapper, so other pages can link to the form (e.g. /join#newsletter). */
   id?: string;
   heading?: string;
@@ -12,13 +10,12 @@ type Props = {
 };
 
 /**
- * Newsletter signup panel. A plain GET form that works without JavaScript: the browser
- * sends the visitor to Constant Contact's hosted opt-in page, which completes the signup.
+ * Newsletter signup panel. The form subscribes the visitor through Constant Contact's
+ * API, or sends them to Constant Contact's hosted opt-in page when that is not
+ * available (see subscribeNewsletter in lib/forms/actions.ts).
  */
-export function NewsletterSignupForm({ signupUrl, id, heading = "Newsletter", archiveHref }: Props) {
-  const { action, hiddenFields } = signupFormTarget(signupUrl);
+export function NewsletterSignupForm({ id, heading = "Newsletter", archiveHref }: Props) {
   const headingId = `${id ?? "newsletter-signup"}-heading`;
-  const emailId = `${id ?? "newsletter-signup"}-email`;
 
   return (
     <section
@@ -40,30 +37,7 @@ export function NewsletterSignupForm({ signupUrl, id, heading = "Newsletter", ar
           </>
         ) : null}
       </p>
-      <form action={action} method="get" className="mt-5">
-        {Object.entries(hiddenFields).map(([name, value]) => (
-          <input key={name} type="hidden" name={name} value={value} />
-        ))}
-        <label htmlFor={emailId} className="field-label">
-          Email address
-        </label>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <input
-            id={emailId}
-            type="email"
-            name="email"
-            autoComplete="email"
-            required
-            className="field-input border-asphalt/60"
-          />
-          <button
-            type="submit"
-            className="btn btn-primary shrink-0"
-          >
-            Subscribe
-          </button>
-        </div>
-      </form>
+      <NewsletterForm />
     </section>
   );
 }

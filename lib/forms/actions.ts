@@ -1,7 +1,10 @@
 "use server";
 
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { z } from "zod";
+import { signupPageUrl } from "@/lib/constant-contact";
+import { subscribeToNewsletter } from "@/lib/constant-contact-api";
 import { prisma } from "@/lib/db";
 import { getEmailProvider } from "@/lib/email";
 import { nativeFormEnabled, type NativeFormName } from "@/lib/feature-flags";
@@ -10,7 +13,7 @@ import { getSettings, settingIsTrue, type Settings } from "@/lib/settings";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { contactFieldLabels, rackApplicationFieldLabels, valetRequestFieldLabels } from "./fields";
 import { fieldErrorsOf, pick, readString, readStrings } from "./parse";
-import { contactSchema, rackApplicationSchema, valetRequestSchema } from "./schemas";
+import { contactSchema, newsletterSchema, rackApplicationSchema, valetRequestSchema } from "./schemas";
 import type { FormState } from "./state";
 
 const HONEYPOT_FIELD = "website";
@@ -84,6 +87,53 @@ export async function submitRackApplication(
         ? null
         : "The Regional Bicycle Parking Program is not currently accepting applications."),
   });
+}
+
+/**
+ * Newsletter signup (every NewsletterSignupForm). Adds the address to the Constant
+ * Contact list through the API; nothing is stored here. When the API is not connected,
+ * Turnstile is misconfigured, or the API call fails, the visitor is sent to Constant
+ * Contact's hosted opt-in page instead (docs/OPEN_QUESTIONS.md Q27), so a signup is
+ * never simply lost.
+ */
+export async function subscribeNewsletter(_prev: FormState, formData: FormData): Promise<FormState> {
+  if (readString(formData, HONEYPOT_FIELD) !== "") {
+    console.info("[forms] NEWSLETTER: honeypot triggered, submission dropped");
+    return { status: "success" };
+  }
+
+  const raw = readStrings(formData, ["email", HONEYPOT_FIELD]);
+  const parsed = newsletterSchema.safeParse(raw);
+  if (!parsed.success) {
+    return {
+      status: "error",
+      fieldErrors: fieldErrorsOf(parsed.error),
+      values: pick(raw, ["email"]),
+    };
+  }
+  const { email } = parsed.data;
+  const fallbackUrl = signupPageUrl((await getSettings()).constant_contact_signup_url, email);
+
+  const turnstile = await verifyTurnstile(
+    readString(formData, TURNSTILE_FIELD) || null,
+    await clientIp(),
+  );
+  if (!turnstile.ok) {
+    if (turnstile.misconfigured) {
+      console.error(`[forms] NEWSLETTER: ${turnstile.error}`);
+      redirect(fallbackUrl);
+    }
+    console.warn(`[forms] NEWSLETTER: ${turnstile.error}`);
+    return {
+      status: "error",
+      formError: "We could not verify that you are a person. Please try again.",
+      values: { email },
+    };
+  }
+
+  const result = await subscribeToNewsletter(email);
+  if (result !== "subscribed") redirect(fallbackUrl);
+  return { status: "success", values: { email } };
 }
 
 /**

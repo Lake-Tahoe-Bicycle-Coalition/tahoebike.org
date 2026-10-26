@@ -29,7 +29,7 @@ export default async function NewsletterPage() {
       </header>
 
       <div className="mt-10 max-w-3xl">
-        <NewsletterSignupForm heading="Sign up" signupUrl={settings.constant_contact_signup_url} />
+        <NewsletterSignupForm heading="Sign up" />
       </div>
 
       <div className="mt-16 max-w-3xl">

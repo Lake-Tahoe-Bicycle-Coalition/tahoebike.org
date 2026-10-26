@@ -17,7 +17,7 @@ export const metadata = pageMetadata({
  * stops doing something (a new form, an analytics script, a new embed), update the text
  * and this date together.
  */
-const LAST_UPDATED = { iso: "2026-10-21", label: "October 21, 2026" };
+const LAST_UPDATED = { iso: "2026-10-26", label: "October 26, 2026" };
 
 /** Privacy policies of the services this site loads in the browser or hands visitors to. */
 const POLICY_URLS = {
@@ -143,11 +143,13 @@ export default async function PrivacyPolicyPage() {
 
         <h2>Newsletter and email lists</h2>
         <p>
-          Our newsletter and volunteer email list are run through Constant Contact. The
-          newsletter Subscribe box, which appears on several pages of this site, sends you to Constant Contact&apos;s
-          signup page, where you finish signing up. The email address you type into the box is
-          passed along to that page; this website does not receive or keep it. The volunteer
-          email list link works the same way. Constant Contact holds the lists, and you can
+          Our newsletter and volunteer email list are run through Constant Contact. When you
+          use the newsletter Subscribe box, which appears on several pages of this site, the
+          site sends the email address you typed to Constant Contact, which adds it to our
+          newsletter list. The site does not keep a copy. If Constant Contact cannot be reached,
+          the box sends you to Constant Contact&apos;s own signup page to finish there instead.
+          The volunteer email list link goes to a Constant Contact signup page as well, and
+          this site never sees what you enter there. Constant Contact holds the lists, and you can
           leave at any time with the unsubscribe link at the bottom of any email we send. The
           past issues on the <Link href="/newsletter">Newsletter page</Link> are hosted by Constant Contact too.{" "}
           <SmartLink href={POLICY_URLS.constantContact}>

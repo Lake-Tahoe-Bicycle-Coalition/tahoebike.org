@@ -4,8 +4,8 @@ import { matchingFundsValues, organizationTypeValues, rackStyleValues } from "./
 import { email, optionalLine, optionalText, requiredLine, requiredText, wholeNumber } from "./validators";
 
 /**
- * Validation for the three public forms. Field lists follow docs/OPEN_QUESTIONS.md
- * Q16 (valet), Q17 (racks), Q18 (contact). Every form also carries a honeypot
+ * Validation for the public forms. Field lists follow docs/OPEN_QUESTIONS.md
+ * Q16 (valet), Q17 (racks), Q18 (contact), Q27 (newsletter). Every form also carries a honeypot
  * field named `website` that humans never see and that must stay empty.
  *
  * Server-only: the client components import labels and option lists from ./fields
@@ -102,3 +102,10 @@ export const rackApplicationSchema = z.object({
 });
 
 export type RackApplicationInput = z.infer<typeof rackApplicationSchema>;
+
+// --- Newsletter signup (Q27) -------------------------------------------------
+
+export const newsletterSchema = z.object({
+  email,
+  ...honeypot,
+});

@@ -1,9 +1,9 @@
 /**
  * Constant Contact integration.
  *
- * Everything the site knows about Constant Contact lives here so it can grow later
- * (for example a full newsletter archive page) without touching individual pages.
- * No API key is involved; both endpoints are the public ones the WordPress site used.
+ * The public Constant Contact endpoints the WordPress site used; no API key is involved.
+ * Signups through the authenticated V3 API live in lib/constant-contact-api.ts and fall
+ * back to the hosted opt-in page below when that API is not connected.
  *
  * 1. Campaign archive (read-only JSON)
  *    GET https://campaignlp.constantcontact.com/v1/archive/<accountId>/activities?limit=<n>
@@ -37,11 +37,11 @@
  *    address back to itself. Extra query parameters are tolerated (the page keeps them
  *    on its form action).
  *
- *    Assumed: the site's signup form is a plain GET form that sends the visitor to this
- *    page (see `signupFormTarget`). The `email` value travels along in the query string
- *    for a possible future prefill, but as of 2026-09-15 the hosted page ignores it and
- *    the visitor types their address again there. Submitting to Constant Contact's list
- *    API directly would need an API key and a server action; not done for now.
+ *    The newsletter form's server action (`subscribeNewsletter` in lib/forms/actions.ts)
+ *    redirects here when the V3 API is not connected or a signup through it fails (see
+ *    `signupPageUrl`). The `email` value travels along in the query string for a
+ *    possible future prefill, but as of 2026-09-15 the hosted page ignores it and the
+ *    visitor types their address again there.
  */
 
 export type NewsletterItem = {
@@ -143,22 +143,15 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 /**
- * Split the hosted opt-in URL into a form `action` and the hidden fields a plain HTML
- * GET form needs so the browser rebuilds the same URL (plus the visitor's email) on submit.
- * A URL that cannot be parsed is returned as-is with no hidden fields.
+ * The hosted opt-in URL with the visitor's email added to its query. A URL that cannot
+ * be parsed is returned as-is.
  */
-export function signupFormTarget(signupUrl: string): {
-  action: string;
-  hiddenFields: Record<string, string>;
-} {
+export function signupPageUrl(signupUrl: string, email: string): string {
   try {
     const url = new URL(signupUrl);
-    const hiddenFields: Record<string, string> = {};
-    url.searchParams.forEach((value, key) => {
-      hiddenFields[key] = value;
-    });
-    return { action: `${url.origin}${url.pathname}`, hiddenFields };
+    url.searchParams.set("email", email);
+    return url.toString();
   } catch {
-    return { action: signupUrl, hiddenFields: {} };
+    return signupUrl;
   }
 }

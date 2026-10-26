@@ -148,7 +148,6 @@ export default async function JoinPage() {
       <div className="mt-16 max-w-3xl">
         <NewsletterSignupForm
           id="newsletter"
-          signupUrl={settings.constant_contact_signup_url}
           archiveHref="/newsletter"
         />
       </div>

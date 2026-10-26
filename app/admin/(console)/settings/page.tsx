@@ -1,3 +1,4 @@
+import { ConstantContactPanel } from "@/components/admin/constant-contact-panel";
 import { Notice } from "@/components/admin/notice";
 import { PageHeader } from "@/components/admin/page-header";
 import { SettingsForm } from "@/components/admin/settings-form";
@@ -19,6 +20,7 @@ export default async function SettingsPage({ searchParams }: PageProps<"/admin/s
         description="Prices, contact addresses, and the links to Memberful, Constant Contact, POINT and our social accounts. Changes appear across the whole site as soon as you save, and links here open the same way as any other link on the site, so check them before saving."
       />
       <Notice params={query} />
+      <ConstantContactPanel />
       <SettingsForm
         action={saveSettings}
         resetAction={resetSetting}

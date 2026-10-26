@@ -44,7 +44,7 @@ address as a signed-in admin (builds and deployments ignore the variable).
 | `pnpm lint` | ESLint |
 | `pnpm db:validate` | Validate `prisma/schema.prisma` |
 | `pnpm db:migrate --name <change>` | Create and apply a migration after editing the schema |
-| `pnpm db:deploy` | Apply pending migrations (production) |
+| `pnpm db:deploy` | Apply pending migrations (production deployments run this themselves) |
 | `pnpm db:seed` | Run `prisma/seed.ts` (add-only: creates missing rows, never overwrites existing ones) |
 | `pnpm content:optimize [--dry-run] [--all]` | Resize (long edge ≤ 2400 px) and recompress oversized images in `public/images` in place; paths and formats never change. Idempotent |
 | `pnpm content:image-index` | Regenerate `docs/IMAGE_INDEX.md`, the list of every image on the site with its alt text and where it is used |
@@ -62,8 +62,9 @@ while Postgres.app sessions default to local time; run `PGTZ=UTC psql ...` to av
 ## Database changes
 
 Edit `prisma/schema.prisma`, then run `pnpm db:migrate --name <change>` and commit the new
-folder under `prisma/migrations/`. Never edit the database schema by hand. Do not add models
-beyond those in the migration plan without a discussion.
+folder under `prisma/migrations/`; the next production deployment applies it. Never edit
+the database schema by hand. Do not add models beyond those in the migration plan without a
+discussion.
 
 ## Content changes
 
@@ -131,6 +132,12 @@ How it fits together:
   `BLOB_READ_WRITE_TOKEN` the image fields still accept a pasted URL or a `/images/...` path.
 - **Freshness**: public pages are static and revalidate every five minutes; every admin save
   also purges the affected pages (`lib/admin/revalidate.ts`), so edits show at once.
+- **Constant Contact** (top of Settings): the newsletter Subscribe boxes add people to the
+  list through Constant Contact's V3 API once an admin has clicked **Connect** there
+  (`app/api/constant-contact/`, `lib/constant-contact-api.ts`). The OAuth tokens live in the
+  `ApiConnection` table, and a weekly cron (`app/api/cron/constant-contact`) refreshes them so
+  they never expire from disuse. Until it is connected, or whenever a signup through the API
+  fails, the form sends the visitor to Constant Contact's hosted signup page instead.
 
 ## Deploying
 
@@ -146,11 +153,22 @@ How it fits together:
    `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL`,
    `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`, `EMAIL_FROM`.
    Set `AUTH_TRUST_HOST=true` for preview deployments.
-6. Run migrations against the production database once, then after any schema change:
-   `DATABASE_URL=<production url> pnpm db:deploy`, and seed once with `pnpm db:seed`.
+6. Production deployments apply pending migrations themselves (`scripts/vercel-build.sh`,
+   the `buildCommand` in `vercel.json`); preview deployments share the production database
+   and never migrate. The database URL is a Sensitive variable, so it cannot be pulled to
+   run `pnpm db:deploy` by hand. Seed once with `pnpm db:seed`.
    Set `SEED_ADMIN_EMAILS` (comma-separated) in the shell running the seed so it allowlists
    the first admins; further admins are added at `/admin/users`.
-7. Push to `main` to deploy production; every pull request gets a preview URL.
+7. For newsletter signups, sign in to Constant Contact **as the LTBC account** and create an
+   app at https://app.constantcontact.com/pages/dma/portal (New Application; OAuth flow
+   "Authorization Code Flow and Implicit Flow"; "Long Lived Refresh Tokens"; redirect URI
+   `https://tahoebike.org/api/constant-contact/callback`). New apps are private to the login
+   that created them, which is why it must be the LTBC login. Set
+   `CONSTANT_CONTACT_CLIENT_ID` (the API key), `CONSTANT_CONTACT_CLIENT_SECRET` and
+   `CRON_SECRET`, deploy (which also creates the `ApiConnection` table), then click
+   **Connect Constant Contact** in `/admin/settings` while still signed in to Constant
+   Contact as LTBC.
+8. Push to `main` to deploy production; every pull request gets a preview URL.
 
 `next build` prerenders every public page (they are static, revalidated every five
 minutes), so the build itself needs a reachable `DATABASE_URL`. On Vercel the Prisma

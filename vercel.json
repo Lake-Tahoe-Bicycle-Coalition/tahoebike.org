@@ -1,4 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "regions": ["sfo1"]
+  "buildCommand": "sh scripts/vercel-build.sh",
+  "regions": ["sfo1"],
+  "crons": [{ "path": "/api/cron/constant-contact", "schedule": "17 13 * * 1" }]
 }
