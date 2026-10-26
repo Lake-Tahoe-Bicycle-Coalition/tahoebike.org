@@ -41,32 +41,32 @@ export const primaryNav: NavItem[] = [
   { label: "Donate", href: "/join#donate", emphasis: true },
 ];
 
-/** Footer link columns. Mirrors the WordPress footer layout. */
+/**
+ * Footer link columns. Programs follows the header's Programs dropdown (minus the printable
+ * map); the logo, address and social links are built in SiteFooter.
+ */
 export const footerColumns: { heading: string; links: NavLink[] }[] = [
   {
-    heading: "About",
+    heading: "Programs",
     links: [
-      { label: "Home", href: "/" },
-      { label: "Board of Directors", href: "/about" },
-      { label: "Programs", href: "/programs" },
-    ],
-  },
-  {
-    heading: "Resources",
-    links: [
+      { label: "Tahoe Bike Month", href: "https://www.tahoebikemonth.org/" },
       { label: "Interactive Bike Map", href: "https://map.tahoebike.org/" },
-      { label: "Bike Month", href: "https://www.tahoebikemonth.org/" },
-      { label: "Bike Safety", href: "/bike-safety" },
+      { label: "Bike Kitchen", href: "/bike-kitchen" },
+      { label: "Bike Racks", href: "/bike-racks" },
       { label: "Bike Valet", href: "/bike-valet" },
+      { label: "Bike Safety", href: "/bike-safety" },
+      { label: "Advocacy", href: "/advocacy" },
     ],
   },
   {
     heading: "Get Involved",
     links: [
-      { label: "Join Us", href: "/join" },
-      { label: "Volunteer", href: "/volunteer" },
+      { label: "Join", href: "/join" },
       { label: "Donate", href: "/join#donate" },
-      { label: "Contact Us", href: "/contact" },
+      { label: "Volunteer", href: "/volunteer" },
+      { label: "Newsletter", href: "/newsletter" },
+      { label: "Contact", href: "/contact" },
+      { label: "About", href: "/about" },
     ],
   },
 ];

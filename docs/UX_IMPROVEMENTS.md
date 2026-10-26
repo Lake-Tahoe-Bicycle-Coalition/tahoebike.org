@@ -97,6 +97,8 @@ Pick one name for each, use it in the nav, cards, headings and metadata, and add
 - Add social icons, the reversed white logo (`reference/logos/Primary Logo/LTBC-Logo-white.png`), the brand tagline and the EIN line (CONT-1).
 - Use a single `<nav aria-label="Footer">` instead of three landmarks named "About", "Resources" and "Get Involved" (A11Y-11).
 
+*Status (October 2026):* drafted on `claude/footer-rework`, awaiting design approval. Two link columns (Programs, in the header dropdown's order without the printable map; Get Involved: Join, Donate, Volunteer, Newsletter, Contact, About) sit side by side on phones, with the white logo, tagline, address, email, round Facebook and Instagram buttons and the privacy policy link below them (beside them from `md` up). One `<nav aria-label="Footer">` wraps the link columns. Links are 32 px tall. The copyright bar is gone, including "an all-volunteer nonprofit". The footer is about 570 px tall on a 390 px phone. No task-shaped labels or EIN line yet.
+
 ### NAV-8. Sticky compact header on long pages
 **Value: Low · Effort: S · Needs: Code**
 The header scrolls away, so on long pages (`/about`, `/bike-safety`, `/bike-racks`) a phone user has to scroll back to the top to navigate. Make it `sticky top-0` with a smaller logo after scrolling. Add `scroll-padding-top` so anchor links and the skip link aren't hidden behind it, and cap the open mobile menu at `max-h-[80vh] overflow-auto` for landscape phones.
@@ -569,7 +571,7 @@ See FORM-6.
 **Value: Low–Medium · Effort: S · Needs: Code**
 Footer links are exactly 24 px tall, the WCAG 2.2 minimum, so any reduction would fail. Nav links are about 40 px. Raise nav links, footer links and the checkbox to about 44 px (`min-h-11`, `py-2.5`, `h-6 w-6`).
 
-*Status (October 2026):* header links and the Donate button are at least 44 px tall (`min-h-11`) in the navigation PR. Footer links and the checkbox are still open.
+*Status (October 2026):* header links and the Donate button are at least 44 px tall (`min-h-11`) in the navigation PR. Footer links are 32 px tall on the `claude/footer-rework` draft (NAV-7). The checkbox is still open.
 
 ### A11Y-17. Alt text for meaningful homepage card images
 **Value: Low · Effort: M · Needs: Code (schema change)**
