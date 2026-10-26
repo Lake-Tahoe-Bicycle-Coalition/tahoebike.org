@@ -13,10 +13,19 @@ export const contentType = "image/png";
 const SAFETY_YELLOW = "#FFDF00";
 const ASPHALT = "#201800";
 
-// The emblem never changes between requests, so read it once at module scope.
+// The emblem and fonts never change between requests, so read them once at module scope.
 const emblemSrc = `data:image/png;base64,${readFileSync(
   join(process.cwd(), "public/images/brand/ltbc-emblem-512.png"),
 ).toString("base64")}`;
+
+// Libre Franklin, the site's stand-in for the brand's Franklin Gothic ATF (OFL; see app/fonts/OFL.txt).
+// next/og bundles no heavy weights, so the header weight must be supplied here.
+const font = (weight: 400 | 800) =>
+  readFileSync(join(process.cwd(), `app/fonts/libre-franklin-latin-${weight}-normal.woff`));
+const fonts = [
+  { name: "Libre Franklin", data: font(400), weight: 400 as const, style: "normal" as const },
+  { name: "Libre Franklin", data: font(800), weight: 800 as const, style: "normal" as const },
+];
 
 export default function OpenGraphImage() {
   return new ImageResponse(
@@ -29,7 +38,7 @@ export default function OpenGraphImage() {
           flexDirection: "column",
           background: SAFETY_YELLOW,
           color: ASPHALT,
-          fontFamily: "sans-serif",
+          fontFamily: "Libre Franklin",
         }}
       >
         <div
@@ -51,18 +60,17 @@ export default function OpenGraphImage() {
           >
             <div
               style={{
-                fontSize: 78,
-                fontWeight: 900,
-                lineHeight: 1,
+                fontSize: 64,
+                fontWeight: 800,
+                lineHeight: 1.1,
                 textTransform: "uppercase",
-                letterSpacing: -2,
-                // The bundled font has one weight; a same-colour shadow thickens the strokes.
-                textShadow: `2px 0 0 ${ASPHALT}`,
+                // Brand header tracking 100 (0.1em), as in globals.css.
+                letterSpacing: "0.1em",
               }}
             >
               Lake Tahoe Bicycle Coalition
             </div>
-            <div style={{ marginTop: 28, fontSize: 34, lineHeight: 1.25 }}>
+            <div style={{ marginTop: 28, fontSize: 34, lineHeight: 1.25, letterSpacing: "0.025em" }}>
               Helping Tahoe become more bicycle friendly.
             </div>
           </div>
@@ -77,7 +85,8 @@ export default function OpenGraphImage() {
             background: ASPHALT,
             color: SAFETY_YELLOW,
             fontSize: 30,
-            letterSpacing: 3,
+            fontWeight: 800,
+            letterSpacing: "0.1em",
             textTransform: "uppercase",
           }}
         >
@@ -85,6 +94,6 @@ export default function OpenGraphImage() {
         </div>
       </div>
     ),
-    size,
+    { ...size, fonts },
   );
 }

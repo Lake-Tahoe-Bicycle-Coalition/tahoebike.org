@@ -468,7 +468,7 @@ This also helps anyone who prints `/bike-safety`.
 ### VIS-13. Favicon and share images
 **Value: Low–Medium · Effort: S–M · Needs: Code**
 - **Favicon:** `app/icon.png` is the detailed diamond emblem, which will blur at 16 and 32 px. Use a simplified high-contrast mark at small sizes, such as the bike on a yellow square.
-- **Default share image:** the OG image (`app/opengraph-image.tsx`) fakes bold text with a text shadow (Q35). Embedding Libre Franklin Black, which the OFL licence allows, fixes that.
+- **Default share image:** done (Oct 25 2026). The OG image (`app/opengraph-image.tsx`) now embeds Libre Franklin ExtraBold instead of faking bold with a text shadow (Q35).
 - **Per-page share images:** `/bike-kitchen` uses a raw ~500 KB photo with no declared dimensions. Pre-cropped 1200×630 photo images for the main program pages would make shared links far more appealing; `pageMetadata` already accepts an image.
 
 ### VIS-14. Sense of place and seasonal touches
