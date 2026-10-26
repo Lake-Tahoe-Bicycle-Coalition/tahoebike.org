@@ -1,12 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ChevronIcon, CloseIcon, MenuIcon } from "@/components/icons";
 import { NavLink } from "@/components/nav-link";
 import { NavMenus } from "@/components/nav-menus";
 import { primaryNav } from "@/lib/navigation";
 
-/** The link to the page being viewed gets a solid yellow background (NavLink sets aria-current). */
+/**
+ * The link to the page being viewed gets a solid yellow background (NavLink sets aria-current).
+ * Tap targets are at least 44px tall (min-h-11).
+ */
 const linkClass =
-  "block rounded px-3 py-2 text-asphalt no-underline hover:bg-safety/40 aria-[current=page]:bg-safety";
+  "flex min-h-11 items-center rounded px-3 py-2 text-asphalt no-underline hover:bg-safety/40 aria-[current=page]:bg-safety";
 /** A desktop menu heading whose dropdown holds the current page is marked the same way. */
 const currentSectionClass = "group-has-[[aria-current=page]]:bg-safety";
 
@@ -40,19 +44,8 @@ export function SiteHeader() {
               aria-label="Menu"
               className="absolute right-4 top-[22px] flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded border-2 border-asphalt text-asphalt hover:bg-safety/40 [&::-webkit-details-marker]:hidden"
             >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                aria-hidden="true"
-              >
-                <path className="group-open:hidden" d="M4 6h16M4 12h16M4 18h16" />
-                <path className="hidden group-open:inline" d="M6 6l12 12M18 6L6 18" />
-              </svg>
+              <MenuIcon width={24} height={24} className="group-open:hidden" />
+              <CloseIcon width={24} height={24} className="hidden group-open:block" />
             </summary>
             <ul className="mt-2 space-y-1 border-t border-asphalt/10 pt-2">
               {primaryNav.map((item) => (
@@ -77,9 +70,9 @@ export function SiteHeader() {
               item.children ? (
                 <li key={item.label} className="relative">
                   <details className="group">
-                    <summary className={`${linkClass} ${currentSectionClass} cursor-pointer list-none font-bold`}>
+                    <summary className={`${linkClass} ${currentSectionClass} cursor-pointer list-none gap-1 font-bold`}>
                       {item.label}
-                      <span aria-hidden="true"> ▾</span>
+                      <ChevronIcon className="h-4 w-4 transition-transform group-open:rotate-180 motion-reduce:transition-none" />
                     </summary>
                     <ul className="absolute right-0 z-20 mt-1 min-w-56 rounded border border-asphalt/10 bg-white p-2 shadow-lg">
                       {item.indexLabel ? (
@@ -97,7 +90,7 @@ export function SiteHeader() {
                 </li>
               ) : item.emphasis ? (
                 <li key={item.label} className="ml-2">
-                  <NavLink link={item} className="btn btn-primary px-4 py-1.5" />
+                  <NavLink link={item} className="btn btn-primary min-h-11 px-4 py-1.5" />
                 </li>
               ) : (
                 <li key={item.label}>
