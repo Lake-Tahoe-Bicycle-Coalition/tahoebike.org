@@ -10,7 +10,6 @@ export type NavItem = NavLink & {
 };
 
 export const primaryNav: NavItem[] = [
-  { label: "Bike Map", href: "https://map.tahoebike.org/" },
   { label: "Join", href: "/join" },
   { label: "Volunteer", href: "/volunteer" },
   {
@@ -19,6 +18,7 @@ export const primaryNav: NavItem[] = [
     indexLabel: "All Programs",
     children: [
       { label: "Tahoe Bike Month", href: "https://www.tahoebikemonth.org/" },
+      { label: "Interactive Bike Map", href: "https://map.tahoebike.org/" },
       { label: "Printable Bike Map", href: "/print-bike-map" },
       { label: "Bike Kitchen", href: "/bike-kitchen" },
       { label: "Bike Racks", href: "/bike-racks" },
@@ -33,9 +33,11 @@ export const primaryNav: NavItem[] = [
     // About is the index page here, so it is the indexLabel rather than a child: the phone
     // menu already links the "About" heading to /about, and a child would list it twice.
     indexLabel: "About",
-    children: [{ label: "Newsletter", href: "/newsletter" }],
+    children: [
+      { label: "Newsletter", href: "/newsletter" },
+      { label: "Contact", href: "/contact" },
+    ],
   },
-  { label: "Contact", href: "/contact" },
   { label: "Donate", href: "/join#donate", emphasis: true },
 ];
 

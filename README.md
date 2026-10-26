@@ -5,10 +5,8 @@ coalition's programs: the Bike Kitchen, Bike Valet, the bike rack program, bike 
 advocacy, and the Lake Tahoe bike map. It also lets people get in touch, volunteer, join, and
 sign up for the newsletter.
 
-The site was rebuilt in 2026 to replace the old WordPress site. Until the switch-over is
-finished, tahoebike.org still shows the old site, and the new one is at
-[tahoebikeorg.vercel.app](https://tahoebikeorg.vercel.app). The links below use the final
-tahoebike.org address.
+The site was rebuilt in 2026 to replace the old WordPress site, and went live at
+tahoebike.org on October 22 2026.
 
 This page is for board members and volunteers who want to know how the site works and how to
 keep it up to date. You don't need to be technical to read it. Developers should start with

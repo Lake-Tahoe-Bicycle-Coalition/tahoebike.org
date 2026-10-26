@@ -198,11 +198,11 @@ parameter simply being ignored.
 
 ### Q35. Open Graph image typography
 `app/opengraph-image.tsx` renders the default share card with next/og, which bundles only Geist
-Regular. The brand's heavy display weight is approximated with a same-colour text shadow that
-thickens the strokes; up close it is not the real typeface.
-**Decision (Sept 17 2026): Decided.** Won't fix for now; keep the text-shadow approximation.
-Supplying a TTF (Libre Franklin Black, or Franklin Gothic ATF if LTBC gets Adobe access — see
-Q6) through `ImageResponse`'s `fonts` option remains the fix if this is ever revisited.
+Regular. The brand's heavy display weight was first approximated with a same-colour text shadow.
+**Decision (Oct 25 2026): Decided.** Revisited: the card now embeds Libre Franklin Regular and
+ExtraBold (OFL, `app/fonts/`) through `ImageResponse`'s `fonts` option, with the brand's
+all-caps header tracking (0.1em), matching the site's headings. Franklin Gothic ATF remains the
+upgrade if LTBC gets Adobe access (see Q6).
 
 ### Q36. Two-hop redirects for retired paths with trailing slashes
 The site runs with Next's default `trailingSlash: false`, so `/get-involved/` is first

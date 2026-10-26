@@ -1,6 +1,6 @@
 # tahoebike.org Migration Plan
 
-**Status:** Phases 1–4 built (Phase 3 admin landed Sept 17 2026); Phase 5 (cutover) in progress: repo and Vercel production deploy are up (Q23, Sept 17 2026); board review, OAuth and DNS remain
+**Status:** The site went live at tahoebike.org on October 22 2026. Phases 1–5 are complete and have been removed from this plan; the remaining work is Phase 6 and the open items below
 **Last updated:** September 2026
 
 ## Background
@@ -117,43 +117,7 @@ Newsletter signup continues to post to Constant Contact.
 
 ## Phases
 
-### Phase 1: Scaffold
-- Next.js + TypeScript + Tailwind + pnpm (done)
-- Prisma schema for the models above (done); Prisma Postgres connected through Vercel (pending the Vercel project, Q23)
-- Admin auth with allowlist (done: Auth.js + Google, `AdminUser` allowlist, `/admin` shell only)
-- Seed script that loads the board roster, Bike Kitchen events, homepage cards, and site settings from the WordPress XML export (done)
-- CI: typecheck, lint, `prisma validate` on every PR (done)
-
-### Phase 2: Content and structure
-- Port every page from the XML export, preserving paths (done)
-- Fix known content bugs during the port (duplicated Bike Valet body; stale 2022 rack deadline; past events) (done)
-- Wire events, board, hero cards, and announcements to the DB (done)
-- Download all referenced images from `wp-content/uploads` into `/public/images` (static) or Vercel Blob (admin-managed) (done: static images downloaded; admin uploads go to Blob since Phase 3)
-- Build the three native forms and email notifications (done)
-- Minimal, clean, accessible styling only, using the brand guidelines' colors and fonts. No attempt to replicate the WordPress theme. (done)
-
-### Phase 3: Admin
-- CRUD pages for each model (done: `/admin/events`, `/admin/board`, `/admin/cards`,
-  `/admin/announcements`, `/admin/settings` (one form, all keys), `/admin/users` (allowlist))
-- Submissions inbox (done: `/admin/submissions`, filtered by form type and status, with a
-  detail view and read/archive/delete actions)
-- Image uploads (done: browser → Vercel Blob through `app/api/admin/upload`; fields fall back to
-  pasted URLs when `BLOB_READ_WRITE_TOKEN` is absent)
-- Also: `ADMIN_DEV_EMAIL` dev-only sign-in bypass (Q37); the seed became add-only so it can
-  never overwrite board edits (Q38)
-
-### Phase 4: Redirects and SEO
-- Keep existing paths. Add a `next.config` redirect map for anything that changes and for old WordPress URLs found in the export (attachment pages, `?p=` links, etc.) (done: 341 rules, see `docs/REDIRECTS.md`)
-- Choose `tahoebike.org` (non-www, matching current canonical) as canonical; redirect `www` (done)
-- Metadata, Open Graph, sitemap, robots (done; every public page declares `alternates.canonical`
-  via `pageMetadata()` in `lib/site-metadata.ts`. The remaining Q34 item is whether to add a
-  `proxy.ts` that strips the leftover `?page_id=`/`?p=` parameter from redirect destinations.)
-
-### Phase 5: Cutover
-- GitHub repo and Vercel project exist; production deploys from `main` to `https://tahoebikeorg.vercel.app` (done Sept 17 2026)
-- Board reviews the Vercel deployment
-- Point apex and `www` DNS to Vercel. **Do not touch** the `map` subdomain or MX records.
-- Keep WordPress hosting alive for two weeks as a fallback, then cancel
+Phases 1–5 (scaffold, content and structure, admin, redirects and SEO, and the DNS cutover) are done. What remains:
 
 ### Phase 6: Design iteration (after launch)
 - Iterate on visual design against the brand guidelines, page by page, via AI-generated PRs and preview deployments
@@ -183,9 +147,8 @@ Newsletter signup continues to post to Constant Contact.
 
 ## Open items
 
-- [x] Admin allowlist seeded (Q24); further admins are added at `/admin/users`
 - [ ] Create the Vercel Blob store so admin image uploads work (TECHNICAL.md, Deploying)
-- [ ] Confirm where current WordPress contact-form and newsletter submissions go
+- [ ] Add the Turnstile and Resend keys so the native forms work end to end
+- [ ] Confirm where the old WordPress contact-form and newsletter submissions went
 - [ ] Get owner access to the two Google Forms (to download past responses before retiring them)
-- [ ] Export the current DNS zone before cutover
 - [ ] Decide whether Volunteer signup should also become a native form or stay on Constant Contact
