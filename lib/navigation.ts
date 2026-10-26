@@ -28,10 +28,10 @@ export const primaryNav: NavItem[] = [
     ],
   },
   {
-    label: "Learn More",
+    label: "About",
     href: "/about",
     // About is the index page here, so it is the indexLabel rather than a child: the phone
-    // menu already links "Learn More" to /about, and a child would list About twice.
+    // menu already links the "About" heading to /about, and a child would list it twice.
     indexLabel: "About",
     children: [
       { label: "Newsletter", href: "/newsletter" },

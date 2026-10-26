@@ -72,9 +72,13 @@ No link anywhere sets `aria-current`, and there is no visual active state. Add a
 **Value: High · Effort: S · Needs: Code**
 The interactive map is LTBC's flagship product and probably the most common visitor task, but it is the second of nine items inside the Programs dropdown. Two of those nine items ("Tahoe Bike Month" and "Interactive Bike Map") leave the site in a new tab, with nothing visible to say so (`SmartLink` adds only a screen-reader note). Add "Bike Map" as a top-level nav item. Add a small external-link icon to every link that opens a new tab, across the site, keeping the existing sr-only text.
 
+*Status (October 2026):* deferred. The map stays in the Programs dropdown as "Interactive Bike Map" until analytics show how much it is used. The external-link icon was declined: the map and Tahoe Bike Month should feel like one identity with this site.
+
 ### NAV-5. Rename "Learn More" and surface Contact
 **Value: Medium · Effort: S · Needs: Code**
 "Learn More" (`lib/navigation.ts`) is a vague parent for About, Newsletter and Contact, and Contact is a high-intent link hidden two clicks deep. Rename the group to "About" and make Contact a top-level item. Alternatively, group Join, Volunteer and Donate under a "Get Involved" parent so the top level reads Bike Map · Programs · Get Involved · About · Contact · [Donate].
+
+*Status (October 2026):* partly done in the navigation PR. The group is now "About" (About stays its index link). Contact stays under About with Newsletter rather than at the top level; it is also in the footer.
 
 ### NAV-6. Use one name per thing
 **Value: Medium · Effort: S · Needs: Both (pick names)**
@@ -448,6 +452,8 @@ Ask the board for recent event photos. Most of the library dates from 2022.
 - Export the logo from `reference/logos/Primary Logo/LTBC-Logo.ai` or `.pdf` as an SVG, so it is sharp at any size and skips the image optimizer.
 - Keep the brand's clear space around the logo (the guide specifies it; the header uses `gap-4 px-4 py-3`).
 
+*Status (October 2026):* the SVG chevron (rotates on open) and the hamburger and close icons are done in the navigation PR. No slide-down panel or SVG logo yet.
+
 ### VIS-11. About page styling
 **Value: Low–Medium · Effort: S · Needs: Code**
 - Make the About banner full-bleed.
@@ -562,6 +568,8 @@ See FORM-6.
 ### A11Y-16. Larger touch targets
 **Value: Low–Medium · Effort: S · Needs: Code**
 Footer links are exactly 24 px tall, the WCAG 2.2 minimum, so any reduction would fail. Nav links are about 40 px. Raise nav links, footer links and the checkbox to about 44 px (`min-h-11`, `py-2.5`, `h-6 w-6`).
+
+*Status (October 2026):* header links and the Donate button are at least 44 px tall (`min-h-11`) in the navigation PR. Footer links and the checkbox are still open.
 
 ### A11Y-17. Alt text for meaningful homepage card images
 **Value: Low · Effort: M · Needs: Code (schema change)**
