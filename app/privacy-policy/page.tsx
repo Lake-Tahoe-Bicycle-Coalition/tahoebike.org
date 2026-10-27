@@ -144,14 +144,14 @@ export default async function PrivacyPolicyPage() {
         <h2>Newsletter and email lists</h2>
         <p>
           Our newsletter and other email lists are run through Constant Contact. When you
-          use the newsletter signup form, which appears on several pages of this site, the
-          site sends Constant Contact the email address you typed, your name if you gave it,
+          use one of our email signup forms (for the newsletter on several pages of this site,
+          and for the volunteer list on the Volunteer page), the site sends Constant Contact the email address you typed, your name if you gave it,
           and which of our newsletter topics you chose (general news, projects in the areas you
           picked, volunteer opportunities), and Constant Contact adds you to those lists. The site
           does not keep a copy. If Constant Contact cannot be reached, the form sends you to
           Constant Contact&apos;s own signup page to finish there instead.
-          The volunteer email list link goes to a Constant Contact signup page as well, and
-          this site never sees what you enter there. Constant Contact holds the lists, and you can
+          Some pages also link to Constant Contact&apos;s own volunteer signup page, and this
+          site never sees what you enter there. Constant Contact holds the lists, and you can
           leave at any time with the unsubscribe link at the bottom of any email we send. The
           past issues on the <Link href="/newsletter">Newsletter page</Link> are hosted by Constant Contact too.{" "}
           <SmartLink href={POLICY_URLS.constantContact}>

@@ -21,15 +21,16 @@ import { TurnstileWidget } from "./turnstile-widget";
  * SIGNUP_LISTS in lib/constant-contact-lists.ts) to the `subscribeNewsletter` action,
  * which adds the address to those Constant Contact lists. Two modes:
  *
- * - "compact" (homepage, /join, /programs): the email box and Subscribe button on one
- *   row, subscribing to the newsletter only. Its success message is followed by an
- *   optional second form (NewsletterDetailsForm) for the name and the other lists.
+ * - "compact" (homepage, /join, /programs, /volunteer): the email box and Subscribe
+ *   button on one row, subscribing to one primary list only (`primaryList`: the general
+ *   newsletter by default, volunteers on /volunteer). Its success message is followed by
+ *   an optional second form (NewsletterDetailsForm) for the name and the other lists.
  * - "full" (/newsletter, /advocacy): email, name and every list choice up front.
  *
- * Both show the lists as one "Newsletter Topics" group in SIGNUP_LISTS order. Where the
- * visitor is already on (or is signing up for) the general newsletter, its box is ticked
- * and disabled; a disabled box does not post, so those forms carry a hidden
- * `lists=general` instead.
+ * Both show the lists as one "Newsletter Topics" group in SIGNUP_LISTS order. A list the
+ * visitor is already on (compact step two: the primary list) or is always signing up for
+ * (/newsletter: the general newsletter) is shown ticked and disabled; a disabled box does
+ * not post, so those forms carry a hidden `lists=<key>` instead.
  *
  * Works without JavaScript: each step is an ordinary form post answered by the server
  * action, which either returns the next state or redirects to Constant Contact's hosted
@@ -47,11 +48,18 @@ type Props = {
    * Off on /advocacy, where an advocacy-only signup must stay possible.
    */
   generalLocked?: boolean;
+  /** Compact mode: the list step one subscribes to (default: the general newsletter). */
+  primaryList?: SignupListKey;
 };
 
-export function NewsletterForm({ mode, defaultLists = [], generalLocked = false }: Props) {
+export function NewsletterForm({
+  mode,
+  defaultLists = [],
+  generalLocked = false,
+  primaryList = "general",
+}: Props) {
   return mode === "compact" ? (
-    <CompactNewsletterForm />
+    <CompactNewsletterForm primaryList={primaryList} />
   ) : (
     <FullNewsletterForm defaultLists={defaultLists} generalLocked={generalLocked} />
   );
@@ -59,6 +67,18 @@ export function NewsletterForm({ mode, defaultLists = [], generalLocked = false 
 
 const TOPICS_LEGEND = "Newsletter Topics";
 const TOPICS_HELP = "Project topics get an email when something in that area is open for public comment.";
+
+/** Compact step one's success message, by primary list. */
+function subscribedMessage(primary: SignupListKey, email: string): string {
+  switch (primary) {
+    case "general":
+      return `You're subscribed. ${email} will get the monthly newsletter.`;
+    case "volunteers":
+      return `You're on the volunteer list. ${email} will hear about volunteer opportunities.`;
+    default:
+      return `You're subscribed. ${email} will hear about: ${SIGNUP_LISTS[primary].label}`;
+  }
+}
 
 /** The comma-joined keys the action echoes back in `values.lists`, unknown keys dropped. */
 function parseListKeys(joined: string | undefined): SignupListKey[] {
@@ -81,9 +101,9 @@ function checkedLists(state: FormState, defaults: readonly SignupListKey[]): Set
 
 /**
  * A single field, so it keeps its own inline layout instead of TextField. Subscribes to
- * the newsletter list only (hidden `lists=general`).
+ * the primary list only (hidden `lists=<primaryList>`).
  */
-function CompactNewsletterForm() {
+function CompactNewsletterForm({ primaryList }: { primaryList: SignupListKey }) {
   const [state, formAction, pending] = useActionState(subscribeNewsletter, initialFormState);
   const id = useId();
   const emailId = `${id}-email`;
@@ -99,7 +119,7 @@ function CompactNewsletterForm() {
         </div>
       );
     }
-    return <NewsletterDetailsForm email={email} />;
+    return <NewsletterDetailsForm email={email} primaryList={primaryList} />;
   }
 
   const emailErrors = state.fieldErrors?.email;
@@ -136,7 +156,7 @@ function CompactNewsletterForm() {
           </p>
         ) : null}
       </div>
-      <input type="hidden" name="lists" value="general" />
+      <input type="hidden" name="lists" value={primaryList} />
       <input type="hidden" name="step" value="1" />
       <HoneypotField />
       <TurnstileWidget resetKey={state} />
@@ -145,13 +165,13 @@ function CompactNewsletterForm() {
 }
 
 /**
- * Step two of the compact form, shown once the address is on the newsletter list: the
- * optional name and the other lists (General Info shown ticked and disabled). It posts
- * the same address again with `lists=general`, which keeps the schema's "at least one
- * list" rule satisfied and is a no-op in Constant Contact (sign_up_form only ever adds
- * lists).
+ * Step two of the compact form, shown once the address is on the primary list: the
+ * optional name and the other lists (the primary one shown ticked and disabled). It
+ * posts the same address again with `lists=<primaryList>`, which keeps the schema's "at
+ * least one list" rule satisfied and is a no-op in Constant Contact (sign_up_form only
+ * ever adds lists).
  */
-function NewsletterDetailsForm({ email }: { email: string }) {
+function NewsletterDetailsForm({ email, primaryList }: { email: string; primaryList: SignupListKey }) {
   const [state, formAction, pending] = useActionState(subscribeNewsletter, initialFormState);
 
   if (state.status === "success") {
@@ -171,11 +191,14 @@ function NewsletterDetailsForm({ email }: { email: string }) {
 
   return (
     <div className="mt-5 space-y-5">
-      <SuccessMessage>
-        You&apos;re subscribed. {email} will get the monthly newsletter.
-      </SuccessMessage>
+      <SuccessMessage>{subscribedMessage(primaryList, email)}</SuccessMessage>
       <form action={formAction} className="space-y-4">
-        <h3 className="text-lg">Tell us a little more</h3>
+        <div>
+          <h3 className="text-lg">Tell us a little more</h3>
+          {primaryList === "general" ? null : (
+            <p className="mt-1">Add your name, or pick other newsletter topics.</p>
+          )}
+        </div>
         <FormAlert message={formError} />
         <div className="grid gap-4 sm:grid-cols-2">
           <TextField
@@ -195,9 +218,9 @@ function NewsletterDetailsForm({ email }: { email: string }) {
             errors={state.fieldErrors?.lastName}
           />
         </div>
-        <NewsletterTopics checked={checked} generalLocked errors={state.fieldErrors?.lists} />
+        <NewsletterTopics checked={checked} locked={primaryList} errors={state.fieldErrors?.lists} />
         <input type="hidden" name="email" value={email} />
-        <input type="hidden" name="lists" value="general" />
+        <input type="hidden" name="lists" value={primaryList} />
         <input type="hidden" name="step" value="2" />
         <HoneypotField />
         <TurnstileWidget resetKey={state} />
@@ -265,7 +288,11 @@ function FullNewsletterForm({
           errors={errors.lastName}
         />
       </div>
-      <NewsletterTopics checked={checked} generalLocked={generalLocked} errors={errors.lists} />
+      <NewsletterTopics
+        checked={checked}
+        locked={generalLocked ? "general" : undefined}
+        errors={errors.lists}
+      />
       {generalLocked ? <input type="hidden" name="lists" value="general" /> : null}
       <input type="hidden" name="step" value="1" />
       <HoneypotField />
@@ -279,31 +306,31 @@ function FullNewsletterForm({
 
 /**
  * Every list as one fieldset, so the "at least one" error is announced with the whole
- * group rather than with any single box. With `generalLocked` the General Info box is
- * ticked and disabled; the form must then post `lists=general` itself (hidden input).
+ * group rather than with any single box. The `locked` list's box is ticked and
+ * disabled; the form must then post `lists=<locked>` itself (hidden input).
  */
 function NewsletterTopics({
   checked,
-  generalLocked = false,
+  locked,
   errors,
 }: {
   checked: Set<SignupListKey>;
-  generalLocked?: boolean;
+  locked?: SignupListKey;
   errors?: string[];
 }) {
   return (
     <CheckboxGroup legend={TOPICS_LEGEND} help={TOPICS_HELP} errors={errors}>
       <div className="space-y-2">
         {signupListKeys.map((key) => {
-          const locked = generalLocked && key === "general";
+          const isLocked = key === locked;
           return (
             <CheckboxField
               key={key}
               label={SIGNUP_LISTS[key].label}
               name="lists"
               value={key}
-              disabled={locked}
-              defaultChecked={locked || checked.has(key)}
+              disabled={isLocked}
+              defaultChecked={isLocked || checked.has(key)}
             />
           );
         })}

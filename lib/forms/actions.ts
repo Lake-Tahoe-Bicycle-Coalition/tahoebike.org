@@ -96,12 +96,14 @@ export async function submitRackApplication(
  * Constant Contact through the API; nothing is stored here. When the API is not
  * connected, Turnstile is misconfigured, or the API call fails, the visitor is sent to
  * Constant Contact's hosted opt-in page instead (docs/OPEN_QUESTIONS.md Q27), so a
- * signup is never simply lost.
+ * signup is never simply lost: the volunteer page when the volunteer list was chosen
+ * without the newsletter, otherwise the newsletter page.
  *
- * The compact form posts twice: step 1 is the email with the newsletter list, step 2
- * (optional) the name and any further lists. The hidden `step` field is echoed back
- * untouched so the form knows which answer it is looking at. Step 2 re-sends the
- * newsletter list, which is harmless because sign_up_form only ever adds lists.
+ * The compact form posts twice: step 1 is the email with its primary list (the
+ * newsletter, or volunteers on /volunteer), step 2 (optional) the name and any further
+ * lists. The hidden `step` field is echoed back untouched so the form knows which answer
+ * it is looking at. Step 2 re-sends the primary list, which is harmless because
+ * sign_up_form only ever adds lists.
  */
 export async function subscribeNewsletter(_prev: FormState, formData: FormData): Promise<FormState> {
   const step = readString(formData, "step") === "2" ? "2" : "1";
@@ -127,7 +129,11 @@ export async function subscribeNewsletter(_prev: FormState, formData: FormData):
     return { status: "error", fieldErrors, values };
   }
   const { email, firstName, lastName } = parsed.data;
-  const fallbackUrl = signupPageUrl((await getSettings()).constant_contact_signup_url, email);
+  const settings = await getSettings();
+  const volunteerOnly = parsed.data.lists.includes("volunteers") && !parsed.data.lists.includes("general");
+  const fallbackUrl = volunteerOnly
+    ? settings.constant_contact_volunteer_url
+    : signupPageUrl(settings.constant_contact_signup_url, email);
 
   const turnstile = await verifyTurnstile(
     readString(formData, TURNSTILE_FIELD) || null,
