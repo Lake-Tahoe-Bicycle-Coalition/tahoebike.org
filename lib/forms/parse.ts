@@ -10,6 +10,14 @@ export function readString(formData: FormData, name: string): string {
   return typeof value === "string" ? value : "";
 }
 
+/**
+ * Every value of a repeated field, e.g. a group of checkboxes sharing one name (only the
+ * ticked ones are sent). Files are skipped.
+ */
+export function readStringList(formData: FormData, name: string): string[] {
+  return formData.getAll(name).filter((value): value is string => typeof value === "string");
+}
+
 /** Every listed field as a string ("" when absent, e.g. an unticked checkbox). */
 export function readStrings(formData: FormData, names: readonly string[]): Record<string, string> {
   const out: Record<string, string> = {};

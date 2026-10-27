@@ -122,14 +122,13 @@ model AdminUser {
 
 /// The site's connection to an external API that needs OAuth (today only Constant Contact,
 /// for newsletter signups). Written by the admin "Connect" flow and the token refresh in
-/// lib/constant-contact-api.ts; one row per provider.
+/// lib/constant-contact-api.ts; one row per provider. The lists signups go to are fixed
+/// in code (lib/constant-contact-lists.ts), not stored here.
 model ApiConnection {
   provider             String    @id
   refreshToken         String
   accessToken          String?
   accessTokenExpiresAt DateTime?
-  /// The Constant Contact list (v3 UUID) that newsletter signups are added to.
-  listId               String?
   connectedBy          String
   connectedAt          DateTime
   updatedAt            DateTime  @updatedAt

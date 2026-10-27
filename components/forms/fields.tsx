@@ -4,8 +4,8 @@ import { useEffect, useId, useRef, type ComponentProps, type ReactNode } from "r
 
 /**
  * Shared building blocks for the public forms: labelled controls with inline errors
- * (aria-describedby / aria-invalid), the honeypot, the alert region, the submit
- * button, and the success message.
+ * (aria-describedby / aria-invalid), checkbox groups, the honeypot, the alert region,
+ * the submit button, and the success message.
  */
 
 type FieldProps = {
@@ -165,24 +165,29 @@ export function SelectField({
 }
 
 /**
- * A single checkbox with its label to the right. Browsers send "on" when ticked and
- * nothing when not, so read it with the `checkbox` validator in lib/forms/validators.ts.
+ * A single checkbox with its label to the right. Without `value`, browsers send "on"
+ * when ticked and nothing when not, so read it with the `checkbox` validator in
+ * lib/forms/validators.ts. With `value`, several checkboxes can share one name and post
+ * the ticked values (read them with readStringList in lib/forms/parse.ts); put them in
+ * a CheckboxGroup and give the group the errors.
  */
 export function CheckboxField({
   label,
   name,
+  value,
   errors,
   className,
   help,
   defaultChecked,
-}: Omit<FieldProps, "required"> & { help?: string; defaultChecked?: boolean }) {
-  const ids = useFieldIds(name);
+}: Omit<FieldProps, "required"> & { value?: string; help?: string; defaultChecked?: boolean }) {
+  const ids = useFieldIds(value === undefined ? name : `${name}-${value}`);
   return (
     <div className={className}>
       <div className="flex items-start gap-3">
         <input
           id={ids.inputId}
           name={name}
+          value={value}
           type="checkbox"
           defaultChecked={defaultChecked}
           className="mt-1 h-5 w-5 shrink-0 accent-tahoe-deep"
@@ -205,6 +210,50 @@ export function CheckboxField({
         </p>
       ) : null}
     </div>
+  );
+}
+
+/**
+ * A fieldset of related checkboxes (or nested groups) with a legend, an optional hint,
+ * and one error for the whole group, all linked from the fieldset with
+ * aria-describedby so screen readers announce them on entering the group.
+ * `legendClassName` lets a group that wraps other groups use a lighter or hidden legend.
+ */
+export function CheckboxGroup({
+  legend,
+  help,
+  errors,
+  className,
+  legendClassName = "field-label",
+  children,
+}: {
+  legend: ReactNode;
+  help?: string;
+  errors?: string[];
+  className?: string;
+  legendClassName?: string;
+  children: ReactNode;
+}) {
+  const id = useId();
+  const helpId = `${id}-help`;
+  const errorId = `${id}-error`;
+  const hasErrors = errors !== undefined && errors.length > 0;
+  const describedBy = [help ? helpId : null, hasErrors ? errorId : null].filter(Boolean).join(" ");
+  return (
+    <fieldset className={className} {...(describedBy ? { "aria-describedby": describedBy } : {})}>
+      <legend className={legendClassName}>{legend}</legend>
+      {help ? (
+        <p id={helpId} className="-mt-0.5 mb-2 text-sm text-asphalt/70">
+          {help}
+        </p>
+      ) : null}
+      {children}
+      {hasErrors ? (
+        <p id={errorId} className="mt-2 text-sm font-semibold text-red-700">
+          {errors.join(" ")}
+        </p>
+      ) : null}
+    </fieldset>
   );
 }
 

@@ -3,7 +3,8 @@ import { prisma } from "@/lib/db";
 import type { ApiConnection } from "@/lib/generated/prisma/client";
 
 /**
- * Constant Contact V3 API: newsletter signups straight from the site's own form.
+ * Constant Contact V3 API: signups to the LTBC email lists straight from the site's own
+ * form. The lists themselves are in lib/constant-contact-lists.ts.
  * (lib/constant-contact.ts holds the public, key-free endpoints: the archive and the
  * hosted opt-in page that signups fall back to.)
  *
@@ -19,16 +20,17 @@ import type { ApiConnection } from "@/lib/generated/prisma/client";
  *   (`ApiConnection`), every refresh stores whatever comes back, and a weekly cron
  *   (app/api/cron/constant-contact) keeps the refresh token in use.
  * - `POST /v3/contacts/sign_up_form` creates (201) or updates (200) a contact by email
- *   address and adds it to the given lists. It needs `contact_data`. It also re-opts-in
+ *   address and ADDS it to the given lists; it never removes a list membership, so
+ *   sending a list the contact is already on is harmless (the form's optional second
+ *   step relies on this to re-send the newsletter list). It needs `contact_data`.
+ *   `first_name` and `last_name` are optional and at most 50 characters each. It also re-opts-in
  *   a contact who had unsubscribed, which is right here because the visitor asked to
  *   subscribe. With Confirmed Opt-in enabled on the account, a new contact gets a
  *   confirmation email and stays `pending_confirmation` until they click it. It is off on
  *   the LTBC account (checked 2026-10-26), so signups are subscribed at once and the
  *   form's thank-you message does not mention confirming.
- * - The WordPress site knew the newsletter list only by its V2 id (docs/OPEN_QUESTIONS.md
- *   Q25). `GET /v3/contact_lists/list_id_xrefs` maps it to the V3 UUID once, at connect
- *   time; Constant Contact says that endpoint will be removed eventually, so the admin
- *   can also pick the list from `GET /v3/contact_lists`.
+ * - The list ids are fixed in code (lib/constant-contact-lists.ts); `GET /v3/contact_lists`
+ *   is only used by /admin/settings to show whether each one exists in the account.
  * - Rate limits: 10,000 requests a day, 4 a second. Refreshing before every request
  *   gets a 429 from the token endpoint, hence the cached access token.
  *
@@ -43,9 +45,6 @@ const AUTHORIZE_URL = "https://authz.constantcontact.com/oauth2/default/v1/autho
 const TOKEN_URL = "https://authz.constantcontact.com/oauth2/default/v1/token";
 const API_BASE_URL = "https://api.cc.email/v3";
 const SCOPES = "contact_data offline_access";
-
-/** The newsletter list's V2 id from the WordPress plugin settings (Q25). */
-const NEWSLETTER_V2_LIST_ID = "1199281500";
 
 /** Refresh a little before the access token expires rather than mid-request. */
 const EXPIRY_MARGIN_MS = 5 * 60 * 1000;
@@ -134,15 +133,14 @@ async function requestTokens(params: Record<string, string>): Promise<TokenSet> 
 }
 
 /**
- * Finishes the admin "Connect" flow: trades the authorization code for tokens, finds
- * the newsletter list, and stores the connection (replacing any earlier one).
- * Returns the list id, or null when the list could not be found automatically.
+ * Finishes the admin "Connect" flow: trades the authorization code for tokens and
+ * stores the connection (replacing any earlier one).
  */
 export async function completeConnection(
   code: string,
   redirectUri: string,
   adminEmail: string,
-): Promise<{ listId: string | null }> {
+): Promise<void> {
   const tokens = await requestTokens({
     grant_type: "authorization_code",
     code,
@@ -152,21 +150,10 @@ export async function completeConnection(
     throw new ConstantContactError("no refresh token returned; was the offline_access scope granted?");
   }
 
-  let listId: string | null = null;
-  try {
-    listId = await lookUpV2ListId(tokens.accessToken, NEWSLETTER_V2_LIST_ID);
-  } catch (error) {
-    console.warn("[constant-contact] could not map the V2 newsletter list id", error);
-  }
-  // A reconnect keeps the list chosen earlier when the lookup finds nothing.
-  const existing = await prisma.apiConnection.findUnique({ where: { provider: PROVIDER } });
-  listId ??= existing?.listId ?? null;
-
   const data = {
     refreshToken: tokens.refreshToken,
     accessToken: tokens.accessToken,
     accessTokenExpiresAt: tokens.expiresAt,
-    listId,
     connectedBy: adminEmail,
     connectedAt: new Date(),
   };
@@ -175,7 +162,6 @@ export async function completeConnection(
     create: { provider: PROVIDER, ...data },
     update: data,
   });
-  return { listId };
 }
 
 export function getConnection(): Promise<ApiConnection | null> {
@@ -185,10 +171,6 @@ export function getConnection(): Promise<ApiConnection | null> {
 /** Forgets the tokens. Signups fall back to the hosted opt-in page from then on. */
 export async function deleteConnection(): Promise<void> {
   await prisma.apiConnection.deleteMany({ where: { provider: PROVIDER } });
-}
-
-export async function setNewsletterList(listId: string): Promise<void> {
-  await prisma.apiConnection.update({ where: { provider: PROVIDER }, data: { listId } });
 }
 
 /**
@@ -253,32 +235,9 @@ async function apiFetch(path: string, init: RequestInit = {}): Promise<Response>
   return send(await accessToken(true));
 }
 
-async function lookUpV2ListId(token: string, v2ListId: string): Promise<string | null> {
-  const response = await fetch(
-    `${API_BASE_URL}/contact_lists/list_id_xrefs?sequence_ids=${encodeURIComponent(v2ListId)}`,
-    {
-      headers: { accept: "application/json", authorization: `Bearer ${token}` },
-      cache: "no-store",
-      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-    },
-  );
-  if (!response.ok) {
-    throw new ConstantContactError(`list_id_xrefs responded ${response.status} ${await errorSummary(response)}`, response.status);
-  }
-  // The spec says `{ xrefs: [...] }`; the migration guide shows a bare array. Accept both.
-  const body: unknown = await response.json();
-  const xrefs = Array.isArray(body) ? body : isRecord(body) && Array.isArray(body.xrefs) ? body.xrefs : [];
-  for (const xref of xrefs) {
-    if (isRecord(xref) && String(xref.sequence_id).replace(/^0+/, "") === v2ListId && typeof xref.list_id === "string") {
-      return xref.list_id;
-    }
-  }
-  return null;
-}
-
 export type ContactList = { listId: string; name: string };
 
-/** The account's email lists, for the list picker in /admin/settings. */
+/** The account's email lists, for the list check in /admin/settings. */
 export async function fetchContactLists(): Promise<ContactList[]> {
   const response = await apiFetch("/contact_lists?limit=1000&status=active");
   if (!response.ok) {
@@ -297,27 +256,47 @@ export async function fetchContactLists(): Promise<ContactList[]> {
 
 export type NewsletterSignupResult = "subscribed" | "not_connected" | "failed";
 
+/** Constant Contact's limit for `first_name` and `last_name`. */
+const NAME_MAX_LENGTH = 50;
+
 /**
- * Adds an address to the newsletter list. Never throws: "not_connected" (no app
- * credentials, no connection, or no list chosen) and "failed" both mean the caller
- * should fall back to the hosted opt-in page. The address itself is never logged.
+ * Creates or updates the contact and adds it to `listIds` (it is never taken off a
+ * list; see `sign_up_form` above). The name fields are sent only when non-empty, so a
+ * later signup without a name keeps the one Constant Contact already has.
+ *
+ * Never throws: "not_connected" (no app credentials or no connection) and "failed" both
+ * mean the caller should fall back to the hosted opt-in page. The address itself is
+ * never logged.
  */
-export async function subscribeToNewsletter(emailAddress: string): Promise<NewsletterSignupResult> {
+export async function subscribeToLists(input: {
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  listIds: string[];
+}): Promise<NewsletterSignupResult> {
   if (!constantContactConfigured()) return "not_connected";
   try {
-    const row = await getConnection();
-    if (!row?.listId) return "not_connected";
+    if (!(await getConnection())) return "not_connected";
+
+    const body: Record<string, unknown> = {
+      email_address: input.email,
+      list_memberships: input.listIds,
+    };
+    const firstName = input.firstName?.trim().slice(0, NAME_MAX_LENGTH);
+    const lastName = input.lastName?.trim().slice(0, NAME_MAX_LENGTH);
+    if (firstName) body.first_name = firstName;
+    if (lastName) body.last_name = lastName;
 
     const response = await apiFetch("/contacts/sign_up_form", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ email_address: emailAddress, list_memberships: [row.listId] }),
+      body: JSON.stringify(body),
     });
     if (response.ok) return "subscribed";
     console.error(`[constant-contact] sign_up_form responded ${response.status} ${await errorSummary(response)}`);
     return "failed";
   } catch (error) {
-    console.error("[constant-contact] newsletter signup failed", error);
+    console.error("[constant-contact] signup failed", error);
     return "failed";
   }
 }

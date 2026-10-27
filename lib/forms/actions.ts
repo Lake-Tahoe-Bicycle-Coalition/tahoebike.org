@@ -4,7 +4,8 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { signupPageUrl } from "@/lib/constant-contact";
-import { subscribeToNewsletter } from "@/lib/constant-contact-api";
+import { subscribeToLists } from "@/lib/constant-contact-api";
+import { SIGNUP_LISTS } from "@/lib/constant-contact-lists";
 import { prisma } from "@/lib/db";
 import { getEmailProvider } from "@/lib/email";
 import { nativeFormEnabled, type NativeFormName } from "@/lib/feature-flags";
@@ -12,7 +13,7 @@ import type { FormType } from "@/lib/generated/prisma/enums";
 import { getSettings, settingIsTrue, type Settings } from "@/lib/settings";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { contactFieldLabels, rackApplicationFieldLabels, valetRequestFieldLabels } from "./fields";
-import { fieldErrorsOf, pick, readString, readStrings } from "./parse";
+import { fieldErrorsOf, pick, readString, readStringList, readStrings } from "./parse";
 import { contactSchema, newsletterSchema, rackApplicationSchema, valetRequestSchema } from "./schemas";
 import type { FormState } from "./state";
 
@@ -90,28 +91,42 @@ export async function submitRackApplication(
 }
 
 /**
- * Newsletter signup (every NewsletterSignupForm). Adds the address to the Constant
- * Contact list through the API; nothing is stored here. When the API is not connected,
- * Turnstile is misconfigured, or the API call fails, the visitor is sent to Constant
- * Contact's hosted opt-in page instead (docs/OPEN_QUESTIONS.md Q27), so a signup is
- * never simply lost.
+ * Newsletter signup (every NewsletterSignupForm). Adds the address, the optional name,
+ * and the chosen lists (keys of SIGNUP_LISTS in lib/constant-contact-lists.ts) to
+ * Constant Contact through the API; nothing is stored here. When the API is not
+ * connected, Turnstile is misconfigured, or the API call fails, the visitor is sent to
+ * Constant Contact's hosted opt-in page instead (docs/OPEN_QUESTIONS.md Q27), so a
+ * signup is never simply lost.
+ *
+ * The compact form posts twice: step 1 is the email with the newsletter list, step 2
+ * (optional) the name and any further lists. The hidden `step` field is echoed back
+ * untouched so the form knows which answer it is looking at. Step 2 re-sends the
+ * newsletter list, which is harmless because sign_up_form only ever adds lists.
  */
 export async function subscribeNewsletter(_prev: FormState, formData: FormData): Promise<FormState> {
+  const step = readString(formData, "step") === "2" ? "2" : "1";
+
   if (readString(formData, HONEYPOT_FIELD) !== "") {
     console.info("[forms] NEWSLETTER: honeypot triggered, submission dropped");
-    return { status: "success" };
+    return { status: "success", values: { step } };
   }
 
-  const raw = readStrings(formData, ["email", HONEYPOT_FIELD]);
-  const parsed = newsletterSchema.safeParse(raw);
+  const raw = readStrings(formData, ["email", "firstName", "lastName", HONEYPOT_FIELD]);
+  const lists = [...new Set(readStringList(formData, "lists"))];
+  const values = { ...pick(raw, ["email", "firstName", "lastName"]), lists: lists.join(","), step };
+
+  const parsed = newsletterSchema.safeParse({ ...raw, lists });
   if (!parsed.success) {
-    return {
-      status: "error",
-      fieldErrors: fieldErrorsOf(parsed.error),
-      values: pick(raw, ["email"]),
-    };
+    // An unknown list key is reported at `lists.<index>`; the form shows one message for
+    // the whole group of checkboxes.
+    const fieldErrors: Record<string, string[]> = {};
+    for (const [key, messages] of Object.entries(fieldErrorsOf(parsed.error))) {
+      const field = key.startsWith("lists.") ? "lists" : key;
+      fieldErrors[field] = [...new Set([...(fieldErrors[field] ?? []), ...messages])];
+    }
+    return { status: "error", fieldErrors, values };
   }
-  const { email } = parsed.data;
+  const { email, firstName, lastName } = parsed.data;
   const fallbackUrl = signupPageUrl((await getSettings()).constant_contact_signup_url, email);
 
   const turnstile = await verifyTurnstile(
@@ -127,13 +142,21 @@ export async function subscribeNewsletter(_prev: FormState, formData: FormData):
     return {
       status: "error",
       formError: "We could not verify that you are a person. Please try again.",
-      values: { email },
+      values,
     };
   }
 
-  const result = await subscribeToNewsletter(email);
+  const result = await subscribeToLists({
+    email,
+    firstName,
+    lastName,
+    listIds: parsed.data.lists.map((key) => SIGNUP_LISTS[key].listId),
+  });
   if (result !== "subscribed") redirect(fallbackUrl);
-  return { status: "success", values: { email } };
+  return {
+    status: "success",
+    values: { email, firstName, lastName, lists: parsed.data.lists.join(","), step },
+  };
 }
 
 /**

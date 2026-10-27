@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { signupListKeys } from "@/lib/constant-contact-lists";
 import { isoDateInZone } from "@/lib/time";
 import { matchingFundsValues, organizationTypeValues, rackStyleValues } from "./fields";
 import { email, optionalLine, optionalText, requiredLine, requiredText, wholeNumber } from "./validators";
@@ -105,7 +106,15 @@ export type RackApplicationInput = z.infer<typeof rackApplicationSchema>;
 
 // --- Newsletter signup (Q27) -------------------------------------------------
 
+/**
+ * Name is optional; Constant Contact caps first and last name at 50 characters. `lists`
+ * holds keys of SIGNUP_LISTS (lib/constant-contact-lists.ts), never raw list ids, so a
+ * crafted request cannot add anyone to a list the form does not offer.
+ */
 export const newsletterSchema = z.object({
   email,
+  firstName: optionalLine("First name", 50),
+  lastName: optionalLine("Last name", 50),
+  lists: z.array(z.enum(signupListKeys, "Choose a list from the form.")).min(1, "Choose at least one list."),
   ...honeypot,
 });
