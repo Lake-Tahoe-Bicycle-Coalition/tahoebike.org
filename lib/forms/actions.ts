@@ -113,9 +113,9 @@ export async function subscribeNewsletter(_prev: FormState, formData: FormData):
     return { status: "success", values: { step } };
   }
 
-  const raw = readStrings(formData, ["email", "firstName", "lastName", HONEYPOT_FIELD]);
+  const raw = readStrings(formData, ["email", "firstName", "lastName", "phone", HONEYPOT_FIELD]);
   const lists = [...new Set(readStringList(formData, "lists"))];
-  const values = { ...pick(raw, ["email", "firstName", "lastName"]), lists: lists.join(","), step };
+  const values = { ...pick(raw, ["email", "firstName", "lastName", "phone"]), lists: lists.join(","), step };
 
   const parsed = newsletterSchema.safeParse({ ...raw, lists });
   if (!parsed.success) {
@@ -128,7 +128,7 @@ export async function subscribeNewsletter(_prev: FormState, formData: FormData):
     }
     return { status: "error", fieldErrors, values };
   }
-  const { email, firstName, lastName } = parsed.data;
+  const { email, firstName, lastName, phone } = parsed.data;
   const settings = await getSettings();
   const volunteerOnly = parsed.data.lists.includes("volunteers") && !parsed.data.lists.includes("general");
   const fallbackUrl = volunteerOnly
@@ -156,6 +156,7 @@ export async function subscribeNewsletter(_prev: FormState, formData: FormData):
     email,
     firstName,
     lastName,
+    phone,
     listIds: parsed.data.lists.map((key) => SIGNUP_LISTS[key].listId),
   });
   if (result !== "subscribed") redirect(fallbackUrl);

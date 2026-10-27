@@ -23,7 +23,8 @@ import type { ApiConnection } from "@/lib/generated/prisma/client";
  *   address and ADDS it to the given lists; it never removes a list membership, so
  *   sending a list the contact is already on is harmless (the form's optional second
  *   step relies on this to re-send the newsletter list). It needs `contact_data`.
- *   `first_name` and `last_name` are optional and at most 50 characters each. It also re-opts-in
+ *   `first_name` and `last_name` are optional and at most 50 characters each, `phone_number`
+ *   optional and at most 25. It also re-opts-in
  *   a contact who had unsubscribed, which is right here because the visitor asked to
  *   subscribe. With Confirmed Opt-in enabled on the account, a new contact gets a
  *   confirmation email and stays `pending_confirmation` until they click it. It is off on
@@ -258,11 +259,13 @@ export type NewsletterSignupResult = "subscribed" | "not_connected" | "failed";
 
 /** Constant Contact's limit for `first_name` and `last_name`. */
 const NAME_MAX_LENGTH = 50;
+/** Constant Contact's limit for `phone_number`. */
+const PHONE_MAX_LENGTH = 25;
 
 /**
  * Creates or updates the contact and adds it to `listIds` (it is never taken off a
- * list; see `sign_up_form` above). The name fields are sent only when non-empty, so a
- * later signup without a name keeps the one Constant Contact already has.
+ * list; see `sign_up_form` above). The name and phone fields are sent only when
+ * non-empty, so a later signup without them keeps what Constant Contact already has.
  *
  * Never throws: "not_connected" (no app credentials or no connection) and "failed" both
  * mean the caller should fall back to the hosted opt-in page. The address itself is
@@ -272,6 +275,7 @@ export async function subscribeToLists(input: {
   email: string;
   firstName?: string;
   lastName?: string;
+  phone?: string;
   listIds: string[];
 }): Promise<NewsletterSignupResult> {
   if (!constantContactConfigured()) return "not_connected";
@@ -286,6 +290,8 @@ export async function subscribeToLists(input: {
     const lastName = input.lastName?.trim().slice(0, NAME_MAX_LENGTH);
     if (firstName) body.first_name = firstName;
     if (lastName) body.last_name = lastName;
+    const phone = input.phone?.trim().slice(0, PHONE_MAX_LENGTH);
+    if (phone) body.phone_number = phone;
 
     const response = await apiFetch("/contacts/sign_up_form", {
       method: "POST",

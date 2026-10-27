@@ -107,7 +107,8 @@ export type RackApplicationInput = z.infer<typeof rackApplicationSchema>;
 // --- Newsletter signup (Q27) -------------------------------------------------
 
 /**
- * Name is optional; Constant Contact caps first and last name at 50 characters. `lists`
+ * Name and phone are optional; Constant Contact caps first and last name at 50
+ * characters and `phone_number` at 25. `lists`
  * holds keys of SIGNUP_LISTS (lib/constant-contact-lists.ts), never raw list ids, so a
  * crafted request cannot add anyone to a list the form does not offer.
  */
@@ -115,6 +116,7 @@ export const newsletterSchema = z.object({
   email,
   firstName: optionalLine("First name", 50),
   lastName: optionalLine("Last name", 50),
+  phone: optionalLine("Phone", 25),
   lists: z.array(z.enum(signupListKeys, "Choose a list from the form.")).min(1, "Choose at least one list."),
   ...honeypot,
 });

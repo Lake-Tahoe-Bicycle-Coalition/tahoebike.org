@@ -18,8 +18,6 @@ type Props = {
   mode?: NewsletterFormMode;
   /** Full mode: lists ticked to begin with. */
   defaultLists?: readonly SignupListKey[];
-  /** Full mode: General Info ticked and disabled, so every signup gets the newsletter. */
-  generalLocked?: boolean;
   /** Compact mode: the list Subscribe adds the visitor to (default: the general newsletter). */
   primaryList?: SignupListKey;
 };
@@ -36,7 +34,6 @@ export function NewsletterSignupForm({
   intro,
   mode = "compact",
   defaultLists,
-  generalLocked,
   primaryList,
 }: Props) {
   const headingId = `${id ?? "newsletter-signup"}-heading`;
@@ -68,7 +65,6 @@ export function NewsletterSignupForm({
       <NewsletterForm
         mode={mode}
         defaultLists={defaultLists}
-        generalLocked={generalLocked}
         primaryList={primaryList}
       />
     </section>

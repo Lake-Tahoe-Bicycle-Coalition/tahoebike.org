@@ -62,14 +62,15 @@ export default async function AdvocacyPage() {
         </p>
       </div>
 
-      {/* No lists ticked and General Info not locked (unlike /newsletter): an
-          advocacy-alerts-only signup must be possible. */}
+      {/* The three project topics ticked to begin with; General Info stays unticked so an
+          advocacy-alerts-only signup is the default. */}
       <div className="mt-10 max-w-3xl">
         <NewsletterSignupForm
           id="signup"
           heading="Hear about projects while there's still time to comment"
           intro="Tell us where you ride and we'll email you when a project there is open for public comment. You can also get the monthly newsletter, or just the alerts."
           mode="full"
+          defaultLists={["advocacy_south", "advocacy_north", "advocacy_truckee"]}
         />
       </div>
 

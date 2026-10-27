@@ -29,7 +29,7 @@ export default async function NewsletterPage() {
       </header>
 
       <div className="mt-10 max-w-3xl">
-        <NewsletterSignupForm heading="Sign up" mode="full" generalLocked />
+        <NewsletterSignupForm heading="Sign up" mode="full" defaultLists={["general"]} />
       </div>
 
       <div className="mt-16 max-w-3xl">
