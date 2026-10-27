@@ -86,7 +86,7 @@ export default async function AdvocacyPage() {
       </p>
 
       <section className="mt-12 max-w-4xl" aria-labelledby="efforts-heading">
-        <h2 id="efforts-heading">Project Support</h2>
+        <h2 id="efforts-heading">Recent Advocacy</h2>
         <p className="mt-4 max-w-3xl text-lg">
           We write comment letters to jurisdictions to weigh in on proposed projects. Here is a summary of
           each effort, newest first, with the letters themselves. Curious about a project that&apos;s not
