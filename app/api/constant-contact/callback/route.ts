@@ -39,12 +39,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   if (!code) return back("Constant Contact did not return an authorization code. Please try again.", "error");
 
   try {
-    const { listId } = await completeConnection(code, oauthCallbackUrl(url.origin), admin.email);
-    return back(
-      listId
-        ? "Connected Constant Contact. Newsletter signups now go straight to the newsletter list."
-        : "Connected Constant Contact, but the newsletter list was not found. Choose it below.",
-    );
+    await completeConnection(code, oauthCallbackUrl(url.origin), admin.email);
+    return back("Connected Constant Contact. Signups now go straight to the email lists below.");
   } catch (error) {
     console.error("[constant-contact] could not complete the connection", error);
     return back("Constant Contact could not be connected. Please try again.", "error");

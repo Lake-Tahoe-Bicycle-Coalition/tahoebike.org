@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { NewsletterSignupForm } from "@/components/newsletter-signup-form";
 import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/site-metadata";
 
@@ -60,21 +60,26 @@ export default async function AdvocacyPage() {
           all of our ideas in our advocacy. Please email{" "}
           <a href={`mailto:${settings.contact_email}`}>{settings.contact_email}</a>
         </p>
+      </div>
 
+      {/* The three project topics ticked to begin with; General Info stays unticked so an
+          advocacy-alerts-only signup is the default. */}
+      <div className="mt-10 max-w-3xl">
+        <NewsletterSignupForm
+          id="signup"
+          heading="Hear about projects while there's still time to comment"
+          intro="Tell us where you ride and we'll email you when a project there is open for public comment. You can also get the monthly newsletter, or just the alerts."
+          mode="full"
+          defaultLists={["advocacy_south", "advocacy_north", "advocacy_truckee"]}
+        />
+      </div>
+
+      <div className="prose-ltbc mt-12 max-w-3xl text-lg">
         <h2>Comment Letters</h2>
         <p>
           We often write comment letters to jurisdictions to weigh in on proposed projects. New in 2026, we are
           taking inventory of past comment letters and sharing them here for the public to see. Curious about a
           project that&apos;s not yet listed here? Please let us know!
-        </p>
-        <p>
-          Want to know about projects while there&apos;s still time to comment? Subscribe to our newsletter and
-          we&apos;ll let you know what&apos;s open for public comment.
-        </p>
-        <p>
-          <Link href="/newsletter" className="btn btn-secondary">
-            Get the newsletter
-          </Link>
         </p>
       </div>
 

@@ -135,9 +135,10 @@ How it fits together:
   `BLOB_READ_WRITE_TOKEN` the image fields still accept a pasted URL or a `/images/...` path.
 - **Freshness**: public pages are static and revalidate every five minutes; every admin save
   also purges the affected pages (`lib/admin/revalidate.ts`), so edits show at once.
-- **Constant Contact** (top of Settings): the newsletter Subscribe boxes add people to the
-  list through Constant Contact's V3 API once an admin has clicked **Connect** there
-  (`app/api/constant-contact/`, `lib/constant-contact-api.ts`). The OAuth tokens live in the
+- **Constant Contact** (top of Settings): the newsletter signup forms add people to the
+  lists they choose (`lib/constant-contact-lists.ts`) through Constant Contact's V3 API once
+  an admin has clicked **Connect** there (`app/api/constant-contact/`,
+  `lib/constant-contact-api.ts`); the panel also shows whether each list exists in the account. The OAuth tokens live in the
   `ApiConnection` table, and a weekly cron (`app/api/cron/constant-contact`) refreshes them so
   they never expire from disuse. Until it is connected, or whenever a signup through the API
   fails, the form sends the visitor to Constant Contact's hosted signup page instead.
@@ -174,7 +175,9 @@ How it fits together:
    `CONSTANT_CONTACT_CLIENT_ID` (the API key), `CONSTANT_CONTACT_CLIENT_SECRET` and
    `CRON_SECRET`, deploy (which also creates the `ApiConnection` table), then click
    **Connect Constant Contact** in `/admin/settings` while still signed in to Constant
-   Contact as LTBC.
+   Contact as LTBC. There is no list to pick: the lists visitors can join (newsletter,
+   three advocacy areas, volunteers) are fixed in `lib/constant-contact-lists.ts` by their
+   V3 list ids, and `/admin/settings` shows whether each one exists in the account.
 8. Push to `main` to deploy production; every pull request gets a preview URL.
 
 `next build` prerenders every public page (they are static, revalidated every five

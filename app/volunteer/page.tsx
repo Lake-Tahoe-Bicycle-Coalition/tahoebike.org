@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { NewsletterSignupForm } from "@/components/newsletter-signup-form";
 import { SmartLink } from "@/components/smart-link";
 import { getSettings } from "@/lib/settings";
 
@@ -36,11 +37,16 @@ export default async function VolunteerPage() {
           involved, and meet fun people. Sign up for one of our volunteer opportunities below! Simply click the
           event, create a POINT account, and sign up for a shift!
         </p>
-        <p>
-          Want to stay in the loop? Join our{" "}
-          <SmartLink href={settings.constant_contact_volunteer_url}>volunteer email list</SmartLink>{" "}
-          to receive the latest updates and upcoming opportunities.
-        </p>
+      </div>
+
+      <div className="mt-10 max-w-3xl">
+        <NewsletterSignupForm
+          id="volunteer-list"
+          mode="compact"
+          primaryList="volunteers"
+          heading="Volunteer email list"
+          intro="Want to stay in the loop? Join our volunteer email list to hear about upcoming opportunities."
+        />
       </div>
 
       <section className="mt-10" aria-label="Volunteer shifts">

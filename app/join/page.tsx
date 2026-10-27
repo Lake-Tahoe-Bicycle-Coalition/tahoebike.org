@@ -101,9 +101,7 @@ export default async function JoinPage() {
             </p>
             <p className="flex-1">
               You can also{" "}
-              <SmartLink href={settings.constant_contact_volunteer_url}>
-                join our volunteer email list
-              </SmartLink>
+              <Link href="/volunteer#volunteer-list">join our volunteer email list</Link>
               .
             </p>
             <p>
