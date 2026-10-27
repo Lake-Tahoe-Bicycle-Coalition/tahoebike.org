@@ -169,7 +169,8 @@ export function SelectField({
  * when ticked and nothing when not, so read it with the `checkbox` validator in
  * lib/forms/validators.ts. With `value`, several checkboxes can share one name and post
  * the ticked values (read them with readStringList in lib/forms/parse.ts); put them in
- * a CheckboxGroup and give the group the errors.
+ * a CheckboxGroup and give the group the errors. A `disabled` box never posts, so a
+ * box shown ticked-and-disabled needs a hidden input carrying its value.
  */
 export function CheckboxField({
   label,
@@ -179,7 +180,13 @@ export function CheckboxField({
   className,
   help,
   defaultChecked,
-}: Omit<FieldProps, "required"> & { value?: string; help?: string; defaultChecked?: boolean }) {
+  disabled,
+}: Omit<FieldProps, "required"> & {
+  value?: string;
+  help?: string;
+  defaultChecked?: boolean;
+  disabled?: boolean;
+}) {
   const ids = useFieldIds(value === undefined ? name : `${name}-${value}`);
   return (
     <div className={className}>
@@ -190,6 +197,7 @@ export function CheckboxField({
           value={value}
           type="checkbox"
           defaultChecked={defaultChecked}
+          disabled={disabled}
           className="mt-1 h-5 w-5 shrink-0 accent-tahoe-deep"
           {...errorAttributes(errors, ids, help)}
         />

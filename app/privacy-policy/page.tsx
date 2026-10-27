@@ -146,8 +146,8 @@ export default async function PrivacyPolicyPage() {
           Our newsletter and other email lists are run through Constant Contact. When you
           use the newsletter signup form, which appears on several pages of this site, the
           site sends Constant Contact the email address you typed, your name if you gave it,
-          and which of our email lists you chose (the newsletter, advocacy alerts for the area
-          you picked, volunteering), and Constant Contact adds you to those lists. The site
+          and which of our newsletter topics you chose (general news, projects in the areas you
+          picked, volunteer opportunities), and Constant Contact adds you to those lists. The site
           does not keep a copy. If Constant Contact cannot be reached, the form sends you to
           Constant Contact&apos;s own signup page to finish there instead.
           The volunteer email list link goes to a Constant Contact signup page as well, and

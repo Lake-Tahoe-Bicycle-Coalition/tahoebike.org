@@ -60,24 +60,26 @@ export default async function AdvocacyPage() {
           all of our ideas in our advocacy. Please email{" "}
           <a href={`mailto:${settings.contact_email}`}>{settings.contact_email}</a>
         </p>
-
-        <h2>Comment Letters</h2>
-        <p>
-          We often write comment letters to jurisdictions to weigh in on proposed projects. New in 2026, we are
-          taking inventory of past comment letters and sharing them here for the public to see. Curious about a
-          project that&apos;s not yet listed here? Please let us know!
-        </p>
       </div>
 
-      {/* No lists ticked to begin with: an advocacy-alerts-only signup must be possible. */}
+      {/* No lists ticked and General Info not locked (unlike /newsletter): an
+          advocacy-alerts-only signup must be possible. */}
       <div className="mt-10 max-w-3xl">
         <NewsletterSignupForm
           id="signup"
           heading="Hear about projects while there's still time to comment"
           intro="Tell us where you ride and we'll email you when a project there is open for public comment. You can also get the monthly newsletter, or just the alerts."
           mode="full"
-          listOrder="advocacy-first"
         />
+      </div>
+
+      <div className="prose-ltbc mt-12 max-w-3xl text-lg">
+        <h2>Comment Letters</h2>
+        <p>
+          We often write comment letters to jurisdictions to weigh in on proposed projects. New in 2026, we are
+          taking inventory of past comment letters and sharing them here for the public to see. Curious about a
+          project that&apos;s not yet listed here? Please let us know!
+        </p>
       </div>
 
       <section className="mt-8" aria-label="Comment letters">

@@ -1,10 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import {
-  NewsletterForm,
-  type NewsletterFormMode,
-  type NewsletterListOrder,
-} from "@/components/forms/newsletter-form";
+import { NewsletterForm, type NewsletterFormMode } from "@/components/forms/newsletter-form";
 import type { SignupListKey } from "@/lib/constant-contact-lists";
 
 type Props = {
@@ -22,8 +18,8 @@ type Props = {
   mode?: NewsletterFormMode;
   /** Full mode: lists ticked to begin with. */
   defaultLists?: readonly SignupListKey[];
-  /** Full mode: whether the newsletter or the "Where do you ride?" lists come first. */
-  listOrder?: NewsletterListOrder;
+  /** Full mode: General Info ticked and disabled, so every signup gets the newsletter. */
+  generalLocked?: boolean;
 };
 
 /**
@@ -38,7 +34,7 @@ export function NewsletterSignupForm({
   intro,
   mode = "compact",
   defaultLists,
-  listOrder,
+  generalLocked,
 }: Props) {
   const headingId = `${id ?? "newsletter-signup"}-heading`;
 
@@ -66,7 +62,7 @@ export function NewsletterSignupForm({
           </>
         )}
       </p>
-      <NewsletterForm mode={mode} defaultLists={defaultLists} listOrder={listOrder} />
+      <NewsletterForm mode={mode} defaultLists={defaultLists} generalLocked={generalLocked} />
     </section>
   );
 }
