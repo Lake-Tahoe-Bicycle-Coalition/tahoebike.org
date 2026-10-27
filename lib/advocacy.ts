@@ -187,30 +187,66 @@ const advocacyEfforts: AdvocacyEffort[] = [
       },
     ],
   },
-  // The letter says it attached our March 31, 2021 comment letter to Caltrans on the South Lake Tahoe Safety
-  // Project. That attachment is not in the text extraction; check whether it is in the PDF or a separate
-  // file. No outcome is stated.
+  // Merged from four efforts (Highway 50 Safety Project, speed limit increase, Trout Creek to Stateline
+  // repaving, US 50/89 corridor plan). The May 2026 corridor plan letter says it attached our March 31, 2021
+  // letter on the Highway 50 Safety Project; that attachment is not in the text extraction, so check whether
+  // it is in the PDF or a separate file. The 2021 letter is addressed to Caltrans (Environmental Management,
+  // Marysville) and comments on the Initial Study and Negative Declaration; its pages 4-14 are a detailed
+  // LTBC addendum (intersection-by-intersection suggestions, lighting, signage, signal timing), and the
+  // project limits (the Y to Pioneer Trail) are inferred from its intersection list. The 2023 speed limit
+  // letter agrees with City staff's criticism of the Caltrans Engineering and Traffic Survey. The repaving
+  // letter is dated February 8, 2024 (filename says 2024.02.06); it does not expand CAPM ('Capital Preventive
+  // Maintenance' is the standard Caltrans meaning) and cites the Caltrans District 3 Active Transportation
+  // Plan (2020), which calls this area a 'Main Street'. No letter states an outcome.
   {
-    slug: "us-50-89-multimodal-mainstreet-corridor-plan",
-    title: "US 50/89 Multimodal Mainstreet Corridor Plan",
+    slug: "caltrans-highways-south-lake-tahoe",
+    title: "Caltrans Highway Improvements Through South Lake Tahoe",
     area: "South Shore",
-    agencies: ["City of South Lake Tahoe", "California Department of Transportation (Caltrans)"],
+    agencies: ["California Department of Transportation (Caltrans)", "City of South Lake Tahoe"],
     position: "Comment",
     summary:
-      "The City of South Lake Tahoe started a corridor plan for US 50 and Highway 89 through town, including the Y intersection, to find projects to propose to Caltrans. We welcomed the plan and sent a detailed list of priorities. Our goal is slower traffic, safer walking and biking, and more people choosing transit, bikes, and their feet over driving.",
+      "Caltrans owns US Highway 50 and State Route 89 through South Lake Tahoe, so the busiest streets in town are state highways. Since 2021 we have weighed in on each Caltrans and City decision about them: the Highway 50 Safety Project from the Y to Pioneer Trail, a proposed speed limit increase, a repaving project from Trout Creek to Stateline, and the City's US 50/89 Multimodal Mainstreet Corridor Plan. Our message has stayed the same: slower traffic, full-width bike lanes, and safer crossings and connections.",
     asks: [
-      "We asked for slower traffic through narrower lanes, signals timed below the speed limit, speed feedback signs, and a 30 mph limit for most of the corridor.",
-      "We asked to move the points where Highway 89 widens closer to the Y, freeing room for buffered bike lanes and new crossings near D St, B St, 10th St, and 13th St.",
-      "We asked to shrink the oversized Y intersection by removing high-speed slip lanes and extra through lanes.",
-      "We asked for full-width bike lanes, bike-safe drain grates, and finished, durable green paint throughout the corridor.",
-      "We asked to extend the bike path from Pioneer Trail to Park Ave and add 25 mph zones at South Tahoe Middle School and Heavenly Village.",
+      "Slow traffic with narrower lanes, signals timed below the speed limit, and lower posted limits, especially at South Tahoe Middle School and Heavenly Village.",
+      "Add full-width bike lanes on both sides of the highway, buffered or protected where the road width allows, with bike-safe drain grates and well-maintained green paint.",
+      "Connect the highway bike lanes to side-street bikeways at the Y, Tahoe Keys, Sierra, Al Tahoe, Ski Run, and Pioneer Trail with turn boxes, paint, and crosswalks.",
+      "Shrink the oversized Y intersection by removing slip lanes and extra through lanes, and bring SR 89 near the Y down to two lanes with protected bike lanes.",
+      "Oppose speed limit increases, and use the City's authority under Assembly Bill 43 to set lower limits and add traffic calming.",
     ],
-    related: [
-      "slt-highway-50-safety-project",
-      "us-50-sr-89-speed-limit-increase",
-      "us-50-repaving-trout-creek-to-stateline",
-    ],
+    related: [],
     letters: [
+      {
+        file: "2021.03.31 SLT Safety Project Comment.pdf",
+        date: "2021-03-31",
+        to: "California Department of Transportation (Caltrans), Environmental Management M-3 Branch",
+        subject: "South Lake Tahoe Safety Project Comments",
+        position: "Support",
+        summary:
+          "Comments on the Initial Study and Negative Declaration for the Highway 50 safety project. We welcomed the green bike lanes, lighting, and crossings, and attached a detailed addendum asking for buffered bike lanes, better intersection connections, a middle school zone, and early delivery of key pieces.",
+        driveId: "1KVN78YzZops-qyyJZE-U9gey902hG7OQ",
+      },
+      {
+        file: "2023.06.19 US 50 Speed Limit Opposition.pdf",
+        date: "2023-06-19",
+        to: "City of South Lake Tahoe Mayor and City Council",
+        subject:
+          "Agenda Item 15, Public Hearing for Caltrans' Proposed Speed Limit Increase on Sections of US 50, US 89, and US 50/89",
+        position: "Opposition",
+        summary:
+          "Written for the Council's public hearing on Caltrans' proposed speed limit increase. We supported staff's recommendation to oppose it and urged lower limits, traffic calming, and a corridor plan for SR 89 at the Y.",
+        driveId: "14Pkd9yI40i9PAOh5DuYcOGVUBwWwKyvD",
+      },
+      {
+        file: "2024.02.06 Caltrans HWY50 Pavement Project Comment.pdf",
+        date: "2024-02-08",
+        to: "Caltrans North Region Environmental, District 3",
+        subject:
+          "South Lake Tahoe CAPM Project: Trout Creek Bridge to Stateline, Nevada on US Highway 50 in El Dorado County, Initial Study with Proposed Negative Declaration",
+        position: "Comment",
+        summary:
+          "Responds to the environmental Initial Study for the US 50 repaving project. We asked for four-foot bike lanes on both sides, made room by narrowing travel lanes.",
+        driveId: "1_RdvPalK0us0qhCf_klV3xF-OfdJ7N5T",
+      },
       {
         file: "2026.05.30 US 50 89 Multimodal Mainstreet Corridor Plan Comment.pdf",
         date: "2026-05-30",
@@ -449,37 +485,6 @@ const advocacyEfforts: AdvocacyEffort[] = [
       },
     ],
   },
-  // Filename says 2024.02.06 but the letter is dated February 08, 2024; used the letter date. The CAPM
-  // acronym is not expanded in the letter; 'Capital Preventive Maintenance' is the standard Caltrans meaning.
-  // The letter cites the Caltrans District 3 Active Transportation Plan (2020), which calls this area a 'Main
-  // Street'. No outcome is stated.
-  {
-    slug: "us-50-repaving-trout-creek-to-stateline",
-    title: "US 50 Repaving, Trout Creek to Stateline",
-    area: "South Shore",
-    agencies: ["California Department of Transportation (Caltrans) District 3"],
-    position: "Comment",
-    summary:
-      "Caltrans planned a pavement maintenance project (Capital Preventive Maintenance, or CAPM) on US Highway 50 from the Trout Creek Bridge to the Nevada state line in South Lake Tahoe. We commented on the environmental review and asked Caltrans to use the repaving to add standard bike lanes on both sides of the highway.",
-    asks: [
-      "We asked Caltrans to add standard four-foot bike lanes on both sides of US 50 throughout the project.",
-      "We suggested narrowing the vehicle travel lanes to make room, which also supports the City's goal of slowing traffic.",
-    ],
-    related: ["slt-highway-50-safety-project", "us-50-89-multimodal-mainstreet-corridor-plan"],
-    letters: [
-      {
-        file: "2024.02.06 Caltrans HWY50 Pavement Project Comment.pdf",
-        date: "2024-02-08",
-        to: "Caltrans North Region Environmental, District 3",
-        subject:
-          "South Lake Tahoe CAPM Project: Trout Creek Bridge to Stateline, Nevada on US Highway 50 in El Dorado County, Initial Study with Proposed Negative Declaration",
-        position: "Comment",
-        summary:
-          "Responds to the environmental Initial Study for the US 50 repaving project. We asked for four-foot bike lanes on both sides, made room by narrowing travel lanes.",
-        driveId: "1_RdvPalK0us0qhCf_klV3xF-OfdJ7N5T",
-      },
-    ],
-  },
   // The letter is dated February 7, 2024; the filename says 2024.02.06. The letter says we had no preference
   // between southern segments A or B, or on the northern alignment. Page 2 includes a schematic from the
   // City's project survey.
@@ -509,75 +514,6 @@ const advocacyEfforts: AdvocacyEffort[] = [
         summary:
           "Responds to the City's trail design options. We supported the project, urged including the unfunded Al Tahoe Boulevard section, and asked for winter snow removal, snow storage, and safe spacing from disc golf.",
         driveId: "1XrbCkJUX0t7Nz8LathxQ002h5E-7XNM9",
-      },
-    ],
-  },
-  // The letter agrees with City staff's criticism of the Caltrans Engineering and Traffic Survey. It also
-  // mentions the upcoming Highway 50 Safety Project and our request for narrower lanes and protected bike
-  // lanes there. No outcome is stated.
-  {
-    slug: "us-50-sr-89-speed-limit-increase",
-    title: "Proposed Speed Limit Increase on US 50 and SR 89",
-    area: "South Shore",
-    agencies: ["City of South Lake Tahoe City Council", "California Department of Transportation (Caltrans)"],
-    position: "Opposition",
-    summary:
-      "Caltrans proposed raising posted speed limits on sections of US Highway 50, State Route 89, and the shared US 50/89 stretch through South Lake Tahoe. The City Council held a public hearing on it in June 2023. We opposed the increase and backed City staff in pushing back, since faster traffic undercuts the City's work on safer streets and bike routes in the Tahoe Valley town center.",
-    asks: [
-      "We asked the City to push back on Caltrans' proposal to raise speed limits on US 50 and SR 89.",
-      "We asked the City to use its authority to set lower speed limits and add traffic calming, and to plan now for local control under Assembly Bill 43.",
-      "We asked the City and Caltrans to start a corridor plan for Emerald Bay Road (SR 89) on both sides of the Y intersection.",
-      "We recommended cutting SR 89 near the Y from four lanes to two, with protected bike lanes and crosswalks.",
-      "We asked for lower speed limits in front of South Tahoe Middle School and on Ski Run Blvd.",
-    ],
-    related: ["us-50-89-multimodal-mainstreet-corridor-plan", "slt-highway-50-safety-project"],
-    letters: [
-      {
-        file: "2023.06.19 US 50 Speed Limit Opposition.pdf",
-        date: "2023-06-19",
-        to: "City of South Lake Tahoe Mayor and City Council",
-        subject:
-          "Agenda Item 15, Public Hearing for Caltrans' Proposed Speed Limit Increase on Sections of US 50, US 89, and US 50/89",
-        position: "Opposition",
-        summary:
-          "Written for the Council's public hearing on Caltrans' proposed speed limit increase. We supported staff's recommendation to oppose it and urged lower limits, traffic calming, and a corridor plan for SR 89 at the Y.",
-        driveId: "14Pkd9yI40i9PAOh5DuYcOGVUBwWwKyvD",
-      },
-    ],
-  },
-  // The task described this as a City of South Lake Tahoe project, but the letter is addressed to Caltrans
-  // (Environmental Management, Marysville) and comments on the Caltrans Initial Study and Negative
-  // Declaration. Pages 4-14 are a detailed addendum written by LTBC (intersection-by-intersection
-  // suggestions, lighting, signage, signal timing); it is part of our comments, not an outside attachment.
-  // The project limits (the Y to Pioneer Trail) are inferred from the letter's intersection list. Position
-  // could also reasonably be "Comment", since the letter welcomes the project but asks for many design
-  // changes.
-  {
-    slug: "slt-highway-50-safety-project",
-    title: "Highway 50 Safety Project in South Lake Tahoe",
-    area: "South Shore",
-    agencies: ["California Department of Transportation (Caltrans)"],
-    position: "Comment",
-    summary:
-      "Caltrans proposed a safety project on Highway 50 through South Lake Tahoe, from the \"Y\" at Highway 89 to Pioneer Trail. It adds green-painted bike lanes, new street lighting, and new mid-block crossings, including one next to Grocery Outlet. We welcomed these upgrades. We also asked Caltrans to go further with wider, buffered bike lanes, better connections at key intersections, and a real school zone at South Tahoe Middle School.",
-    asks: [
-      "Study an alternative with buffered or protected bike lanes, at least where the existing road width allows it.",
-      "Make the bike lane at least 4 feet wide everywhere, including at storm drains, and adopt a plan to keep the green paint maintained.",
-      "Connect the highway bike lane to side-street bikeways at the \"Y\", Tahoe Keys, Sierra, Al Tahoe, Ski Run, and Pioneer Trail with turn boxes, paint, and crosswalks.",
-      "Sign a school zone with a lower speed limit at South Tahoe Middle School and add the crossings from the Safe Routes to School plan.",
-      "Build quick wins early, such as the Grocery Outlet crossing, repainting faded bike lanes, and lighting near the middle school.",
-    ],
-    related: ["us-50-89-multimodal-mainstreet-corridor-plan", "us-50-repaving-trout-creek-to-stateline"],
-    letters: [
-      {
-        file: "2021.03.31 SLT Safety Project Comment.pdf",
-        date: "2021-03-31",
-        to: "California Department of Transportation (Caltrans), Environmental Management M-3 Branch",
-        subject: "South Lake Tahoe Safety Project Comments",
-        position: "Support",
-        summary:
-          "Comments on the Initial Study and Negative Declaration for the Highway 50 safety project. We welcomed the green bike lanes, lighting, and crossings, and attached a detailed addendum asking for buffered bike lanes, better intersection connections, a middle school zone, and early delivery of key pieces.",
-        driveId: "1KVN78YzZops-qyyJZE-U9gey902hG7OQ",
       },
     ],
   },
