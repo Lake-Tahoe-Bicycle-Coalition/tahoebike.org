@@ -34,9 +34,9 @@ there's a preview button to check how it will look.
 
 ## What needs a developer
 
-Everything else on the site, such as the wording of the program pages, the menu, and the
-page layout, is part of the site's code. To change it, send the new wording to whoever looks
-after the website, or open an issue on the
+Everything else on the site, such as the wording of the program pages, the menu, the advocacy
+page's list of efforts and letters, and the page layout, is part of the site's code. To
+change it, send the new wording to whoever looks after the website, or open an issue on the
 [GitHub repository](https://github.com/Lake-Tahoe-Bicycle-Coalition/tahoebike.org/issues).
 Before any change goes live, a private preview copy of the site is built so it can be checked
 first.

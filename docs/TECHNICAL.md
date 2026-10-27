@@ -81,6 +81,11 @@ large photo run `pnpm content:optimize` to shrink it in place, and after adding,
 re-describing an image run `pnpm content:image-index` and commit the updated
 [docs/IMAGE_INDEX.md](IMAGE_INDEX.md), which is where alt text is reviewed.
 
+The advocacy efforts and comment letters listed on `/advocacy` live in `lib/advocacy.ts`; the
+letter PDFs themselves stay in the public Google Drive folder it links to. To add a letter or an
+effort, add an entry there with the PDF's Drive file id; the comment at the top of the file
+explains the fields, and the page fails to render if a `related` slug does not exist.
+
 ## Feature flags
 
 The Bike Valet request (`/bike-valet`) and the Bike Rack application (`/bike-racks`)
